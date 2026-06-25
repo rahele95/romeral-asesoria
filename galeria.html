@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Romeral · Galería</title>
+<meta name="description" content="Galería editorial de bodas y celebraciones diseñadas en El Romeral. Cada experiencia, única e irrepetible.">
+<meta name="theme-color" content="#0F140D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#B8935A; --gold-light:#D4AF7A;
+  --forest:#1A2118; --forest-deep:#0F140D; --ivory:#F5F1EB; --ivory-dark:#E7E0D4;
+  --text:#23271F; --text-mid:#6B665C;
+  --display:'Cormorant Garamond', Georgia, serif;
+  --body:'Lato', system-ui, sans-serif;
+  --ease-out:cubic-bezier(0.23, 1, 0.32, 1);
+  --spring:cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+*{ margin:0; padding:0; box-sizing:border-box }
+body{ font-family:var(--body); font-weight:300; background:var(--ivory); color:var(--text); -webkit-font-smoothing:antialiased; overflow-x:hidden }
+a{ color:inherit; text-decoration:none }
+img{ display:block; max-width:100% }
+:focus-visible{ outline:2px solid var(--gold-light); outline-offset:4px; border-radius:1px }
+
+/* ── top bar ── */
+header.top{ position:sticky; top:0; z-index:40; background:rgba(15,20,13,.92); backdrop-filter:blur(10px);
+  display:flex; align-items:center; justify-content:space-between; padding:16px 28px; border-bottom:1px solid rgba(184,147,90,.16) }
+header.top .logo{ font:400 11px/1 var(--body); letter-spacing:.42em; text-transform:uppercase; color:var(--gold) }
+header.top .back{ display:inline-flex; align-items:center; min-height:44px; font:400 12px/1 var(--body); letter-spacing:.12em; color:rgba(245,241,235,.78); transition:color .3s ease }
+@media(hover:hover) and (pointer:fine){ header.top .back:hover{ color:var(--gold-light) } }
+
+/* ── hero editorial ── */
+.hero-g{ padding:clamp(70px,11vw,140px) 6vw clamp(34px,5vw,60px); max-width:1500px; margin:0 auto }
+.hero-g .eyebrow{ font:400 11px/1 var(--body); letter-spacing:.4em; text-transform:uppercase; color:var(--gold) }
+.hero-g h1{ font:200 clamp(48px,8vw,96px)/0.98 var(--display); letter-spacing:-0.02em; color:var(--forest); margin:22px 0 0; max-width:14ch }
+.hero-g h1 em{ font-style:italic; font-weight:200; color:var(--gold) }
+.hero-g .sub{ font:300 15px/1.7 var(--body); color:var(--text-mid); margin-top:26px; max-width:42ch }
+
+/* ── filtros textuales (sin pills) ── */
+.filtros{ position:sticky; top:53px; z-index:30; background:var(--ivory);
+  display:flex; flex-wrap:wrap; gap:clamp(16px,2.4vw,34px); align-items:center;
+  padding:8px 6vw 26px; max-width:1500px; margin:0 auto }
+.filtro{ position:relative; background:none; border:0; cursor:pointer; padding:10px 0; min-height:44px;
+  font:300 14px/1 var(--display); letter-spacing:.06em; color:var(--text-mid);
+  transition:color .3s var(--ease-out) }
+.filtro::after{ content:''; position:absolute; left:0; bottom:6px; height:1px; width:0; background:var(--gold);
+  transition:width .35s var(--ease-out) }
+.filtro.on{ color:var(--forest) }
+.filtro.on::after{ width:100% }
+@media(hover:hover) and (pointer:fine){ .filtro:hover{ color:var(--forest) } }
+.filtros .sep{ width:1px; height:14px; background:var(--ivory-dark) }
+
+/* ── grid asimétrico editorial · full-bleed ── */
+.masonry{ display:grid; gap:clamp(8px,1.1vw,16px); max-width:1500px; margin:0 auto;
+  padding:0 6vw clamp(70px,9vw,120px) }
+.masonry.todos{
+  grid-template-columns:repeat(6,1fr);
+  grid-template-rows:clamp(380px,72vh,760px) clamp(380px,72vh,760px) clamp(320px,58vh,620px);
+  grid-template-areas:
+    "a a a a b b"
+    "c c d d d d"
+    "e e e f f f"; }
+.masonry.todos .tile:nth-child(1){ grid-area:a }
+.masonry.todos .tile:nth-child(2){ grid-area:b }
+.masonry.todos .tile:nth-child(3){ grid-area:c }
+.masonry.todos .tile:nth-child(4){ grid-area:d }
+.masonry.todos .tile:nth-child(5){ grid-area:e }
+.masonry.todos .tile:nth-child(6){ grid-area:f }
+/* vista filtrada: cuadrícula uniforme, sin áreas nombradas */
+.masonry.filtrada{ grid-template-columns:repeat(2,1fr); grid-auto-rows:clamp(360px,64vh,680px) }
+.masonry.filtrada .tile.hide{ display:none }
+
+.tile{ position:relative; overflow:hidden; cursor:pointer; background:var(--forest-deep);
+  opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .6s var(--ease-out) }
+.tile.in{ opacity:1; transform:none }
+.tile img{ width:100%; height:100%; object-fit:cover; transition:transform .9s var(--ease-out), filter .5s ease }
+.tile .ov{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:24px; background:rgba(10,13,8,.34); opacity:0; transition:opacity .45s var(--ease-out) }
+.tile .ov .estilo{ font:400 10px/1 var(--body); letter-spacing:.28em; text-transform:uppercase; color:var(--gold-light);
+  opacity:0; transform:translateY(10px); transition:opacity .5s var(--ease-out) .04s, transform .5s var(--ease-out) .04s }
+.tile .ov .pareja{ font:200 italic clamp(30px,3.4vw,52px)/1.02 var(--display); letter-spacing:-0.01em; color:var(--ivory); margin-top:12px;
+  opacity:0; transform:translateY(12px); transition:opacity .55s var(--ease-out) .09s, transform .55s var(--ease-out) .09s }
+.tile .ov .ln{ width:0; height:1px; background:var(--gold); margin-top:18px; transition:width .55s var(--ease-out) .16s }
+.tile .ov .meta{ font:300 11px/1 var(--body); letter-spacing:.14em; text-transform:uppercase; color:rgba(245,241,235,.66); margin-top:16px;
+  opacity:0; transition:opacity .5s var(--ease-out) .2s }
+@media(hover:hover) and (pointer:fine){
+  .tile:hover img{ transform:scale(1.05) }
+  .tile:hover .ov{ opacity:1 }
+  .tile:hover .ov .estilo,.tile:hover .ov .pareja{ opacity:1; transform:none }
+  .tile:hover .ov .ln{ width:40px }
+  .tile:hover .ov .meta{ opacity:1 }
+}
+/* en táctil: nombre siempre visible, sutil */
+@media(hover:none){
+  .tile .ov{ opacity:1; background:linear-gradient(transparent 46%, rgba(10,13,8,.74)); justify-content:flex-end }
+  .tile .ov .estilo,.tile .ov .pareja,.tile .ov .meta{ opacity:1; transform:none }
+  .tile .ov .ln{ width:34px }
+}
+.tile:active{ transform:scale(.992) }
+
+/* placeholder pareja sin fotos */
+.tile.empty{ cursor:default }
+.tile.empty .ov{ opacity:1; background:rgba(15,20,13,.9) }
+.tile.empty .ov .pareja{ opacity:1; transform:none }
+.tile.empty .ov .soon{ font:300 italic 14px/1.4 var(--display); color:rgba(245,241,235,.5); margin-top:14px; opacity:1 }
+
+/* ── lightbox · negro 95% ── */
+.lb{ position:fixed; inset:0; z-index:80; background:rgba(6,8,5,.95); display:flex; align-items:center; justify-content:center;
+  opacity:0; visibility:hidden; pointer-events:none; transition:opacity .3s var(--ease-out), visibility .3s }
+.lb.on{ opacity:1; visibility:visible; pointer-events:auto }
+.lb-stage{ position:relative; display:flex; align-items:center; justify-content:center; width:90vw; height:85vh }
+.lb-img{ max-width:90vw; max-height:85vh; object-fit:contain;
+  transform:scale(.96); opacity:0; transition:transform .42s var(--spring), opacity .3s ease }
+.lb.on .lb-img{ transform:scale(1); opacity:1 }
+.lb-cap{ position:absolute; bottom:24px; left:0; right:0; text-align:center; color:var(--ivory); pointer-events:none }
+.lb-cap .p{ font:200 italic clamp(22px,2.6vw,30px)/1 var(--display); letter-spacing:-0.01em; color:var(--gold-light) }
+.lb-cap .c{ font:300 12px/1 var(--body); letter-spacing:.22em; color:rgba(245,241,235,.6); margin-top:8px; font-variant-numeric:tabular-nums }
+.lb-x{ position:absolute; top:22px; right:26px; min-width:44px; min-height:44px; font:200 26px/1 var(--display);
+  color:rgba(245,241,235,.7); cursor:pointer; background:none; border:none; transition:color .3s ease }
+.lb-nav{ position:absolute; top:50%; transform:translateY(-50%); min-width:44px; min-height:44px; font:200 40px/1 var(--display);
+  color:rgba(245,241,235,.55); cursor:pointer; background:none; border:none; padding:16px; user-select:none; transition:color .3s ease, transform .2s var(--ease-out) }
+@media(hover:hover) and (pointer:fine){ .lb-nav:hover,.lb-x:hover{ color:var(--gold-light) } }
+.lb-nav:active{ transform:translateY(-50%) scale(.9) }
+.lb-prev{ left:8px } .lb-next{ right:8px }
+
+/* ── responsive ── */
+@media(max-width:900px){
+  .masonry.todos,.masonry.filtrada{ grid-template-columns:1fr 1fr; grid-template-rows:none; grid-template-areas:none; grid-auto-rows:46vh }
+  .masonry.todos .tile:nth-child(n){ grid-area:auto }
+  .masonry.todos .tile:nth-child(1),.masonry.todos .tile:nth-child(4){ grid-column:1 / -1; grid-auto-rows:auto }
+  .masonry.todos .tile:nth-child(1),.masonry.todos .tile:nth-child(4){ aspect-ratio:16/10 }
+}
+@media(max-width:560px){
+  .masonry.todos,.masonry.filtrada{ grid-template-columns:1fr; grid-auto-rows:auto }
+  .masonry.todos .tile,.masonry.filtrada .tile{ grid-column:1 / -1; aspect-ratio:4/5 }
+  .lb-stage{ width:96vw; height:80vh }
+  .lb-nav{ font-size:30px; padding:10px }
+}
+@media(prefers-reduced-motion:reduce){
+  *{ transition-duration:.01ms !important; animation-duration:.01ms !important }
+  .tile{ opacity:1; transform:none }
+  .lb-img{ transform:none; opacity:1 }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="logo">El Romeral</div>
+  <a href="index.html" class="back">← Volver a la asesoría</a>
+</header>
+
+<section class="hero-g">
+  <div class="eyebrow">Galería</div>
+  <h1>Lo que hemos <em>diseñado</em> juntos</h1>
+  <p class="sub">Cada celebración, única e irrepetible. Pasa el cursor sobre una historia para descubrirla.</p>
+</section>
+
+<nav class="filtros" id="filtros" role="tablist" aria-label="Filtrar por estilo"></nav>
+<div class="masonry todos" id="masonry"></div>
+
+<!-- lightbox -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Visor de fotos">
+  <button class="lb-x" id="lbX" aria-label="Cerrar">✕</button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Anterior">‹</button>
+  <div class="lb-stage">
+    <img class="lb-img" id="lbImg" alt="">
+  </div>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Siguiente">›</button>
+  <div class="lb-cap"><div class="p" id="lbPareja"></div><div class="c" id="lbCount"></div></div>
+</div>
+
+<script>
+const DIR = 'fotos/web/galeria/';
+const FALLBACK = 'fotos/web/lago_turquesa_muelle_01.jpg';
+
+// metadatos de cada pareja
+const COUPLES = [
+  { slug:'sarahi-emmanuel',    pareja:'Sarahí & Emmanuel',    estilo:'Modern Glam Nocturno',    fecha:'Octubre 2025',   filtro:'Modern' },
+  { slug:'henry-stephanie',    pareja:'Henry & Stephanie',    estilo:'Romántico Etéreo',        fecha:'Noviembre 2025', filtro:'Romántico' },
+  { slug:'ana-diego',          pareja:'Ana & Diego',          estilo:'Clásico Contemporáneo',   fecha:'Febrero 2026',   filtro:'Romántico' },
+  { slug:'daniel-bernardette', pareja:'Daniel & Bernardette', estilo:'Boho Chic Natural',       fecha:'Enero 2026',     filtro:'Boho' },
+  { slug:'perla-alexis',       pareja:'Perla & Alexis',       estilo:'Organic Modern',          fecha:'Marzo 2026',     filtro:'Modern' },
+  { slug:'paty-alex',          pareja:'Paty & Alex',          estilo:'Garden Glam',             fecha:'Abril 2026',     filtro:'Garden Glam' },
+];
+
+// fallback embebido (por si falla el fetch en file://)
+const MANIFEST_FALLBACK = {
+  "sarahi-emmanuel": seqNames('sarahi_emmanuel_',18),
+  "henry-stephanie": seqNames('henry_stephanie_',18),
+  "ana-diego": seqNames('ana_diego_',18),
+  "daniel-bernardette": seqNames('daniel_bernardette_',18),
+  "perla-alexis": seqNames('perla_alexis_',18),
+  "paty-alex": seqNames('paty_alex_',19),
+};
+function seqNames(prefix, n){ return Array.from({length:n}, (_,i) => prefix + String(i+1).padStart(3,'0') + '.jpg'); }
+
+const FILTROS = ['Todos','Garden Glam','Romántico','Boho','Modern'];
+const $ = s => document.querySelector(s);
+const onImgError = img => { if (img.dataset.fb) return; img.dataset.fb = '1'; img.src = FALLBACK; };
+
+let lbCi = 0, lbIdx = 0, lastFocus = null;
+const lb=$('#lb'), lbImg=$('#lbImg'), lbPareja=$('#lbPareja'), lbCount=$('#lbCount'), grid=$('#masonry');
+
+// ── init: carga manifest desplegable, luego pinta ──
+(async function init(){
+  let manifest = null;
+  try{
+    const r = await fetch(DIR + 'manifest.json', { cache:'no-cache' });
+    if (r.ok) manifest = await r.json();
+  }catch(e){ /* file:// o sin red → fallback */ }
+  if (!manifest) manifest = MANIFEST_FALLBACK;
+
+  COUPLES.forEach(c => {
+    const names = (manifest[c.slug] || []).slice().sort();
+    c.fotos = names.map(n => DIR + c.slug + '/' + n);
+  });
+
+  pintarFiltros();
+  pintarTiles();
+})();
+
+// ── filtros textuales ──
+function pintarFiltros(){
+  const wrap = $('#filtros');
+  FILTROS.forEach((f,i) => {
+    if (i>0){ const s=document.createElement('span'); s.className='sep'; s.setAttribute('aria-hidden','true'); wrap.appendChild(s); }
+    const b = document.createElement('button');
+    b.className = 'filtro' + (i===0?' on':''); b.textContent = f; b.dataset.f = f;
+    b.setAttribute('role','tab'); b.setAttribute('aria-selected', i===0?'true':'false');
+    b.addEventListener('click', () => aplicarFiltro(f, b));
+    wrap.appendChild(b);
+  });
+}
+function aplicarFiltro(f, btn){
+  document.querySelectorAll('.filtro').forEach(x => { x.classList.remove('on'); x.setAttribute('aria-selected','false'); });
+  btn.classList.add('on'); btn.setAttribute('aria-selected','true');
+  const todos = f === 'Todos';
+  grid.classList.toggle('todos', todos);
+  grid.classList.toggle('filtrada', !todos);
+  document.querySelectorAll('.tile').forEach(t => t.classList.toggle('hide', !todos && t.dataset.filtro !== f));
+}
+
+// ── tiles ──
+function pintarTiles(){
+  COUPLES.forEach((c, ci) => {
+    const tile = document.createElement('div');
+    tile.dataset.filtro = c.filtro; tile.dataset.ci = ci;
+    const vacia = !c.fotos || c.fotos.length === 0;
+    if (vacia){
+      tile.className = 'tile empty';
+      tile.innerHTML = `<div class="ov"><div class="estilo">${c.estilo}</div><div class="pareja">${c.pareja}</div><div class="soon">Galería en camino</div></div>`;
+    } else {
+      tile.className = 'tile';
+      tile.tabIndex = 0; tile.setAttribute('role','button'); tile.setAttribute('aria-label', `Ver galería de ${c.pareja}`);
+      tile.innerHTML = `
+        <img src="${c.fotos[0]}" alt="${c.pareja} — ${c.estilo}" loading="lazy" onerror="onImgError(this)">
+        <div class="ov">
+          <div class="estilo">${c.estilo}</div>
+          <div class="pareja">${c.pareja}</div>
+          <div class="ln"></div>
+          <div class="meta">${c.fecha} · ${c.fotos.length} momentos</div>
+        </div>`;
+      tile.addEventListener('click', () => abrirLightbox(ci, 0));
+      tile.addEventListener('keydown', e => { if (e.key==='Enter' || e.key===' '){ e.preventDefault(); abrirLightbox(ci, 0); } });
+    }
+    grid.appendChild(tile);
+  });
+
+  // revelar con stagger
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting){
+        const idx = [...grid.children].indexOf(e.target);
+        e.target.style.transitionDelay = (Math.min(idx,5)*0.07)+'s';
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold:.12 });
+  document.querySelectorAll('.tile').forEach(t => io.observe(t));
+}
+
+// ── lightbox ──
+function abrirLightbox(ci, idx){
+  if (!COUPLES[ci].fotos || !COUPLES[ci].fotos.length) return;
+  lbCi=ci; lbIdx=idx; lastFocus=document.activeElement; pintar();
+  lb.classList.add('on'); document.body.style.overflow='hidden'; $('#lbNext').focus();
+}
+function pintar(){
+  const c=COUPLES[lbCi];
+  lbImg.classList.remove('on');
+  lbImg.src=c.fotos[lbIdx]; lbImg.alt=`${c.pareja} · ${lbIdx+1} de ${c.fotos.length}`;
+  lbPareja.textContent=c.pareja;
+  lbCount.textContent=`${lbIdx+1} / ${c.fotos.length}`;
+  const n=c.fotos.length;
+  [ (lbIdx+1)%n, (lbIdx-1+n)%n ].forEach(i => { const im=new Image(); im.src=c.fotos[i]; });
+}
+function nav(d){ const n=COUPLES[lbCi].fotos.length; lbIdx=(lbIdx+d+n)%n; pintar(); }
+function cerrar(){ lb.classList.remove('on'); document.body.style.overflow=''; if(lastFocus) lastFocus.focus(); }
+lbImg.addEventListener('error', () => onImgError(lbImg));
+$('#lbX').addEventListener('click', cerrar);
+$('#lbPrev').addEventListener('click', e=>{ e.stopPropagation(); nav(-1); });
+$('#lbNext').addEventListener('click', e=>{ e.stopPropagation(); nav(1); });
+lb.addEventListener('click', e=>{ if(e.target===lb || e.target.classList.contains('lb-stage')) cerrar(); });
+document.addEventListener('keydown', e=>{
+  if(!lb.classList.contains('on')) return;
+  if(e.key==='Escape') cerrar();
+  else if(e.key==='ArrowLeft') nav(-1);
+  else if(e.key==='ArrowRight') nav(1);
+});
+</script>
+</body>
+</html>

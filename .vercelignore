@@ -1,0 +1,6 @@
+# No subir originales pesados (4-19MB c/u). El sitio usa fotos/web/ (optimizadas).
+fotos/*.jpg
+fotos/*.png
+fotos/*.JPG
+# Galerías de bodas: solo se despliegan las optimizadas de fotos/web/galeria/
+fotos/galeria/

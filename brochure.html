@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Tu Experiencia · El Romeral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#B8935A; --forest:#1A2F23; --forest-deep:#0D1A12;
+  --ivory:#F5F1EB; --text:#2A2A2A;
+  --spring:cubic-bezier(0.34,1.56,0.64,1);
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:'Lato',sans-serif;font-weight:300;font-size:15px;line-height:1.6;
+  color:var(--text);background:var(--ivory);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+h1,h2,h3,.serif{font-family:'DM Serif Display',serif;font-weight:400;line-height:1.12}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+.cta{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--gold);color:var(--forest-deep);
+  font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+  padding:18px 38px;border-radius:2px;
+  transition:transform .5s var(--spring), box-shadow .4s var(--ease), background .3s;
+  box-shadow:0 10px 34px rgba(184,147,90,0.28);
+}
+.cta:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 16px 44px rgba(184,147,90,0.4)}
+.cta:active{transform:translateY(0) scale(.99)}
+
+/* ---------- BROCHURE ---------- */
+#brochure{background:var(--ivory);position:relative;min-height:100vh}
+.bro-stage{display:none;width:100%;min-height:100vh;min-height:100svh}
+.bro-stage.active{display:grid}
+@media(min-width:880px){.bro-stage.active{grid-template-columns:1fr 1fr}}
+.bro-photo{position:relative;min-height:42vh;background-size:cover;background-position:center}
+.bro-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(13,26,18,0.18),transparent 60%)}
+.bro-body{position:relative;display:flex;flex-direction:column;justify-content:center;padding:56px clamp(28px,6vw,76px)}
+.bro-counter{position:absolute;top:26px;right:clamp(28px,6vw,76px);font-size:12px;letter-spacing:.22em;color:var(--gold);font-weight:700}
+.bro-bignum{position:absolute;top:-18px;left:clamp(20px,5vw,60px);font-family:'DM Serif Display',serif;font-size:clamp(120px,20vw,210px);color:rgba(184,147,90,0.13);line-height:1;pointer-events:none;z-index:0}
+.bro-content{position:relative;z-index:1;animation:fadeUp .7s var(--ease) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.bro-kicker{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px}
+.bro-content h2{font-size:clamp(32px,4.6vw,52px);color:var(--forest);margin-bottom:22px}
+.bro-lead{font-size:17px;color:#544d40;margin-bottom:26px;max-width:46ch}
+.bro-list{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:24px}
+.bro-list li{position:relative;padding-left:24px;font-size:15px;color:#3a352c;max-width:48ch}
+.bro-list li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.bro-sub{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#a39c8c;font-weight:700;margin:6px 0 12px}
+.bro-cortesias{background:rgba(184,147,90,0.08);border-left:3px solid var(--gold);padding:16px 20px;border-radius:0 6px 6px 0;margin-bottom:30px}
+.bro-cortesias .bro-sub{margin-top:0}
+.bro-cortesias p{font-size:14px;color:#544d40;line-height:1.7}
+.bro-next{align-self:flex-start}
+
+@media(max-width:879px){.bro-bignum{font-size:120px}}
+</style>
+</head>
+<body>
+<div id="brochure">
+
+  <div class="bro-stage" data-stage="loc">
+    <div class="bro-photo" style="background-image:url('fotos/web/toldo_panoramico_01.jpg')"></div>
+    <div class="bro-body">
+      <span class="bro-counter"></span>
+      <span class="bro-bignum">01</span>
+      <div class="bro-content">
+        <p class="bro-kicker">Locación</p>
+        <h2>El escenario de tu día</h2>
+        <p class="bro-lead">7 horas para vivir cada momento: 5 hrs de recepción + 1 hr de área de alberca y coctelería + 1 hr en la Capilla Cristo del Romeral.</p>
+        <ul class="bro-list">
+          <li>Toldo panorámico de 16 × 26 m</li>
+          <li>Planta de luz de respaldo</li>
+          <li>Estacionamiento para 250 autos</li>
+          <li>Seguridad privada y valet parking</li>
+          <li>Personal para sanitarios</li>
+        </ul>
+        <div class="bro-cortesias">
+          <p class="bro-sub">Cortesías de la casa</p>
+          <p>Bride room desde las 8 am · cisnes negros, patos y gansos en el lago · fogata decorativa junto al lago · valet parking.</p>
+        </div>
+        <button class="cta bro-next">Siguiente <span>&rarr;</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bro-stage" data-stage="cat">
+    <div class="bro-photo" style="background-image:url('fotos/web/banquete_mesa_01.jpg')"></div>
+    <div class="bro-body">
+      <span class="bro-counter"></span>
+      <span class="bro-bignum">02</span>
+      <div class="bro-content">
+        <p class="bro-kicker">Catering</p>
+        <h2>Cocina propia, sabor a casa</h2>
+        <p class="bro-lead">Un menú de 3 tiempos preparado en nuestra cocina, servido con detalle.</p>
+        <ul class="bro-list">
+          <li>Entrada: crema o ensalada</li>
+          <li>Plato fuerte: Pollo, Cerdo, Res o Salmón</li>
+          <li>Postre</li>
+          <li>Vajilla Arcoroc · mantelería fina · molletón</li>
+          <li>Mesas redondas o cuadradas</li>
+          <li>1 mesero por cada 15 personas · capitán de meseros</li>
+          <li>Menú impreso · numeración de mesas · pan individual</li>
+        </ul>
+        <button class="cta bro-next">Siguiente <span>&rarr;</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bro-stage" data-stage="bar">
+    <div class="bro-photo" style="background-image:url('fotos/web/banquete_quesos_01.jpg')"></div>
+    <div class="bro-body">
+      <span class="bro-counter"></span>
+      <span class="bro-bignum">03</span>
+      <div class="bro-content">
+        <p class="bro-kicker">Barra y bebidas</p>
+        <h2>Bebidas sin alcohol</h2>
+        <p class="bro-lead">Barra completamente equipada para mantener a tus invitados refrescados toda la noche.</p>
+        <ul class="bro-list">
+          <li>Mobiliario de barra · fábrica de hielo</li>
+          <li>Coca, Diet, Mineral, Squirt y Quina</li>
+          <li>Jugos de uva, piña, naranja y arándano</li>
+          <li>1 bartender por cada 100 personas</li>
+          <li>2 lavavajillas · barra de madera · acero inoxidable</li>
+          <li>Cristalería completa</li>
+        </ul>
+        <button class="cta bro-next">Siguiente <span>&rarr;</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bro-stage" data-stage="ilu">
+    <div class="bro-photo" id="iluPhoto" style="background-image:url('fotos/web/jardin_lago_atardecer_iluminado_01.jpg')"></div>
+    <div class="bro-body">
+      <span class="bro-counter"></span>
+      <span class="bro-bignum">04</span>
+      <div class="bro-content">
+        <p class="bro-kicker">Iluminación</p>
+        <h2 id="iluTitle">Atardecer iluminado</h2>
+        <p class="bro-lead" id="iluLead">40 unidades de luz led ámbar en puntos clave del jardín, para envolver la noche en calidez.</p>
+        <button class="cta bro-next">Siguiente <span>&rarr;</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bro-stage" data-stage="dj">
+    <div class="bro-photo" style="background-image:url('fotos/web/boda_pista_baile_noche_01.jpg')"></div>
+    <div class="bro-body">
+      <span class="bro-counter"></span>
+      <span class="bro-bignum">05</span>
+      <div class="bro-content">
+        <p class="bro-kicker">DJ Romeral y pista</p>
+        <h2>Que no pare la música</h2>
+        <p class="bro-lead">Producción de audio e iluminación profesional para llenar la pista.</p>
+        <ul class="bro-list">
+          <li>Equipo Bose · rack · mezcladora · cabina DJ</li>
+          <li>11 subwoofers · 12 bocinas en 3 zonas</li>
+          <li>Consola de 12 canales · 2 micrófonos</li>
+          <li>8 luces robóticas · 4 par led</li>
+          <li>8 chisperos en pista · bazuca de mariposas</li>
+          <li>Pista pintada a mano</li>
+          <li>DJ Romeral durante 5 horas</li>
+        </ul>
+        <button class="cta bro-next">Siguiente <span>&rarr;</span></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const d = JSON.parse(sessionStorage.getItem('romeral') || '{}');
+const CON_DJ = ['boda','xv','corporativo','social'];
+const tieneDJ = CON_DJ.includes(d.tipo);
+
+let stages = ['loc','cat','bar'];
+if(tieneDJ){ stages.push('ilu','dj'); }
+
+let broIdx = 0;
+function pad(n){ return String(n).padStart(2,'0'); }
+function showStage(i){
+  broIdx = i;
+  const key = stages[i];
+  document.querySelectorAll('.bro-stage').forEach(s=>s.classList.remove('active'));
+  const el = document.querySelector(`.bro-stage[data-stage="${key}"]`);
+  el.classList.add('active');
+  el.querySelector('.bro-counter').textContent = `${pad(i+1)} / ${pad(stages.length)}`;
+  const next = el.querySelector('.bro-next');
+  next.innerHTML = (i === stages.length-1) ? 'Ver mi inversión <span>&rarr;</span>' : 'Siguiente <span>&rarr;</span>';
+  const c = el.querySelector('.bro-content');
+  c.style.animation='none'; void c.offsetWidth; c.style.animation='';
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+document.querySelectorAll('.bro-next').forEach(btn=>{
+  btn.onclick = ()=>{
+    if(broIdx < stages.length-1){ showStage(broIdx+1); }
+    else { window.location.href = 'precio.html'; }
+  };
+});
+
+showStage(0);
+</script>
+</body>
+</html>

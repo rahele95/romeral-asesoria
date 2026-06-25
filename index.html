@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Asesoría Virtual · El Romeral</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+:root{
+  --gold:#B8935A; --forest:#1A2F23; --forest-deep:#0D1A12;
+  --ivory:#F5F1EB; --text:#2A2A2A;
+  --spring:cubic-bezier(0.34,1.56,0.64,1);
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:'Lato',sans-serif;font-weight:300;font-size:15px;line-height:1.6;
+  color:var(--text);background:var(--ivory);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+h1,h2,h3,.serif{font-family:'DM Serif Display',serif;font-weight:400;line-height:1.12}
+img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* ---------- PHASES ---------- */
+.phase{display:none;min-height:100vh;width:100%}
+.phase.active{display:flex}
+
+/* ---------- HERO ---------- */
+#hero{
+  position:relative;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;color:var(--ivory);padding:24px;min-height:100vh;min-height:100svh;
+  background:#0D1A12;
+}
+#hero::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(120% 90% at 50% 38%, rgba(13,26,18,0.30) 0%, rgba(13,26,18,0.72) 100%),
+    linear-gradient(to bottom, rgba(13,26,18,0.45), rgba(13,26,18,0.62) 55%, rgba(13,26,18,0.82));
+}
+#hero>*{position:relative;z-index:2}
+.hero-eyebrow{
+  font-size:10px;letter-spacing:.42em;text-transform:uppercase;
+  color:rgba(184,147,90,0.85);font-weight:400;margin-bottom:30px;
+}
+#hero h1{font-size:clamp(18px,2.8vw,28px);max-width:16ch;margin-bottom:4px;letter-spacing:.005em}
+#hero h1 .gold{color:var(--gold)}
+.hero-sub{font-size:clamp(13px,1.4vw,15px);color:rgba(245,241,235,0.78);font-weight:300;max-width:38ch;margin:10px auto 20px}
+.cta{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--gold);color:var(--forest-deep);
+  font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+  padding:18px 38px;border-radius:2px;
+  transition:transform .5s var(--spring), box-shadow .4s var(--ease), background .3s;
+  box-shadow:0 10px 34px rgba(184,147,90,0.28);
+}
+.cta:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 16px 44px rgba(184,147,90,0.4)}
+.cta:active{transform:translateY(0) scale(.99)}
+.cta:disabled{background:#c9c1b4;color:#8a8478;box-shadow:none;cursor:not-allowed;transform:none}
+
+/* calendar fused into hero */
+.hero-cal{width:100%;display:flex;flex-direction:column;align-items:center;margin-top:30px}
+.hero-cal .step-cta{margin-top:28px}
+
+/* ---------- STEPS ---------- */
+#steps{background:var(--ivory);flex-direction:column;align-items:center;justify-content:center;padding:64px 24px}
+.steps-inner{width:100%;max-width:760px;text-align:center}
+.dots{display:flex;gap:12px;justify-content:center;margin-bottom:46px}
+.dot{width:11px;height:11px;border-radius:50%;background:#d8d0c2;transition:background .4s var(--spring),transform .5s var(--spring)}
+.dot.on{background:var(--gold);transform:scale(1.18)}
+.step{display:none}
+.step.active{display:block;animation:fadeUp .7s var(--ease) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.step h2{font-size:clamp(30px,5vw,48px);color:var(--forest);margin-bottom:8px}
+.step .lead{color:#6b6457;font-size:16px;margin-bottom:34px}
+.step-cta{margin-top:40px}
+
+/* calendar — integrated over dark hero, no white card */
+.cal{
+  width:100%;max-width:680px;margin:0 auto;
+  background:rgba(26,47,35,0.40);
+  border:1px solid rgba(245,241,235,0.12);
+  border-radius:16px;padding:18px 24px 20px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  color:var(--ivory);
+}
+.cal-years{display:flex;gap:8px;justify-content:center;margin-bottom:18px}
+.cal-year{
+  padding:7px 18px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.04em;
+  color:rgba(245,241,235,0.6);border:1px solid rgba(245,241,235,0.18);transition:all .3s var(--ease);
+}
+.cal-year:hover{color:var(--ivory);border-color:rgba(245,241,235,0.4)}
+.cal-year.on{background:var(--gold);border-color:var(--gold);color:var(--forest-deep)}
+.cal-body{display:flex;gap:22px;align-items:flex-start}
+.cal-months{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex:0 0 auto}
+.cal-month{
+  padding:9px 6px;border-radius:8px;font-size:12px;text-transform:capitalize;
+  color:rgba(245,241,235,0.7);transition:all .25s var(--ease);
+}
+.cal-month:hover{background:rgba(245,241,235,0.10);color:var(--ivory)}
+.cal-month.on{background:rgba(184,147,90,0.22);color:var(--gold);font-weight:700}
+.cal-month.disabled{color:rgba(245,241,235,0.22);cursor:not-allowed}
+.cal-days{flex:1 1 auto;min-width:0}
+.cal-dows{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:6px}
+.cal-dow{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,241,235,0.45);text-align:center;font-weight:700}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:13px;border-radius:50%;color:var(--ivory);transition:background .25s,color .25s,transform .4s var(--spring)}
+.cal-day.empty{visibility:hidden}
+.cal-day.avail{cursor:pointer}
+.cal-day.avail:hover{background:rgba(245,241,235,0.14)}
+.cal-day.disabled{color:rgba(245,241,235,0.22);cursor:not-allowed}
+.cal-day.sel{background:var(--gold);color:#fff;transform:scale(1.1);font-weight:700}
+@media(max-width:560px){
+  .cal-body{flex-direction:column;gap:14px}
+  .cal-months{grid-template-columns:repeat(6,1fr);width:100%}
+}
+
+.reward{
+  display:inline-block;margin-top:18px;color:var(--gold);font-weight:700;
+  font-size:13px;letter-spacing:.05em;opacity:0;transform:translateY(8px);
+  transition:opacity .5s var(--ease),transform .5s var(--spring);
+}
+.reward.show{opacity:1;transform:translateY(0)}
+
+/* type cards */
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:640px;margin:0 auto}
+.type-card{
+  position:relative;background:#fff;border:1.5px solid #e7e0d3;border-radius:10px;
+  padding:26px 14px;text-align:center;transition:transform .5s var(--spring),border-color .35s,background .35s,box-shadow .4s;
+}
+.type-card:hover{border-color:var(--gold);transform:scale(1.03);box-shadow:0 14px 34px rgba(26,47,35,0.08)}
+.type-card.sel{border-color:var(--gold);background:rgba(184,147,90,0.1)}
+.type-ico{font-size:26px;margin-bottom:10px}
+.type-name{font-family:'DM Serif Display',serif;font-size:18px;color:var(--forest)}
+.type-check{position:absolute;top:10px;right:12px;color:var(--gold);font-weight:700;opacity:0;transform:scale(.4);transition:all .45s var(--spring)}
+.type-card.sel .type-check{opacity:1;transform:scale(1)}
+
+/* guests */
+.guest-num{font-family:'DM Serif Display',serif;font-size:clamp(72px,16vw,140px);color:var(--forest);line-height:1}
+.guest-label{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#a39c8c;margin-bottom:30px}
+.slider-wrap{max-width:460px;margin:0 auto}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:4px;background:#ddd5c6;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--gold);cursor:pointer;box-shadow:0 4px 14px rgba(184,147,90,0.5);transition:transform .3s var(--spring)}
+input[type=range]::-webkit-slider-thumb:active{transform:scale(1.2)}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-radius:50%;background:var(--gold);cursor:pointer}
+.slider-ends{display:flex;justify-content:space-between;font-size:12px;color:#a39c8c;margin-top:10px;letter-spacing:.06em}
+@media(max-width:879px){.type-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){#hero h1{font-size:22px}}
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<section id="hero" class="phase active">
+  <p class="hero-eyebrow">El Romeral</p>
+  <h1>No organizamos eventos.<br><span class="gold">Creamos momentos que perduran.</span></h1>
+  <p class="hero-sub">Elige la fecha soñada para tu evento y empecemos a diseñar tu celebración.</p>
+  <div class="hero-cal">
+    <div class="cal" id="cal"></div>
+    <span class="reward" id="dateReward">¡Esa fecha está disponible!</span>
+    <div class="step-cta"><button class="cta" id="cta1" disabled>Continuar <span>&rarr;</span></button></div>
+  </div>
+</section>
+
+<!-- ===================== STEPS ===================== -->
+<section id="steps" class="phase">
+  <div class="steps-inner">
+    <div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div>
+
+    <!-- STEP 2 -->
+    <div class="step active" data-step="2">
+      <h2>¿Qué van a celebrar?</h2>
+      <p class="lead">Cada celebración tiene su propia esencia.</p>
+      <div class="type-grid" id="typeGrid">
+        <button class="type-card" data-tipo="boda"><div class="type-ico">💍</div><div class="type-name">Boda</div><span class="type-check">✓</span></button>
+        <button class="type-card" data-tipo="xv"><div class="type-ico">👑</div><div class="type-name">XV Años</div><span class="type-check">✓</span></button>
+        <button class="type-card" data-tipo="corporativo"><div class="type-ico">🏛️</div><div class="type-name">Corporativo</div><span class="type-check">✓</span></button>
+        <button class="type-card" data-tipo="social"><div class="type-ico">🥂</div><div class="type-name">Social</div><span class="type-check">✓</span></button>
+        <button class="type-card" data-tipo="bautizo"><div class="type-ico">🕊️</div><div class="type-name">Bautizo</div><span class="type-check">✓</span></button>
+        <button class="type-card" data-tipo="comunion"><div class="type-ico">✝️</div><div class="type-name">1ra Comunión</div><span class="type-check">✓</span></button>
+      </div>
+      <div class="step-cta"><button class="cta" id="cta2" disabled>Continuar <span>&rarr;</span></button></div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" data-step="3">
+      <h2>¿Cuántos invitados esperan?</h2>
+      <p class="lead">Desliza para ajustar el número de invitados.</p>
+      <div class="guest-num" id="guestNum">120</div>
+      <div class="guest-label">Invitados</div>
+      <div class="slider-wrap">
+        <input type="range" id="guestSlider" min="50" max="400" step="10" value="120">
+        <div class="slider-ends"><span>50</span><span>400</span></div>
+      </div>
+      <div class="step-cta"><button class="cta" id="cta3">Ver mi experiencia <span>&rarr;</span></button></div>
+    </div>
+  </div>
+</section>
+
+<script>
+const BLOCKED = ['2026-01-31','2026-03-14','2026-04-11','2026-04-25',
+  '2026-05-02','2026-10-10','2026-11-14','2027-07-10'];
+const CON_DJ = ['boda','xv','corporativo','social'];
+function getRangoRenta(n){ return [50,100,150,200,250,300,350,400].find(r=>n<=r) || 400; }
+
+const S = { fecha:null, tipo:null, personas:120 };
+
+/* PHASE NAV */
+function goPhase(id){
+  document.querySelectorAll('.phase').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+/* STEPS NAV */
+const dots = document.querySelectorAll('.dot');
+function showStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.toggle('active', +s.dataset.step===n));
+  dots.forEach((d,i)=>d.classList.toggle('on', i < n));
+}
+
+/* STEP 1: CALENDAR */
+const MONTHS_SHORT = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const DOW = ['D','L','M','M','J','V','S'];
+const today = new Date(); today.setHours(0,0,0,0);
+const YEARS = [today.getFullYear(), today.getFullYear()+1, today.getFullYear()+2];
+let viewY = today.getFullYear(), viewM = today.getMonth();
+const calEl = document.getElementById('cal');
+function pad(n){ return String(n).padStart(2,'0'); }
+function clampMonth(){
+  if(viewY === today.getFullYear() && viewM < today.getMonth()) viewM = today.getMonth();
+}
+function renderCal(){
+  const years = YEARS.map(y=>
+    `<button class="cal-year ${y===viewY?'on':''}" data-year="${y}">${y}</button>`).join('');
+  const months = MONTHS_SHORT.map((m,i)=>{
+    const lastDay = new Date(viewY, i+1, 0);
+    const past = lastDay < today;
+    return `<button class="cal-month ${i===viewM?'on':''} ${past?'disabled':''}" ${past?'':`data-month="${i}"`}>${m}</button>`;
+  }).join('');
+  const first = new Date(viewY, viewM, 1).getDay();
+  const days = new Date(viewY, viewM+1, 0).getDate();
+  let grid = DOW.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  grid = `<div class="cal-dows">${grid}</div><div class="cal-grid">`;
+  for(let i=0;i<first;i++) grid += `<div class="cal-day empty"></div>`;
+  for(let d=1;d<=days;d++){
+    const iso = `${viewY}-${pad(viewM+1)}-${pad(d)}`;
+    const dateObj = new Date(viewY, viewM, d);
+    const disabled = dateObj < today || BLOCKED.includes(iso);
+    const sel = S.fecha===iso;
+    grid += `<div class="cal-day ${disabled?'disabled':'avail'} ${sel?'sel':''}" data-iso="${iso}" ${disabled?'':'data-pick="1"'}>${d}</div>`;
+  }
+  grid += `</div>`;
+  calEl.innerHTML =
+    `<div class="cal-years">${years}</div>
+     <div class="cal-body">
+       <div class="cal-months">${months}</div>
+       <div class="cal-days">${grid}</div>
+     </div>`;
+  calEl.querySelectorAll('[data-year]').forEach(b=>{ b.onclick = ()=>{ viewY = +b.dataset.year; clampMonth(); renderCal(); }; });
+  calEl.querySelectorAll('[data-month]').forEach(b=>{ b.onclick = ()=>{ viewM = +b.dataset.month; renderCal(); }; });
+  calEl.querySelectorAll('[data-pick]').forEach(c=>{ c.onclick = ()=> pickDate(c.dataset.iso); });
+}
+function pickDate(iso){
+  S.fecha = iso;
+  renderCal();
+  document.getElementById('dateReward').classList.add('show');
+  document.getElementById('cta1').disabled = false;
+}
+renderCal();
+document.getElementById('cta1').onclick = ()=>{ goPhase('steps'); showStep(2); };
+
+/* STEP 2: TYPE */
+document.querySelectorAll('.type-card').forEach(card=>{
+  card.onclick = ()=>{
+    document.querySelectorAll('.type-card').forEach(c=>c.classList.remove('sel'));
+    card.classList.add('sel');
+    S.tipo = card.dataset.tipo;
+    document.getElementById('cta2').disabled = false;
+  };
+});
+document.getElementById('cta2').onclick = ()=> showStep(3);
+
+/* STEP 3: GUESTS */
+const slider = document.getElementById('guestSlider');
+const guestNum = document.getElementById('guestNum');
+let guestObj = {v:120};
+function updateGuests(val){
+  S.personas = val;
+  gsap.to(guestObj, {v:val, duration:.5, ease:'power2.out', onUpdate:()=>{ guestNum.textContent = Math.round(guestObj.v); }});
+}
+slider.oninput = ()=> updateGuests(+slider.value);
+updateGuests(120);
+document.getElementById('cta3').onclick = ()=>{
+  sessionStorage.setItem('romeral', JSON.stringify({ fecha: S.fecha, tipo: S.tipo, personas: S.personas }));
+  window.location.href = 'brochure.html';
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Tu Inversión · El Romeral</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+:root{
+  --gold:#B8935A; --forest:#1A2F23; --forest-deep:#0D1A12;
+  --ivory:#F5F1EB; --text:#2A2A2A;
+  --spring:cubic-bezier(0.34,1.56,0.64,1);
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:'Lato',sans-serif;font-weight:300;font-size:15px;line-height:1.6;
+  color:var(--text);background:var(--ivory);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+h1,h2,h3,.serif{font-family:'DM Serif Display',serif;font-weight:400;line-height:1.12}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+.cta{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--gold);color:var(--forest-deep);
+  font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+  padding:18px 38px;border-radius:2px;
+  transition:transform .5s var(--spring), box-shadow .4s var(--ease), background .3s;
+  box-shadow:0 10px 34px rgba(184,147,90,0.28);
+}
+.cta:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 16px 44px rgba(184,147,90,0.4)}
+.cta:active{transform:translateY(0) scale(.99)}
+
+/* ---------- INVESTMENT ---------- */
+#investment{
+  background:radial-gradient(120% 120% at 50% 0%, #1A2F23 0%, #0D1A12 70%);
+  color:var(--ivory);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;min-height:100svh;padding:72px 24px;text-align:center;
+}
+.inv-inner{width:100%;max-width:600px;animation:fadeUp .8s var(--ease) both}
+.inv-basis{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(184,147,90,0.85);font-weight:700;margin-bottom:30px}
+.inv-eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(245,241,235,0.55);margin-bottom:14px}
+.inv-total{font-family:'DM Serif Display',serif;font-size:clamp(54px,11vw,92px);color:var(--gold);line-height:1}
+.inv-per{font-size:15px;color:rgba(245,241,235,0.7);margin-top:12px}
+.inv-note{font-size:16px;color:rgba(245,241,235,0.82);font-weight:300;max-width:42ch;margin:30px auto 46px;font-style:italic}
+.inv-form{display:flex;flex-direction:column;gap:16px;text-align:left;max-width:440px;margin:0 auto 40px}
+.field label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,235,0.6);margin-bottom:7px}
+.field input{width:100%;background:rgba(245,241,235,0.06);border:1px solid rgba(245,241,235,0.18);border-radius:4px;padding:14px 16px;color:var(--ivory);font-family:inherit;font-size:15px;transition:border-color .3s}
+.field input:focus{outline:none;border-color:var(--gold)}
+.field input::placeholder{color:rgba(245,241,235,0.35)}
+.toggle-row{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;margin-top:4px}
+.toggle{position:relative;width:46px;height:26px;border-radius:999px;background:rgba(245,241,235,0.2);transition:background .35s var(--ease);flex:none}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .4s var(--spring)}
+.toggle-row.on .toggle{background:var(--gold)}
+.toggle-row.on .toggle::after{transform:translateX(20px)}
+.toggle-row span{font-size:14px;color:rgba(245,241,235,0.82)}
+.inv-ask{font-family:'DM Serif Display',serif;font-size:clamp(24px,4vw,32px);color:var(--ivory);margin:8px 0 26px}
+.inv-actions{display:flex;flex-direction:column;gap:16px;align-items:center}
+.btn-ghost{color:rgba(245,241,235,0.7);font-size:13px;letter-spacing:.1em;text-decoration:underline;text-underline-offset:4px;transition:color .3s}
+.btn-ghost:hover{color:var(--gold)}
+.inv-done{display:none;margin-top:30px;animation:fadeUp .6s var(--ease) both}
+.inv-done.show{display:block}
+.inv-done p{font-size:17px;color:rgba(245,241,235,0.9);margin-bottom:24px;max-width:40ch;margin-inline:auto}
+
+/* ---------- SCHEDULE ---------- */
+#schedule{
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;min-height:100svh;padding:72px 24px;text-align:center;
+  background:var(--ivory);
+}
+#schedule.show{display:flex}
+#schedule h2{font-size:clamp(30px,5vw,48px);color:var(--forest);margin-bottom:46px;max-width:16ch}
+.sched-grid{display:grid;gap:18px;width:100%;max-width:860px}
+@media(min-width:760px){.sched-grid{grid-template-columns:repeat(3,1fr)}}
+.sched-card{
+  display:block;background:#fff;border:1.5px solid #e7e0d3;border-radius:12px;padding:38px 24px;
+  text-decoration:none;color:inherit;transition:transform .5s var(--spring),border-color .35s,box-shadow .4s;
+}
+.sched-card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 22px 50px rgba(26,47,35,0.1)}
+.sched-ico{font-size:34px;margin-bottom:16px}
+.sched-card h3{font-family:'DM Serif Display',serif;font-size:21px;color:var(--forest);margin-bottom:8px}
+.sched-card p{font-size:14px;color:#6b6457}
+
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--forest);color:var(--ivory);padding:14px 24px;border-radius:6px;font-size:14px;opacity:0;pointer-events:none;transition:all .5s var(--spring);z-index:50}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ===================== INVESTMENT ===================== -->
+<section id="investment">
+  <div class="inv-inner">
+    <p class="inv-basis" id="invBasis"></p>
+    <p class="inv-eyebrow">Inversión estimada</p>
+    <div class="inv-total" id="invTotal">$0</div>
+    <p class="inv-per" id="invPer"></p>
+    <p class="inv-note">Esta es la base de tu experiencia. A partir de aquí, la personalizamos juntos.</p>
+
+    <div class="inv-form" id="invForm">
+      <div class="field"><label id="nameLabel">Tu nombre</label><input type="text" id="fNombre" placeholder="Escribe aquí"></div>
+      <div class="field"><label>WhatsApp</label><input type="tel" id="fWhats" placeholder="33 1234 5678"></div>
+      <div class="field"><label>Correo</label><input type="email" id="fEmail" placeholder="correo@ejemplo.com"></div>
+      <div class="toggle-row on" id="emailToggle"><span class="toggle"></span><span>Sí, envíenme esta información por correo</span></div>
+    </div>
+
+    <div id="invDecision">
+      <p class="inv-ask">¿Les gustaría agendar su visita a El Romeral?</p>
+      <div class="inv-actions">
+        <button class="cta" id="btnAgendar">Sí, quiero agendar mi cita <span>&rarr;</span></button>
+        <button class="btn-ghost" id="btnSoloInfo">Por ahora solo quiero la información</button>
+      </div>
+    </div>
+
+    <div class="inv-done" id="invDone">
+      <p>¡Listo! Te enviamos tu experiencia y un asesor te contactará muy pronto.</p>
+      <button class="cta" id="btnReconsiderar">Mejor sí quiero agendar mi cita <span>&rarr;</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SCHEDULE ===================== -->
+<section id="schedule">
+  <h2>¿Cómo prefieren que nos conozcamos?</h2>
+  <div class="sched-grid">
+    <a class="sched-card" href="https://cal.com/ricardo-heredia-jxuu3m/presencial" target="_blank" rel="noopener">
+      <div class="sched-ico">🌿</div><h3>Visita presencial</h3><p>Recorre El Romeral en persona.</p>
+    </a>
+    <a class="sched-card" href="https://cal.com/ricardo-heredia-jxuu3m/presencial" target="_blank" rel="noopener">
+      <div class="sched-ico">💻</div><h3>Videollamada</h3><p>Conócenos desde donde estés.</p>
+    </a>
+    <a class="sched-card" href="https://wa.me/523338708159" target="_blank" rel="noopener">
+      <div class="sched-ico">💬</div><h3>WhatsApp</h3><p>Escríbenos directamente.</p>
+    </a>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const d = JSON.parse(sessionStorage.getItem('romeral') || '{}');
+const CON_DJ = ['boda','xv','corporativo','social'];
+
+function getRangoRenta(n){ return [50,100,150,200,250,300,350,400].find(r=>n<=r) || 400; }
+function getRangoPista(n){ return n<=50?22500 : n<=100?27000 : n<=150?32400 : n<=250?37800 : 44100; }
+const RENTA = {50:89000,100:119000,150:149000,200:159000,250:169000,300:179000,350:189000,400:199000};
+function calcularTotal(personas, tipo){
+  const dj = CON_DJ.includes(tipo);
+  const renta = RENTA[getRangoRenta(personas)];
+  const menu = 1250 * personas, barra = 90 * personas;
+  const pista = getRangoPista(personas);
+  const ilum = dj ? 32000 : 0;
+  const sonido = dj ? 123000 + 25000 + pista : 0;
+  return renta + menu + barra + ilum + sonido;
+}
+
+function fmt(n){ return '$' + n.toLocaleString('es-MX'); }
+
+const NAME_LABELS = { boda:'Nombre de los novios', xv:'Nombre de la festejada', corporativo:'Empresa y nombre de contacto' };
+const tipoNice = {boda:'Boda',xv:'XV Años',corporativo:'Corporativo',social:'Evento social',bautizo:'Bautizo',comunion:'1ra Comunión'};
+
+const total = calcularTotal(d.personas || 120, d.tipo);
+const per = Math.round(total / (d.personas || 120));
+
+document.getElementById('invBasis').textContent = `Basado en ${d.personas || 120} invitados · ${tipoNice[d.tipo] || ''} · ${d.fecha || ''}`;
+document.getElementById('nameLabel').textContent = NAME_LABELS[d.tipo] || 'Tu nombre';
+document.getElementById('invPer').textContent = `${fmt(per)} por persona`;
+
+const o = {v:0};
+gsap.to(o, {v:total, duration:1.6, ease:'power3.out', onUpdate:()=>{ document.getElementById('invTotal').textContent = fmt(Math.round(o.v)); }});
+
+let emailOn = true;
+const emailToggle = document.getElementById('emailToggle');
+emailToggle.onclick = ()=>{ emailOn = !emailOn; emailToggle.classList.toggle('on', emailOn); };
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3200);
+}
+
+function showSchedule(){
+  document.getElementById('investment').style.display = 'none';
+  const s = document.getElementById('schedule');
+  s.classList.add('show');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+async function saveLead(quiereCita){
+  const payload = {
+    nombre: document.getElementById('fNombre').value.trim(),
+    telefono: document.getElementById('fWhats').value.trim(),
+    whatsapp: document.getElementById('fWhats').value.trim(),
+    email: document.getElementById('fEmail').value.trim(),
+    fecha: d.fecha,
+    tipoEvento: d.tipo,
+    tipo_evento: d.tipo,
+    personas: d.personas,
+    hora: CON_DJ.includes(d.tipo) ? 'noche' : 'dia',
+    musica: CON_DJ.includes(d.tipo) ? 'con' : 'sin',
+    total: total,
+    total_estimado: total,
+    quiere_cita: quiereCita,
+    quiere_email: emailOn
+  };
+  try{
+    await fetch('/api/leads', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+  }catch(e){}
+}
+
+function validForm(){
+  const n = document.getElementById('fNombre').value.trim();
+  const w = document.getElementById('fWhats').value.trim();
+  if(!n || !w){ showToast('Completa tu nombre y WhatsApp, por favor.'); return false; }
+  return true;
+}
+
+document.getElementById('btnAgendar').onclick = ()=>{
+  if(!validForm()) return;
+  saveLead(true);
+  showSchedule();
+};
+document.getElementById('btnSoloInfo').onclick = ()=>{
+  if(!validForm()) return;
+  saveLead(false);
+  document.getElementById('invDecision').style.display='none';
+  document.getElementById('invForm').style.display='none';
+  document.getElementById('invDone').classList.add('show');
+};
+document.getElementById('btnReconsiderar').onclick = ()=>{ saveLead(true); showSchedule(); };
+</script>
+</body>
+</html>

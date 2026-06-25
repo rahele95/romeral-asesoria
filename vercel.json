@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "alias": ["asesoria.elromeral.com.mx"],
+  "functions": {
+    "api/leads.js": { "maxDuration": 10 },
+    "api/leads-list.js": { "maxDuration": 10 }
+  }
+}

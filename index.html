@@ -28,8 +28,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 #hero{position:relative;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--ivory);padding:32px 20px 40px;min-height:100vh;min-height:100svh;background:#0D1A12}
 #hero::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 38%,rgba(13,26,18,0.30) 0%,rgba(13,26,18,0.72) 100%),linear-gradient(to bottom,rgba(13,26,18,0.45),rgba(13,26,18,0.62) 55%,rgba(13,26,18,0.82))}
 #hero>*{position:relative;z-index:2}
-.hero-eyebrow{font-size:clamp(26px,5vw,40px);letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:400;margin-bottom:12px;font-family:'DM Serif Display',serif;font-style:italic}
-#hero h1{display:none}
+.hero-eyebrow{font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:rgba(184,147,90,0.85);font-weight:400;margin-bottom:16px}
+#hero h1{font-size:clamp(18px,3.5vw,28px);max-width:20ch;margin-bottom:4px;letter-spacing:.005em}
 #hero h1 .gold{color:var(--gold)}
 .hero-sub{font-size:12px;color:rgba(245,241,235,0.45);font-weight:300;max-width:36ch;margin:10px auto 0;letter-spacing:.01em}
 .cta{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:var(--forest-deep);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;padding:16px 30px;border-radius:2px;transition:transform .5s var(--spring),box-shadow .4s var(--ease),background .3s;box-shadow:0 10px 34px rgba(184,147,90,0.28);width:100%;justify-content:center}
@@ -51,14 +51,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .step .lead{color:#6b6457;font-size:15px;margin-bottom:28px}
 .step-cta{margin-top:32px}
 .cal{width:100%;max-width:680px;margin:0 auto;background:rgba(26,47,35,0.45);border:1px solid rgba(245,241,235,0.14);border-radius:16px;padding:20px 18px 22px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--ivory)}
-.cal-years-row{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
-.cal-ytab{padding:5px 16px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.06em;color:rgba(245,241,235,0.55);border:1px solid rgba(245,241,235,0.18);transition:all .25s;cursor:pointer;background:none}
+.cal-years-row{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
+.cal-ytab{padding:7px 18px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.04em;color:rgba(245,241,235,0.6);border:1px solid rgba(245,241,235,0.18);transition:all .3s;cursor:pointer;background:none}
 .cal-ytab:hover{color:var(--ivory);border-color:rgba(245,241,235,0.4)}
 .cal-ytab.on{background:var(--gold);border-color:var(--gold);color:var(--forest-deep)}
-.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.cal-nav{background:none;border:none;cursor:pointer;color:rgba(245,241,235,0.6);font-size:26px;padding:2px 8px;transition:color .2s;line-height:1}
-.cal-nav:hover{color:var(--gold)}
-.cal-title{font-family:'DM Serif Display',serif;font-size:clamp(15px,3vw,19px);color:var(--ivory);text-align:center;flex:1;letter-spacing:.01em}
+.cal-body{display:flex;gap:20px;align-items:flex-start}
+.cal-months{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;flex:0 0 auto}
+.cal-month{padding:9px 6px;border-radius:8px;font-size:13px;text-transform:capitalize;color:rgba(245,241,235,0.7);transition:all .25s;cursor:pointer}
+.cal-month:hover{background:rgba(245,241,235,0.10);color:var(--ivory)}
+.cal-month.on{background:rgba(184,147,90,0.22);color:var(--gold);font-weight:700}
+.cal-month.disabled{color:rgba(245,241,235,0.22);cursor:not-allowed}
+.cal-days{flex:1 1 auto;min-width:0}
 .cal-dows{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:6px}
 .cal-dow{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,241,235,0.45);text-align:center;font-weight:700}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
@@ -88,14 +91,20 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-ra
 .slider-ends{display:flex;justify-content:space-between;font-size:12px;color:#a39c8c;margin-top:10px;letter-spacing:.06em}
 @media(max-width:600px){
   #hero{min-height:100svh;justify-content:flex-start;padding:max(28px,env(safe-area-inset-top)) 14px 28px}
-  .hero-eyebrow{font-size:20px;margin-bottom:4px;letter-spacing:.14em}
-  #hero h1{display:none}
+  .hero-eyebrow{font-size:10px;margin-bottom:10px}
+  #hero h1{font-size:clamp(18px,3.5vw,28px);max-width:20ch;margin-bottom:4px;letter-spacing:.005em}
   .hero-sub{font-size:13px;margin:6px auto 10px}
   .cal{padding:14px 12px 16px;border-radius:14px}
-  .cal-years-row{gap:4px;margin-bottom:8px}
-  .cal-ytab{padding:4px 12px;font-size:11px}
-  .cal-header{margin-bottom:10px}
-  .cal-title{font-size:16px}
+  .cal-years-row{gap:6px;margin-bottom:12px}
+  .cal-ytab{padding:5px 12px;font-size:12px}
+  .cal-body{flex-direction:column;gap:10px}
+  .cal-months{grid-template-columns:repeat(6,1fr);width:100%;gap:3px}
+  .cal-month{padding:8px 0;font-size:12px;border-radius:6px;text-align:center}
+  .cal-days{width:100%;flex:none}
+  .cal-dows{width:100%}
+  .cal-grid{width:100%;gap:3px}
+  .cal-dow{font-size:11px}
+  .cal-day{font-size:14px}
   .cal-dow{font-size:11px}
   .cal-day{font-size:15px}
   .cal-grid{gap:5px}
@@ -117,7 +126,6 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-ra
   <div class="hero-cal">
     <p class="cal-label">Selecciona la fecha de tu evento</p>
     <div class="cal" id="cal"></div>
-    <p class="hero-sub">No organizamos eventos. Creamos momentos que perduran.</p>
     <span class="reward" id="dateReward"></span>
     <div class="step-cta"><button class="cta" id="cta1" disabled>Continuar &rarr;</button></div>
   </div>
@@ -182,11 +190,12 @@ function renderCal(){
   }
   grid+=`</div>`;
   const yearNow=today.getFullYear();
+  const MONTHS_S=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   const yearTabs=[yearNow,yearNow+1,yearNow+2].map(y=>`<button class="cal-ytab ${y===viewY?'on':''}" data-y="${y}">${y}</button>`).join('');
-  calEl.innerHTML=`<div class="cal-years-row">${yearTabs}</div><div class="cal-header"><button class="cal-nav" id="calPrev">&#8249;</button><div class="cal-title">${MONTHS_FULL[viewM]}</div><button class="cal-nav" id="calNext">&#8250;</button></div>${grid}`;
+  const months=MONTHS_S.map((m,i)=>{const lastDay=new Date(viewY,i+1,0);const past=lastDay<today;return`<button class="cal-month ${i===viewM?'on':''} ${past?'disabled':''}" ${past?'':`data-month="${i}"`}>${m}</button>`}).join('');
+  calEl.innerHTML=`<div class="cal-years-row">${yearTabs}</div><div class="cal-body"><div class="cal-months">${months}</div><div class="cal-days">${grid}</div></div>`;
   calEl.querySelectorAll('.cal-ytab').forEach(b=>{b.onclick=()=>{viewY=+b.dataset.y;clampMonth();renderCal();}});
-  document.getElementById('calPrev').onclick=()=>{viewM--;if(viewM<0){viewM=11;viewY--;}clampMonth();renderCal();};
-  document.getElementById('calNext').onclick=()=>{viewM++;if(viewM>11){viewM=0;viewY++;}renderCal();};
+  calEl.querySelectorAll('[data-month]').forEach(b=>{b.onclick=()=>{viewM=+b.dataset.month;renderCal();}});
   calEl.querySelectorAll('[data-pick]').forEach(c=>{c.onclick=()=>pickDate(c.dataset.iso)});
 }
 function pickDate(iso){

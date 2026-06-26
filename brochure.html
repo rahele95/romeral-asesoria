@@ -210,9 +210,6 @@ function showStage(i){
   window.scrollTo({top:0,behavior:'instant'});
 }
 
-// Back button logic
-const backBtn = document.getElementById('broBack');
-
 document.querySelectorAll('.bro-next').forEach(btn=>{
   btn.onclick = ()=>{
     if(broIdx < stages.length-1){ showStage(broIdx+1); }

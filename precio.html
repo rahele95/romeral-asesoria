@@ -107,7 +107,14 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
       <div class="field"><label id="nameLabel">Tu nombre</label><input type="text" id="fNombre" placeholder="Escribe aquí"></div>
       <div class="field"><label>WhatsApp</label><input type="tel" id="fWhats" placeholder="33 1234 5678"></div>
       <div class="field"><label>Correo</label><input type="email" id="fEmail" placeholder="correo@ejemplo.com"></div>
-      <div class="toggle-row" id="emailToggle" style="opacity:0;pointer-events:none;transition:opacity .5s ease;margin-top:16px"><span class="toggle"></span><span>Sí, envíenme esta información por correo</span></div>
+    </div>
+
+    <div id="emailQuestion" style="opacity:0;pointer-events:none;transition:opacity .5s ease;margin-top:28px;text-align:center">
+      <p style="font-size:15px;color:rgba(245,241,235,0.85);margin-bottom:16px;">¿Te gustaría recibir esta información por correo?</p>
+      <div style="display:flex;gap:12px;justify-content:center">
+        <button id="btnEmailSi" style="padding:12px 32px;background:var(--gold);color:#0D1A12;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;border:none;border-radius:2px;cursor:pointer">Sí</button>
+        <button id="btnEmailNo" style="padding:12px 32px;background:transparent;color:rgba(245,241,235,0.6);font-size:13px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(245,241,235,0.2);border-radius:2px;cursor:pointer">No</button>
+      </div>
     </div>
 
     <div id="invDecision">
@@ -175,27 +182,36 @@ document.getElementById('invPer').textContent = `${fmt(per)} por persona`;
 const o = {v:0};
 gsap.to(o, {v:total, duration:1.6, ease:'power3.out', onUpdate:()=>{ document.getElementById('invTotal').textContent = fmt(Math.round(o.v)); }});
 
-let emailOn = true;
-const emailToggle = document.getElementById('emailToggle');
-emailToggle.onclick = ()=>{ emailOn = !emailOn; emailToggle.classList.toggle("on", emailOn); };
+let emailOn = false;
 
-// Mostrar toggle cuando campos esten llenos
 function checkFields(){
-  const n=document.getElementById("fNombre").value.trim();
-  const w=document.getElementById("fWhats").value.trim();
-  const e=document.getElementById("fEmail").value.trim();
-  const toggle=document.getElementById("emailToggle");
+  const n=document.getElementById('fNombre').value.trim();
+  const w=document.getElementById('fWhats').value.trim();
+  const e=document.getElementById('fEmail').value.trim();
+  const q=document.getElementById('emailQuestion');
   if(n && w && e){
-    toggle.style.opacity="1";
-    toggle.style.pointerEvents="auto";
+    q.style.opacity='1';
+    q.style.pointerEvents='auto';
   } else {
-    toggle.style.opacity="0";
-    toggle.style.pointerEvents="none";
+    q.style.opacity='0';
+    q.style.pointerEvents='none';
+    emailOn=false;
   }
 }
-document.getElementById("fNombre").addEventListener("input",checkFields);
-document.getElementById("fWhats").addEventListener("input",checkFields);
-document.getElementById("fEmail").addEventListener("input",checkFields);
+document.getElementById('fNombre').addEventListener('input',checkFields);
+document.getElementById('fWhats').addEventListener('input',checkFields);
+document.getElementById('fEmail').addEventListener('input',checkFields);
+
+document.getElementById('btnEmailSi').onclick=()=>{
+  emailOn=true;
+  document.getElementById('btnEmailSi').style.opacity='1';
+  document.getElementById('btnEmailNo').style.opacity='0.4';
+};
+document.getElementById('btnEmailNo').onclick=()=>{
+  emailOn=false;
+  document.getElementById('btnEmailNo').style.opacity='1';
+  document.getElementById('btnEmailSi').style.opacity='0.4';
+};
 
 function showToast(msg){
   const t = document.getElementById('toast');

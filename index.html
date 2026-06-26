@@ -251,9 +251,11 @@ function renderCal(){
   for(let d=1;d<=days;d++){
     const iso = `${viewY}-${pad(viewM+1)}-${pad(d)}`;
     const dateObj = new Date(viewY, viewM, d);
-    const disabled = dateObj < today || BLOCKED.includes(iso);
+    const past = dateObj < today;
+    const blocked = BLOCKED.includes(iso);
+    const disabled = past;
     const sel = S.fecha===iso;
-    grid += `<div class="cal-day ${disabled?'disabled':'avail'} ${sel?'sel':''}" data-iso="${iso}" ${disabled?'':'data-pick="1"'}>${d}</div>`;
+    grid += `<div class="cal-day ${disabled?'disabled':blocked?'blocked avail':'avail'} ${sel?'sel':''}" data-iso="${iso}" ${disabled?'':'data-pick="1"'}>${d}</div>`;
   }
   grid += `</div>`;
   calEl.innerHTML =

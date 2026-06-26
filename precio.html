@@ -120,9 +120,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     </div>
 
     <div id="invDecision">
-      <p class="inv-ask">¿Les gustaría agendar su visita a El Romeral?</p>
+      <p class="inv-ask">Estamos listos para recibirlos.</p>
       <div class="inv-actions">
-        <button class="cta" id="btnAgendar">Sí, quiero agendar mi cita <span>&rarr;</span></button>
+        <button class="cta" id="btnAgendar">Agendar mi visita <span>&rarr;</span></button>
         <button class="btn-ghost" id="btnSoloInfo">Por ahora solo quiero la información</button>
       </div>
     </div>
@@ -182,7 +182,7 @@ document.getElementById('nameLabel').textContent = NAME_LABELS[d.tipo] || 'Tu no
 document.getElementById('invPer').textContent = `${fmt(per)} por persona`;
 
 const o = {v:0};
-gsap.to(o, {v:total, duration:1.6, ease:'power3.out', onUpdate:()=>{ document.getElementById('invTotal').textContent = fmt(Math.round(o.v)); }});
+const el=document.getElementById('invTotal');el.textContent=fmt(total);gsap.fromTo(el,{opacity:0,y:20},{opacity:1,y:0,duration:.8,ease:'power2.out'});
 
 let emailOn = false;
 

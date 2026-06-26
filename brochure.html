@@ -62,6 +62,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 @media(max-width:879px){.bro-bignum{font-size:120px}}
 .btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:10px 16px;color:rgba(245,241,235,0.65);transition:color .3s}
 .btn-back:hover{color:var(--ivory)}
+.bro-back{display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:rgba(26,47,35,0.45);transition:color .25s;margin-bottom:24px;padding:0}
+.bro-back:hover{color:var(--forest)}
+.bro-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
 <body>
@@ -70,9 +73,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   <div class="bro-stage" data-stage="loc">
     <div class="bro-photo" style="background-image:url('fotos/web/toldo_panoramico_01.jpg')"></div>
     <div class="bro-body">
-      <span class="bro-counter"></span>
+      
       <span class="bro-bignum">01</span>
       <div class="bro-content">
+        <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
         <p class="bro-kicker">Locación</p>
         <h2>El escenario de tu día</h2>
         <p class="bro-lead">7 horas para vivir cada momento: 5 hrs de recepción + 1 hr de área de alberca y coctelería + 1 hr en la Capilla Cristo del Romeral.</p>
@@ -95,9 +99,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   <div class="bro-stage" data-stage="cat">
     <div class="bro-photo" style="background-image:url('fotos/web/banquete_mesa_01.jpg')"></div>
     <div class="bro-body">
-      <span class="bro-counter"></span>
+      
       <span class="bro-bignum">02</span>
       <div class="bro-content">
+        <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
         <p class="bro-kicker">Catering</p>
         <h2>Cocina propia, sabor a casa</h2>
         <p class="bro-lead">Un menú de 3 tiempos preparado en nuestra cocina, servido con detalle.</p>
@@ -118,9 +123,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   <div class="bro-stage" data-stage="bar">
     <div class="bro-photo" style="background-image:url('fotos/web/banquete_quesos_01.jpg')"></div>
     <div class="bro-body">
-      <span class="bro-counter"></span>
+      
       <span class="bro-bignum">03</span>
       <div class="bro-content">
+        <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
         <p class="bro-kicker">Barra y bebidas</p>
         <h2>Bebidas sin alcohol</h2>
         <p class="bro-lead">Barra completamente equipada para mantener a tus invitados refrescados toda la noche.</p>
@@ -140,9 +146,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   <div class="bro-stage" data-stage="ilu">
     <div class="bro-photo" id="iluPhoto" style="background-image:url('fotos/web/jardin_lago_atardecer_iluminado_01.jpg')"></div>
     <div class="bro-body">
-      <span class="bro-counter"></span>
+      
       <span class="bro-bignum">04</span>
       <div class="bro-content">
+        <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
         <p class="bro-kicker">Iluminación</p>
         <h2 id="iluTitle">Atardecer iluminado</h2>
         <p class="bro-lead" id="iluLead">40 unidades de luz led ámbar en puntos clave del jardín, para envolver la noche en calidez.</p>
@@ -154,9 +161,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   <div class="bro-stage" data-stage="dj">
     <div class="bro-photo" style="background-image:url('fotos/web/boda_pista_baile_noche_01.jpg')"></div>
     <div class="bro-body">
-      <span class="bro-counter"></span>
+      
       <span class="bro-bignum">05</span>
       <div class="bro-content">
+        <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
         <p class="bro-kicker">DJ Romeral y pista</p>
         <h2>Que no pare la música</h2>
         <p class="bro-lead">Producción de audio e iluminación profesional para llenar la pista.</p>
@@ -195,6 +203,8 @@ function showStage(i){
   el.querySelector('.bro-counter').textContent = `${pad(i+1)} / ${pad(stages.length)}`;
   const next = el.querySelector('.bro-next');
   next.innerHTML = (i === stages.length-1) ? 'Ver mi inversión <span>&rarr;</span>' : 'Siguiente <span>&rarr;</span>';
+  const back = el.querySelector('.bro-back');
+  if(back){ back.onclick = ()=>{ if(broIdx===0){ window.location.href='index.html'; } else{ showStage(broIdx-1); } }; }
   const c = el.querySelector('.bro-content');
   c.style.animation='none'; void c.offsetWidth; c.style.animation='';
   window.scrollTo({top:0,behavior:'instant'});
@@ -202,10 +212,7 @@ function showStage(i){
 
 // Back button logic
 const backBtn = document.getElementById('broBack');
-backBtn.onclick = ()=>{
-  if(cur === 0){ window.location.href='index.html'; }
-  else{ cur--; showStage(cur); }
-};
+
 document.querySelectorAll('.bro-next').forEach(btn=>{
   btn.onclick = ()=>{
     if(broIdx < stages.length-1){ showStage(broIdx+1); }

@@ -216,6 +216,14 @@ function updateGuests(val){S.personas=val;gsap.to(guestObj,{v:val,duration:.5,ea
 slider.oninput=()=>updateGuests(+slider.value);
 updateGuests(120);
 document.getElementById('cta3').onclick=()=>{sessionStorage.setItem('romeral',JSON.stringify({fecha:S.fecha,tipo:S.tipo,personas:S.personas}));window.location.href='brochure.html'};
+// Si viene de brochure con ?back=1, restaurar al paso 3
+if(new URLSearchParams(window.location.search).get('back')==='1'){
+  const saved=JSON.parse(sessionStorage.getItem('romeral')||'{}');
+  if(saved.fecha){S.fecha=saved.fecha;renderCal();}
+  if(saved.tipo){S.tipo=saved.tipo;document.querySelectorAll('.type-card').forEach(c=>{if(c.dataset.tipo===S.tipo)c.classList.add('sel');});}
+  if(saved.personas){S.personas=saved.personas;slider.value=saved.personas;updateGuests(saved.personas);}
+  goPhase('steps');showStep(3);
+}
 </script>
 </body>
 </html>

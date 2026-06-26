@@ -194,6 +194,7 @@ if(tieneDJ){ stages.push('ilu','dj'); }
 
 let broIdx = 0;
 function pad(n){ return String(n).padStart(2,'0'); }
+
 function showStage(i){
   broIdx = i;
   const key = stages[i];
@@ -201,20 +202,25 @@ function showStage(i){
   const el = document.querySelector(`.bro-stage[data-stage="${key}"]`);
   el.classList.add('active');
   el.querySelector('.bro-counter').textContent = `${pad(i+1)} / ${pad(stages.length)}`;
-  const next = el.querySelector('.bro-next');
-  next.innerHTML = (i === stages.length-1) ? 'Ver mi inversión <span>&rarr;</span>' : 'Siguiente <span>&rarr;</span>';
-  const back = el.querySelector('.bro-back');
-  if(back){ const idx=i; back.onclick = ()=>{ if(idx===0){ window.location.href='index.html'; } else{ showStage(idx-1); } }; }
+  el.querySelector('.bro-next').innerHTML = (i === stages.length-1)
+    ? 'Ver mi inversión <span>&rarr;</span>'
+    : 'Siguiente <span>&rarr;</span>';
   const c = el.querySelector('.bro-content');
   c.style.animation='none'; void c.offsetWidth; c.style.animation='';
   window.scrollTo({top:0,behavior:'instant'});
 }
 
-document.querySelectorAll('.bro-next').forEach(btn=>{
-  btn.onclick = ()=>{
+document.getElementById('brochure').addEventListener('click', function(e){
+  const next = e.target.closest('.bro-next');
+  const back = e.target.closest('.bro-back');
+  if(next){
     if(broIdx < stages.length-1){ showStage(broIdx+1); }
     else { window.location.href = 'precio.html'; }
-  };
+  }
+  if(back){
+    if(broIdx === 0){ window.location.href = 'index.html'; }
+    else { showStage(broIdx-1); }
+  }
 });
 
 showStage(0);

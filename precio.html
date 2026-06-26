@@ -31,7 +31,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   display:inline-flex;align-items:center;gap:10px;
   background:var(--gold);color:var(--forest-deep);
   font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;
-  padding:18px 38px;border-radius:2px;
+  padding:14px 38px;border-radius:2px;
   transition:transform .5s var(--spring), box-shadow .4s var(--ease), background .3s;
   box-shadow:0 10px 34px rgba(184,147,90,0.28);
 }
@@ -42,15 +42,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 #investment{
   background:radial-gradient(120% 120% at 50% 0%, #1A2F23 0%, #0D1A12 70%);
   color:var(--ivory);display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100vh;min-height:100svh;padding:72px 24px;text-align:center;
+  min-height:100vh;min-height:100svh;padding:32px 24px;text-align:center;
 }
 .inv-inner{width:100%;max-width:600px;animation:fadeUp .8s var(--ease) both}
-.inv-basis{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(184,147,90,0.85);font-weight:700;margin-bottom:30px}
-.inv-eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(245,241,235,0.55);margin-bottom:14px}
-.inv-total{font-family:'DM Serif Display',serif;font-size:clamp(54px,11vw,92px);color:var(--gold);line-height:1}
-.inv-per{font-size:15px;color:rgba(245,241,235,0.7);margin-top:12px}
-.inv-note{font-size:16px;color:rgba(245,241,235,0.82);font-weight:300;max-width:42ch;margin:30px auto 46px;font-style:italic}
-.inv-form{display:flex;flex-direction:column;gap:16px;text-align:left;max-width:440px;margin:0 auto 40px}
+.inv-basis{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(184,147,90,0.85);font-weight:700;margin-bottom:16px}
+.inv-eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(245,241,235,0.55);margin-bottom:8px}
+.inv-total{font-family:'DM Serif Display',serif;font-size:clamp(48px,8vw,78px);color:var(--gold);line-height:1}
+.inv-per{font-size:15px;color:rgba(245,241,235,0.7);margin-top:6px}
+.inv-note{font-size:15px;color:rgba(245,241,235,0.82);font-weight:300;max-width:42ch;margin:16px auto 24px;font-style:italic}
+.inv-form{display:flex;flex-direction:column;gap:10px;text-align:left;max-width:440px;margin:0 auto 20px}
 .field label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,235,0.6);margin-bottom:7px}
 .field input{width:100%;background:rgba(245,241,235,0.06);border:1px solid rgba(245,241,235,0.18);border-radius:4px;padding:14px 16px;color:var(--ivory);font-family:inherit;font-size:15px;transition:border-color .3s}
 .field input:focus{outline:none;border-color:var(--gold)}
@@ -61,8 +61,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .toggle-row.on .toggle{background:var(--gold)}
 .toggle-row.on .toggle::after{transform:translateX(20px)}
 .toggle-row span{font-size:14px;color:rgba(245,241,235,0.82)}
-.inv-ask{font-family:'DM Serif Display',serif;font-size:clamp(24px,4vw,32px);color:var(--ivory);margin:8px 0 26px}
-.inv-actions{display:flex;flex-direction:column;gap:16px;align-items:center}
+.inv-ask{font-family:'DM Serif Display',serif;font-size:clamp(20px,3vw,28px);color:var(--ivory);margin:6px 0 16px}
+.inv-actions{display:flex;flex-direction:column;gap:10px;align-items:center}
 .btn-ghost{color:rgba(245,241,235,0.7);font-size:13px;letter-spacing:.1em;text-decoration:underline;text-underline-offset:4px;transition:color .3s}
 .btn-ghost:hover{color:var(--gold)}
 .inv-done{display:none;margin-top:30px;animation:fadeUp .6s var(--ease) both}
@@ -72,7 +72,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 /* ---------- SCHEDULE ---------- */
 #schedule{
   display:none;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100vh;min-height:100svh;padding:72px 24px;text-align:center;
+  min-height:100vh;min-height:100svh;padding:32px 24px;text-align:center;
   background:var(--ivory);
 }
 #schedule.show{display:flex}

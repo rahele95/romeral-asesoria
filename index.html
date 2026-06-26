@@ -17,6 +17,12 @@ body{font-family:'Lato',sans-serif;font-weight:300;font-size:15px;line-height:1.
 h1,h2,h3,.serif{font-family:'DM Serif Display',serif;font-weight:400;line-height:1.12}
 img{display:block;max-width:100%}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:10px 0;transition:opacity .3s;opacity:.7}
+.btn-back:hover{opacity:1}
+.btn-back-hero{color:rgba(245,241,235,0.7);position:absolute;top:max(18px,env(safe-area-inset-top));left:18px;z-index:10}
+.btn-back-hero:hover{color:var(--ivory)}
+.btn-back-steps{color:var(--forest);margin-bottom:8px}
+.back-row{display:flex;align-items:center;margin-bottom:4px}
 .phase{display:none;min-height:100vh;width:100%}
 .phase.active{display:flex}
 #hero{position:relative;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--ivory);padding:32px 20px 40px;min-height:100vh;min-height:100svh;background:#0D1A12}
@@ -111,6 +117,7 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-ra
 </head>
 <body>
 <section id="hero" class="phase active">
+  <button class="btn-back btn-back-hero" onclick="window.location.reload()" aria-label="Reiniciar">&larr; Inicio</button>
   <p class="hero-eyebrow">El Romeral</p>
   <h1>No organizamos eventos.<br><span class="gold">Creamos momentos que perduran.</span></h1>
   <p class="hero-sub">Elige la fecha soñada para tu evento y empecemos a diseñar tu celebración.</p>
@@ -124,6 +131,7 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-ra
   <div class="steps-inner">
     <div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div>
     <div class="step active" data-step="2">
+      <div class="back-row"><button class="btn-back btn-back-steps" id="back2">&larr; Fecha</button></div>
       <h2>¿Qué van a celebrar?</h2>
       <p class="lead">Cada celebración tiene su propia esencia.</p>
       <div class="type-grid" id="typeGrid">
@@ -137,6 +145,7 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-ra
       <div class="step-cta"><button class="cta" id="cta2" disabled>Continuar &rarr;</button></div>
     </div>
     <div class="step" data-step="3">
+      <div class="back-row"><button class="btn-back btn-back-steps" id="back3">&larr; Tipo de evento</button></div>
       <h2>¿Cuántos invitados esperan?</h2>
       <p class="lead">Desliza para ajustar el número de invitados.</p>
       <div class="guest-num" id="guestNum">120</div>
@@ -194,6 +203,8 @@ function pickDate(iso){
 }
 renderCal();
 document.getElementById('cta1').onclick=()=>{goPhase('steps');showStep(2)};
+document.getElementById('back2').onclick=()=>{goPhase('hero')};
+document.getElementById('back3').onclick=()=>showStep(2);
 document.querySelectorAll('.type-card').forEach(card=>{
   card.onclick=()=>{document.querySelectorAll('.type-card').forEach(c=>c.classList.remove('sel'));card.classList.add('sel');S.tipo=card.dataset.tipo;document.getElementById('cta2').disabled=false}
 });

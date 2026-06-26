@@ -60,6 +60,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .bro-next{align-self:flex-start}
 
 @media(max-width:879px){.bro-bignum{font-size:120px}}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:10px 16px;color:rgba(245,241,235,0.65);transition:color .3s}
+.btn-back:hover{color:var(--ivory)}
 </style>
 </head>
 <body>
@@ -198,6 +200,12 @@ function showStage(i){
   window.scrollTo({top:0,behavior:'instant'});
 }
 
+// Back button logic
+const backBtn = document.getElementById('broBack');
+backBtn.onclick = ()=>{
+  if(cur === 0){ window.location.href='index.html'; }
+  else{ cur--; showStage(cur); }
+};
 document.querySelectorAll('.bro-next').forEach(btn=>{
   btn.onclick = ()=>{
     if(broIdx < stages.length-1){ showStage(broIdx+1); }

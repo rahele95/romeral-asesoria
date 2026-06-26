@@ -269,10 +269,22 @@ function renderCal(){
   calEl.querySelectorAll('[data-pick]').forEach(c=>{ c.onclick = ()=> pickDate(c.dataset.iso); });
 }
 function pickDate(iso){
-  S.fecha = iso;
+  const reward = document.getElementById('dateReward');
+  const cta = document.getElementById('cta1');
+  if(BLOCKED.includes(iso)){
+    S.fecha = '';
+    reward.textContent = 'Esa fecha ya está reservada. Te sugerimos otra fecha cercana.';
+    reward.style.color = 'rgba(245,100,100,0.9)';
+    reward.classList.add('show');
+    cta.disabled = true;
+  } else {
+    S.fecha = iso;
+    reward.textContent = '¡Esa fecha está disponible!';
+    reward.style.color = 'var(--gold)';
+    reward.classList.add('show');
+    cta.disabled = false;
+  }
   renderCal();
-  document.getElementById('dateReward').classList.add('show');
-  document.getElementById('cta1').disabled = false;
 }
 renderCal();
 document.getElementById('cta1').onclick = ()=>{ goPhase('steps'); showStep(2); };

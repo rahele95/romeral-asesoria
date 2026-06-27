@@ -129,8 +129,9 @@ header.top .back{ display:inline-flex; align-items:center; min-height:44px; font
 .st-cell:active{ transform:scale(.994) }
 .st-full .st-cell{ aspect-ratio:3/2 }
 .st-duo .st-cell{ aspect-ratio:4/5 }
-.st-asym .st-cell.big{ aspect-ratio:4/5 }
+.st-asym .st-cell.big{ aspect-ratio:3/4 }
 .st-asym .st-cell.small{ aspect-ratio:1/1 }
+.st-full .st-cell img,.st-duo .st-cell img{ object-position:center top }
 
 .st-end{ text-align:center; padding:clamp(60px,12vw,140px) 20px calc(clamp(80px,14vw,160px) + env(safe-area-inset-bottom)) }
 .st-end .ln{ width:48px; height:1px; background:var(--gold); margin:0 auto 26px }
@@ -310,7 +311,7 @@ function pintarTiles(){
 // ── MODAL "La Historia" ──
 function cell(url, idx, ar, w, extra){
   return `<div class="st-cell ${extra}" data-idx="${idx}" role="button" tabindex="0" aria-label="Ampliar foto ${idx+1}">`
-    + `<img alt="El Romeral — foto ${idx+1}" loading="lazy" decoding="async" src="${cldAr(url,w,ar)}" onload="this.classList.add('loaded')" onerror="onImgError(this)"></div>`;
+    + `<img alt="El Romeral — foto ${idx+1}" loading="lazy" decoding="async" src="${cld(url,w)}" onload="this.classList.add('loaded')" onerror="onImgError(this)"></div>`;
 }
 function buildStory(ci){
   const c = COUPLES[ci], fotos = c.fotos, n = fotos.length;

@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
 :root{
@@ -24,6 +25,7 @@ body{
 }
 h1,h2,h3,.serif{font-family:'DM Serif Display',serif;font-weight:400;line-height:1.12}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 200,'GRAD' 0,'opsz' 40}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
@@ -37,6 +39,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 }
 .cta:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 16px 44px rgba(184,147,90,0.4)}
 .cta:active{transform:translateY(0) scale(.99)}
+.cta:disabled{background:#363531;color:#9a8f81;cursor:not-allowed;transform:none;box-shadow:none}
 
 /* ---------- INVESTMENT ---------- */
 #investment{
@@ -46,23 +49,21 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 }
 .inv-inner{width:100%;max-width:600px;animation:fadeUp .8s var(--ease) both}
 .inv-basis{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(184,147,90,0.85);font-weight:700;margin-bottom:16px}
-.inv-eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(245,241,235,0.55);margin-bottom:8px}
-.inv-total{font-family:'DM Serif Display',serif;font-size:clamp(48px,8vw,78px);color:var(--gold);line-height:1}
-.inv-per{font-size:15px;color:rgba(245,241,235,0.7);margin-top:6px}
-.inv-note{font-size:15px;color:rgba(245,241,235,0.82);font-weight:300;max-width:42ch;margin:16px auto 24px;font-style:italic}
-.inv-form{display:flex;flex-direction:column;gap:10px;text-align:left;max-width:440px;margin:0 auto 20px}
-.field label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,235,0.6);margin-bottom:7px}
+.inv-eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(245,241,235,0.65);margin-bottom:8px}
+.inv-total{font-family:'DM Serif Display',serif;font-size:clamp(48px,8vw,78px);color:var(--gold);line-height:1;font-variant-numeric:tabular-nums}
+.inv-note{font-size:15px;color:rgba(245,241,235,0.82);font-weight:300;max-width:42ch;margin:16px auto 28px;font-style:italic}
+.inv-actions{display:flex;flex-direction:column;gap:12px;align-items:center}
+.inv-form-wrap{animation:fadeUp .5s var(--ease) both;margin-top:8px}
+.inv-ask{font-family:'DM Serif Display',serif;font-size:clamp(20px,3vw,28px);color:var(--ivory);margin:6px 0 18px}
+.inv-form{display:flex;flex-direction:column;gap:12px;text-align:left;max-width:440px;margin:0 auto 14px}
+.field label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,235,0.65);margin-bottom:7px}
 .field input{width:100%;background:rgba(245,241,235,0.06);border:1px solid rgba(184,147,90,0.2);border-radius:4px;padding:14px 16px;color:var(--ivory);font-family:inherit;font-size:15px;transition:border-color .3s}
+.field input:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-color:var(--gold)}
 .field input:focus{outline:none;border-color:var(--gold)}
-.field input::placeholder{color:rgba(245,241,235,0.35)}
-.toggle-row{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;margin-top:4px}
-.toggle{position:relative;width:46px;height:26px;border-radius:999px;background:rgba(245,241,235,0.2);transition:background .35s var(--ease);flex:none}
-.toggle::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .4s var(--spring)}
-.toggle-row.on .toggle{background:var(--gold)}
-.toggle-row.on .toggle::after{transform:translateX(20px)}
-.toggle-row span{font-size:14px;color:rgba(245,241,235,0.82)}
-.inv-ask{font-family:'DM Serif Display',serif;font-size:clamp(20px,3vw,28px);color:var(--ivory);margin:6px 0 16px}
-.inv-actions{display:flex;flex-direction:column;gap:10px;align-items:center}
+.field input::placeholder{color:rgba(245,241,235,0.4)}
+.form-status{font-size:13px;line-height:1.5;margin:4px auto 12px;max-width:440px;min-height:18px;color:rgba(245,241,235,0.7)}
+.form-status.error{color:#E58A8A;font-weight:400}
+.form-status.ok{color:var(--gold);font-weight:400}
 .btn-ghost{color:rgba(245,241,235,0.7);font-size:13px;letter-spacing:.1em;text-decoration:underline;text-underline-offset:4px;transition:color .3s}
 .btn-ghost:hover{color:var(--gold)}
 .inv-done{display:none;margin-top:30px;animation:fadeUp .6s var(--ease) both}
@@ -82,12 +83,12 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 @media(max-width:600px){
   #investment{padding:56px 18px 40px}
   .inv-total{font-size:clamp(48px,14vw,72px)}
-  .inv-note{font-size:14px;margin:20px auto 32px}
-  .inv-form{gap:12px;margin-bottom:28px}
-  .field input{padding:12px 14px;font-size:16px}
+  .inv-note{font-size:14px;margin:20px auto 28px}
+  .inv-form{gap:12px;margin-bottom:14px}
+  .field input{padding:14px;font-size:16px}
   .inv-ask{font-size:clamp(20px,5.5vw,26px);margin-bottom:18px}
   .cta{width:100%;justify-content:center;padding:16px 24px}
-  .btn-back{padding:12px 16px;font-size:11px}
+  .btn-back{padding:14px 16px;font-size:11px}
   #schedule{padding:48px 18px}
   .sched-card{padding:28px 18px}
   .sched-card h3{font-size:18px}
@@ -97,14 +98,18 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   text-decoration:none;color:inherit;transition:transform .5s var(--spring),border-color .35s,box-shadow .4s;
 }
 .sched-card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 0 18px rgba(184,147,90,0.12)}
-.sched-ico{font-size:34px;margin-bottom:16px}
+.sched-card:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.sched-ico{font-size:34px;margin-bottom:16px;color:var(--gold)}
 .sched-card h3{font-family:'DM Serif Display',serif;font-size:21px;color:var(--ivory);margin-bottom:8px}
-.sched-card p{font-size:14px;color:rgba(245,241,235,0.6)}
+.sched-card p{font-size:14px;color:rgba(245,241,235,0.65)}
 
-.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--forest);color:var(--ivory);padding:14px 24px;border-radius:4px;font-size:14px;opacity:0;pointer-events:none;transition:all .5s var(--spring);z-index:50}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:16px 20px;color:rgba(245,241,235,0.5);transition:color .3s;position:absolute;top:0;left:0}
-.btn-back:hover{color:rgba(245,241,235,0.9)}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:16px 20px;color:rgba(245,241,235,0.65);transition:color .3s;position:absolute;top:0;left:0}
+.btn-back:hover{color:rgba(245,241,235,0.95)}
+
+/* ---------- A4: reduce motion ---------- */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+}
 </style>
 </head>
 <body>
@@ -115,32 +120,31 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   <div class="inv-inner">
     <p class="inv-basis" id="invBasis"></p>
     <p class="inv-eyebrow">Inversión estimada</p>
-    <div class="inv-total" id="invTotal" style="opacity:0"></div>
-    <p class="inv-per" id="invPer"></p>
+    <div class="inv-total" id="invTotal"></div>
     <p class="inv-note">Esta es la base de tu experiencia. A partir de aquí, la personalizamos juntos.</p>
 
-    <div class="inv-form" id="invForm">
-      <div class="field"><label id="nameLabel">Tu nombre</label><input type="text" id="fNombre" placeholder="Escribe aquí"></div>
-      <div class="field"><label>WhatsApp</label><input type="tel" id="fWhats" placeholder="33 1234 5678"></div>
-      <div class="field"><label>Correo</label><input type="email" id="fEmail" placeholder="correo@ejemplo.com"></div>
+    <!-- Paso 1: intención (CTA principal primero, sin formulario) -->
+    <div class="inv-actions" id="invIntent">
+      <button class="cta" id="btnIntentCita">Agendar mi visita <span>&rarr;</span></button>
+      <button class="btn-ghost" id="btnIntentInfo">Prefiero recibir la información por correo</button>
     </div>
 
-    <div id="emailQuestion" style="opacity:0;pointer-events:none;transition:opacity .5s ease;margin-top:28px;text-align:center">
-      <p style="font-size:15px;color:rgba(245,241,235,0.85);margin-bottom:16px;">¿Te gustaría recibir esta información por correo?</p>
-      <div style="display:flex;gap:12px;justify-content:center">
-        <button id="btnEmailSi" style="padding:12px 32px;background:var(--gold);color:#0D1A12;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;border:none;border-radius:2px;cursor:pointer">Sí</button>
-        <button id="btnEmailNo" style="padding:12px 32px;background:transparent;color:rgba(245,241,235,0.6);font-size:13px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(245,241,235,0.2);border-radius:2px;cursor:pointer">No</button>
+    <!-- Paso 2: formulario (se revela al expresar intención) -->
+    <div class="inv-form-wrap" id="invFormWrap" hidden>
+      <p class="inv-ask" id="invAsk">Estamos listos para recibirlos.</p>
+      <div class="inv-form" id="invForm">
+        <div class="field"><label id="nameLabel" for="fNombre">Tu nombre</label><input type="text" id="fNombre" placeholder="Escribe aquí" autocomplete="name"></div>
+        <div class="field"><label for="fWhats">WhatsApp</label><input type="tel" id="fWhats" placeholder="33 1234 5678" autocomplete="tel"></div>
+        <div class="field"><label for="fEmail">Correo</label><input type="email" id="fEmail" placeholder="correo@ejemplo.com" autocomplete="email"></div>
       </div>
-    </div>
-
-    <div id="invDecision">
-      <p class="inv-ask">Estamos listos para recibirlos.</p>
+      <p class="form-status" id="formStatus" role="alert" aria-live="polite"></p>
       <div class="inv-actions">
-        <button class="cta" id="btnAgendar">Agendar mi visita <span>&rarr;</span></button>
-        <button class="btn-ghost" id="btnSoloInfo">Por ahora solo quiero la información</button>
+        <button class="cta" id="btnSubmit">Enviar <span>&rarr;</span></button>
+        <button class="btn-ghost" id="btnFormBack">Volver</button>
       </div>
     </div>
 
+    <!-- Estado final (ruta "solo información") -->
     <div class="inv-done" id="invDone">
       <p>¡Listo! Te enviamos tu experiencia y un asesor te contactará muy pronto.</p>
       <button class="cta" id="btnReconsiderar">Mejor sí quiero agendar mi cita <span>&rarr;</span></button>
@@ -152,19 +156,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 <section id="schedule">
   <h2>¿Cómo prefieren que nos conozcamos?</h2>
   <div class="sched-grid">
-    <a class="sched-card" href="https://cal.com/ricardo-heredia-jxuu3m/presencial" target="_blank" rel="noopener">
-      <div class="sched-ico">🌿</div><h3>Visita presencial</h3><p>Recorre El Romeral en persona.</p>
+    <a class="sched-card" href="https://cal.com/ricardo-heredia-jxuu3m/presencial?overlayCalendar=true" target="_blank" rel="noopener">
+      <span class="sched-ico material-symbols-outlined" aria-hidden="true">nature</span><h3>Visita presencial</h3><p>Recorre El Romeral en persona.</p>
     </a>
-    <a class="sched-card" href="https://cal.com/ricardo-heredia-jxuu3m/presencial" target="_blank" rel="noopener">
-      <div class="sched-ico">💻</div><h3>Videollamada</h3><p>Conócenos desde donde estés.</p>
+    <a class="sched-card" href="https://cal.com/ricardo-heredia-jxuu3m/video-llamada" target="_blank" rel="noopener">
+      <span class="sched-ico material-symbols-outlined" aria-hidden="true">videocam</span><h3>Videollamada</h3><p>Conócenos desde donde estés.</p>
     </a>
     <a class="sched-card" href="https://wa.me/523338708159" target="_blank" rel="noopener">
-      <div class="sched-ico">💬</div><h3>WhatsApp</h3><p>Escríbenos directamente.</p>
+      <span class="sched-ico material-symbols-outlined" aria-hidden="true">chat</span><h3>WhatsApp</h3><p>Escríbenos directamente.</p>
     </a>
   </div>
 </section>
-
-<div class="toast" id="toast"></div>
 
 <script>
 const d = JSON.parse(sessionStorage.getItem('romeral') || '{}');
@@ -189,65 +191,72 @@ const NAME_LABELS = { boda:'Nombre de los novios', xv:'Nombre de la festejada', 
 const tipoNice = {boda:'Boda',xv:'XV Años',corporativo:'Corporativo',social:'Evento social',bautizo:'Bautizo',comunion:'1ra Comunión'};
 
 const total = calcularTotal(d.personas || 120, d.tipo);
-const per = Math.round(total / (d.personas || 120));
 
 document.getElementById('invBasis').textContent = `Basado en ${d.personas || 120} invitados · ${tipoNice[d.tipo] || ''} · ${d.fecha || ''}`;
 document.getElementById('nameLabel').textContent = NAME_LABELS[d.tipo] || 'Tu nombre';
-document.getElementById('invPer').textContent = `${fmt(per)} por persona`;
 
-const o = {v:0};
-const el=document.getElementById('invTotal');el.style.opacity='0';el.textContent=fmt(total);requestAnimationFrame(()=>gsap.fromTo(el,{opacity:0,y:16},{opacity:1,y:0,duration:1,ease:'power3.out',delay:.15}));
+// A7: el precio es visible por defecto; GSAP solo lo realza (no controla su visibilidad)
+const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const el = document.getElementById('invTotal');
+el.textContent = fmt(total);
+if(typeof gsap !== 'undefined' && !prefersReduce){
+  requestAnimationFrame(()=>gsap.from(el,{opacity:0,y:16,duration:1,ease:'power3.out',delay:.15}));
+}
 
-let emailOn = false;
+// ---------- M1: revelar el formulario solo al expresar intención ----------
+const invIntent = document.getElementById('invIntent');
+const invFormWrap = document.getElementById('invFormWrap');
+const invDone = document.getElementById('invDone');
+const formStatus = document.getElementById('formStatus');
+const btnSubmit = document.getElementById('btnSubmit');
+const fNombre = document.getElementById('fNombre');
+const fWhats = document.getElementById('fWhats');
+const fEmail = document.getElementById('fEmail');
 
-function checkFields(){
-  const n=document.getElementById('fNombre').value.trim();
-  const w=document.getElementById('fWhats').value.trim();
-  const e=document.getElementById('fEmail').value.trim();
-  const q=document.getElementById('emailQuestion');
-  if(n && w && e){
-    q.style.opacity='1';
-    q.style.pointerEvents='auto';
-  } else {
-    q.style.opacity='0';
-    q.style.pointerEvents='none';
-    emailOn=false;
+let intent = 'cita';
+
+function setStatus(msg, type){
+  formStatus.textContent = msg || '';
+  formStatus.className = 'form-status' + (type ? ' ' + type : '');
+}
+
+function revealForm(which){
+  intent = which;
+  invIntent.hidden = true;
+  invFormWrap.hidden = false;
+  document.getElementById('invAsk').textContent = which === 'cita'
+    ? 'Estamos listos para recibirlos.'
+    : 'Déjanos tus datos y te enviamos todo por correo.';
+  setStatus('', '');
+  fNombre.focus();
+  invFormWrap.scrollIntoView({behavior: prefersReduce ? 'auto' : 'smooth', block:'center'});
+}
+document.getElementById('btnIntentCita').onclick = ()=>revealForm('cita');
+document.getElementById('btnIntentInfo').onclick = ()=>revealForm('info');
+document.getElementById('btnFormBack').onclick = ()=>{
+  invFormWrap.hidden = true;
+  invIntent.hidden = false;
+  setStatus('', '');
+};
+
+function validForm(){
+  const n = fNombre.value.trim();
+  const w = fWhats.value.trim();
+  if(!n || !w){
+    setStatus('Completa tu nombre y WhatsApp, por favor.', 'error');
+    (!n ? fNombre : fWhats).focus();
+    return false;
   }
-}
-document.getElementById('fNombre').addEventListener('input',checkFields);
-document.getElementById('fWhats').addEventListener('input',checkFields);
-document.getElementById('fEmail').addEventListener('input',checkFields);
-
-document.getElementById('btnEmailSi').onclick=()=>{
-  emailOn=true;
-  document.getElementById('btnEmailSi').style.opacity='1';
-  document.getElementById('btnEmailNo').style.opacity='0.4';
-};
-document.getElementById('btnEmailNo').onclick=()=>{
-  emailOn=false;
-  document.getElementById('btnEmailNo').style.opacity='1';
-  document.getElementById('btnEmailSi').style.opacity='0.4';
-};
-
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 3200);
+  return true;
 }
 
-function showSchedule(){
-  document.getElementById('investment').style.display = 'none';
-  const s = document.getElementById('schedule');
-  s.classList.add('show');
-  window.scrollTo({top:0,behavior:'instant'});
-}
-
+// Devuelve true/false según el resultado real del envío (para feedback de éxito/error)
 async function saveLead(quiereCita){
   const payload = {
-    nombre: document.getElementById('fNombre').value.trim(),
-    telefono: document.getElementById('fWhats').value.trim(),
-    whatsapp: document.getElementById('fWhats').value.trim(),
-    email: document.getElementById('fEmail').value.trim(),
+    nombre: fNombre.value.trim(),
+    telefono: fWhats.value.trim(),
+    whatsapp: fWhats.value.trim(),
+    email: fEmail.value.trim(),
     fecha: d.fecha,
     tipoEvento: d.tipo,
     tipo_evento: d.tipo,
@@ -257,33 +266,52 @@ async function saveLead(quiereCita){
     total: total,
     total_estimado: total,
     quiere_cita: quiereCita,
-    quiere_email: emailOn
+    quiere_email: (intent === 'info')
   };
+  // N4: timeout de 10s — si la red cuelga, abortamos y dejamos que submitLead muestre el error con reintento
+  const ctrl = new AbortController();
+  const timer = setTimeout(()=>ctrl.abort(), 10000);
   try{
-    await fetch('/api/leads', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
-  }catch(e){}
+    const res = await fetch('/api/leads', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), signal:ctrl.signal });
+    return res.ok;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
-function validForm(){
-  const n = document.getElementById('fNombre').value.trim();
-  const w = document.getElementById('fWhats').value.trim();
-  if(!n || !w){ showToast('Completa tu nombre y WhatsApp, por favor.'); return false; }
-  return true;
+function showSchedule(){
+  document.getElementById('investment').style.display = 'none';
+  const s = document.getElementById('schedule');
+  s.classList.add('show');
+  window.scrollTo({top:0,behavior: prefersReduce ? 'auto' : 'instant'});
 }
 
-document.getElementById('btnAgendar').onclick = ()=>{
+// A3: await del envío + estado "Enviando…" + confirmación de éxito o error con reintento
+async function submitLead(){
   if(!validForm()) return;
-  saveLead(true);
-  showSchedule();
-};
-document.getElementById('btnSoloInfo').onclick = ()=>{
-  if(!validForm()) return;
-  saveLead(false);
-  document.getElementById('invDecision').style.display='none';
-  document.getElementById('invForm').style.display='none';
-  document.getElementById('invDone').classList.add('show');
-};
-document.getElementById('btnReconsiderar').onclick = ()=>{ saveLead(true); showSchedule(); };
+  const original = btnSubmit.innerHTML;
+  btnSubmit.disabled = true;
+  btnSubmit.textContent = 'Enviando…';
+  setStatus('', '');
+  try{
+    const ok = await saveLead(intent === 'cita');
+    if(!ok) throw new Error('request-failed');
+    if(intent === 'cita'){
+      showSchedule();
+    } else {
+      invFormWrap.hidden = true;
+      invDone.classList.add('show');
+      window.scrollTo({top:0,behavior: prefersReduce ? 'auto' : 'instant'});
+    }
+  }catch(err){
+    btnSubmit.disabled = false;
+    btnSubmit.innerHTML = original;
+    setStatus('No pudimos enviar tu información. Revisa tu conexión e inténtalo de nuevo.', 'error');
+  }
+}
+btnSubmit.onclick = submitLead;
+
+document.getElementById('btnReconsiderar').onclick = ()=>{ saveLead(true).catch(()=>{}); showSchedule(); };
 </script>
 </body>
 </html>

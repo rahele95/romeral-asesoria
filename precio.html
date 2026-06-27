@@ -66,6 +66,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .form-status.ok{color:var(--gold);font-weight:400}
 .btn-ghost{color:rgba(245,241,235,0.7);font-size:13px;letter-spacing:.1em;text-decoration:underline;text-underline-offset:4px;transition:color .3s}
 .btn-ghost:hover{color:var(--gold)}
+.btn-outline{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:transparent;color:var(--gold);border:1px solid rgba(184,147,90,0.45);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;padding:13px 28px;border-radius:2px;text-decoration:none;transition:background .3s,border-color .3s}
+.btn-outline:hover{background:rgba(184,147,90,0.08);border-color:var(--gold)}
 .inv-done{display:none;margin-top:30px;animation:fadeUp .6s var(--ease) both}
 .inv-done.show{display:block}
 .inv-done p{font-size:17px;color:rgba(245,241,235,0.9);margin-bottom:24px;max-width:40ch;margin-inline:auto}
@@ -87,7 +89,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .inv-form{gap:12px;margin-bottom:14px}
   .field input{padding:14px;font-size:16px}
   .inv-ask{font-size:clamp(20px,5.5vw,26px);margin-bottom:18px}
-  .cta{width:100%;justify-content:center;padding:16px 24px}
+  .cta,.btn-outline{width:100%;justify-content:center;padding:16px 24px}
   .btn-back{padding:14px 16px;font-size:11px}
   #schedule{padding:48px 18px}
   .sched-card{padding:28px 18px}
@@ -125,6 +127,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
     <!-- Paso 1: intención (CTA principal primero, sin formulario) -->
     <div class="inv-actions" id="invIntent">
+      <a href="galeria.html" class="btn-outline">Ver bodas reales en El Romeral <span>&rarr;</span></a>
       <button class="cta" id="btnIntentCita">Agendar mi visita <span>&rarr;</span></button>
       <button class="btn-ghost" id="btnIntentInfo">Prefiero recibir la información por correo</button>
     </div>

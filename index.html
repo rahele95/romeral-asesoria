@@ -59,8 +59,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .cal-ytab:hover{color:var(--ivory);border-color:rgba(245,241,235,0.4)}
 .cal-ytab.on{background:var(--gold);border-color:var(--gold);color:var(--forest-deep)}
 .cal-nav-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.cal-nav-btn{background:none;border:none;cursor:pointer;color:var(--gold);font-size:22px;min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;transition:color .2s,background .2s,transform .2s;line-height:1;font-family:inherit}
-.cal-nav-btn:hover:not(:disabled){color:var(--gold);background:rgba(184,147,90,0.16);transform:scale(1.1)}
+.cal-nav-btn{width:50px;height:50px;background:var(--forest);border:1.5px solid rgba(184,147,90,0.4);cursor:pointer;color:var(--gold);font-size:1.8rem;display:inline-flex;align-items:center;justify-content:center;transition:color .2s,background .2s,border-color .2s,transform .2s;line-height:1;font-family:inherit}
+.cal-nav-btn:hover:not(:disabled){background:var(--gold);color:#1a2818;border-color:var(--gold)}
+.cal-nav-btn:active{transform:scale(0.9)}
 .cal-nav-btn:disabled{color:rgba(245,241,235,0.2);cursor:not-allowed}
 .cal-month-title{font-family:'DM Serif Display',serif;font-size:17px;color:var(--ivory);letter-spacing:.01em;text-align:center;flex:1}
 .cal-days{width:100%}
@@ -104,7 +105,7 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-ra
   .cal-years-row{gap:6px;margin-bottom:8px}
   .cal-ytab{padding:5px 12px;font-size:12px}
   .cal-month-title{font-size:15px}
-  .cal-nav-btn{font-size:20px;padding:4px 8px}
+  .cal-nav-btn{padding:4px 8px}
   .cal-dows{width:100%}
   .cal-grid{width:100%;gap:0;row-gap:3px}
   .cal-dow{font-size:11px}
@@ -166,7 +167,7 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-ra
         <input type="range" id="guestSlider" min="50" max="400" step="1" value="120">
         <div class="slider-ends"><span>50</span><span>400</span></div>
       </div>
-      <div class="step-cta"><button class="cta" id="cta3">Ver mi experiencia &rarr;</button></div>
+      <div class="step-cta"><button class="cta" id="cta3">Ver mi experiencia <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></button></div>
     </div>
   </div>
 </section>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Asesoría Virtual · El Romeral</title>
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="https://asesoria.elromeral.com.mx/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -224,7 +224,7 @@ let guestObj={v:120};
 function updateGuests(val){S.personas=val;gsap.to(guestObj,{v:val,duration:.5,ease:'power2.out',onUpdate:()=>{guestNum.textContent=Math.round(guestObj.v)}})}
 slider.oninput=()=>updateGuests(+slider.value);
 updateGuests(120);
-document.getElementById('cta3').onclick=()=>{sessionStorage.setItem('romeral',JSON.stringify({fecha:S.fecha,tipo:S.tipo,personas:S.personas}));window.location.href='brochure.html'};
+document.getElementById('cta3').onclick=()=>{sessionStorage.setItem('romeral',JSON.stringify({fecha:S.fecha,tipo:S.tipo,personas:S.personas}));window.location.href='https://asesoria.elromeral.com.mx/brochure.html'};
 // Si viene de brochure con ?back=1, restaurar al paso 3
 if(new URLSearchParams(window.location.search).get('back')==='1'){
   const saved=JSON.parse(sessionStorage.getItem('romeral')||'{}');

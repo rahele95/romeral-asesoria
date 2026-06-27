@@ -19,7 +19,7 @@
 html,body{height:100%}
 body{
   font-family:'Lato',sans-serif;font-weight:300;font-size:15px;line-height:1.6;
-  color:var(--text);background:var(--ivory);
+  color:var(--ivory);background:var(--forest-deep);
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 h1,h2,h3,.serif{font-family:'DM Serif Display',serif;font-weight:400;line-height:1.12}
@@ -52,7 +52,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .inv-note{font-size:15px;color:rgba(245,241,235,0.82);font-weight:300;max-width:42ch;margin:16px auto 24px;font-style:italic}
 .inv-form{display:flex;flex-direction:column;gap:10px;text-align:left;max-width:440px;margin:0 auto 20px}
 .field label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,235,0.6);margin-bottom:7px}
-.field input{width:100%;background:rgba(245,241,235,0.06);border:1px solid rgba(245,241,235,0.18);border-radius:4px;padding:14px 16px;color:var(--ivory);font-family:inherit;font-size:15px;transition:border-color .3s}
+.field input{width:100%;background:rgba(245,241,235,0.06);border:1px solid rgba(184,147,90,0.2);border-radius:4px;padding:14px 16px;color:var(--ivory);font-family:inherit;font-size:15px;transition:border-color .3s}
 .field input:focus{outline:none;border-color:var(--gold)}
 .field input::placeholder{color:rgba(245,241,235,0.35)}
 .toggle-row{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;margin-top:4px}
@@ -73,10 +73,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 #schedule{
   display:none;flex-direction:column;align-items:center;justify-content:center;
   min-height:100vh;min-height:100svh;padding:32px 24px;text-align:center;
-  background:var(--ivory);
+  background:var(--forest-deep);
 }
 #schedule.show{display:flex}
-#schedule h2{font-size:clamp(30px,5vw,48px);color:var(--forest);margin-bottom:46px;max-width:16ch}
+#schedule h2{font-size:clamp(30px,5vw,48px);color:var(--ivory);margin-bottom:46px;max-width:16ch}
 .sched-grid{display:grid;gap:18px;width:100%;max-width:860px}
 @media(min-width:760px){.sched-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){
@@ -93,15 +93,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .sched-card h3{font-size:18px}
 }
 .sched-card{
-  display:block;background:#fff;border:1.5px solid #e7e0d3;border-radius:12px;padding:38px 24px;
+  display:block;background:var(--forest);border:1px solid rgba(184,147,90,0.18);border-radius:4px;padding:38px 24px;
   text-decoration:none;color:inherit;transition:transform .5s var(--spring),border-color .35s,box-shadow .4s;
 }
-.sched-card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 22px 50px rgba(26,47,35,0.1)}
+.sched-card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 0 18px rgba(184,147,90,0.12)}
 .sched-ico{font-size:34px;margin-bottom:16px}
-.sched-card h3{font-family:'DM Serif Display',serif;font-size:21px;color:var(--forest);margin-bottom:8px}
-.sched-card p{font-size:14px;color:#6b6457}
+.sched-card h3{font-family:'DM Serif Display',serif;font-size:21px;color:var(--ivory);margin-bottom:8px}
+.sched-card p{font-size:14px;color:rgba(245,241,235,0.6)}
 
-.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--forest);color:var(--ivory);padding:14px 24px;border-radius:6px;font-size:14px;opacity:0;pointer-events:none;transition:all .5s var(--spring);z-index:50}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);background:var(--forest);color:var(--ivory);padding:14px 24px;border-radius:4px;font-size:14px;opacity:0;pointer-events:none;transition:all .5s var(--spring);z-index:50}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:16px 20px;color:rgba(245,241,235,0.5);transition:color .3s;position:absolute;top:0;left:0}
 .btn-back:hover{color:rgba(245,241,235,0.9)}

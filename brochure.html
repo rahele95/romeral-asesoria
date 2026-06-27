@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 <style>
 :root{
   --gold:#B8935A; --forest:#1A2F23; --forest-deep:#0D1A12;
@@ -18,7 +19,7 @@
 html,body{height:100%}
 body{
   font-family:'Lato',sans-serif;font-weight:300;font-size:15px;line-height:1.6;
-  color:var(--text);background:var(--ivory);
+  color:var(--ivory);background:var(--forest-deep);
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 h1,h2,h3,.serif{font-family:'DM Serif Display',serif;font-weight:400;line-height:1.12}
@@ -36,7 +37,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .cta:active{transform:translateY(0) scale(.99)}
 
 /* ---------- BROCHURE ---------- */
-#brochure{background:var(--ivory);position:relative;min-height:100vh}
+#brochure{background:var(--forest-deep);position:relative;min-height:100vh}
 .bro-stage{display:none;width:100%;min-height:100vh;min-height:100svh}
 .bro-stage.active{display:grid}
 @media(min-width:880px){.bro-stage.active{grid-template-columns:1fr 1fr}}
@@ -44,28 +45,29 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .bro-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(13,26,18,0.18),transparent 60%)}
 .bro-body{position:relative;display:flex;flex-direction:column;justify-content:center;padding:56px clamp(28px,6vw,76px)}
 .bro-counter{position:absolute;top:26px;right:clamp(28px,6vw,76px);font-size:12px;letter-spacing:.22em;color:var(--gold);font-weight:700}
-.bro-bignum{position:absolute;top:-18px;left:clamp(20px,5vw,60px);font-family:'DM Serif Display',serif;font-size:clamp(120px,20vw,210px);color:rgba(184,147,90,0.13);line-height:1;pointer-events:none;z-index:0}
+.bro-bignum{position:absolute;top:36px;left:clamp(20px,5vw,60px);font-family:'DM Serif Display',serif;font-size:clamp(150px,24vw,260px);color:rgba(184,147,90,0.17);line-height:1;pointer-events:none;z-index:0}
 .bro-content{position:relative;z-index:1;animation:fadeUp .7s var(--ease) both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 .bro-kicker{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px}
-.bro-content h2{font-size:clamp(32px,4.6vw,52px);color:var(--forest);margin-bottom:22px}
-.bro-lead{font-size:17px;color:#544d40;margin-bottom:26px;max-width:46ch}
+.bro-content h2{font-size:clamp(32px,4.6vw,52px);color:var(--ivory);margin-bottom:22px}
+.bro-lead{font-size:17px;color:rgba(245,241,235,0.78);margin-bottom:26px;max-width:46ch}
 .bro-list{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:24px}
-.bro-list li{position:relative;padding-left:24px;font-size:15px;color:#3a352c;max-width:48ch}
-.bro-list li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
-.bro-sub{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#a39c8c;font-weight:700;margin:6px 0 12px}
-.bro-cortesias{background:rgba(184,147,90,0.08);border-left:3px solid var(--gold);padding:16px 20px;border-radius:0 6px 6px 0;margin-bottom:30px}
+.bro-list li{display:flex;align-items:flex-start;gap:12px;font-size:15px;color:rgba(245,241,235,0.85);max-width:48ch}
+.bro-list li .material-symbols-outlined{font-size:19px;line-height:1.3;color:var(--gold);flex-shrink:0;font-variation-settings:'FILL' 0,'wght' 200,'GRAD' 0,'opsz' 20}
+.bro-sub{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,147,90,0.6);font-weight:700;margin:6px 0 12px}
+.bro-cortesias{background:rgba(184,147,90,0.08);border-left:3px solid var(--gold);padding:16px 20px;border-radius:0 4px 4px 0;margin-bottom:30px}
 .bro-cortesias .bro-sub{margin-top:0}
-.bro-cortesias p{font-size:14px;color:#544d40;line-height:1.7}
-.bro-next{align-self:flex-start}
+.bro-cortesias p{font-size:14px;color:rgba(245,241,235,0.65);line-height:1.7}
+.bro-next{align-self:flex-start;background:transparent;color:var(--gold);border:1px solid rgba(184,147,90,0.45);box-shadow:none}
+.bro-next:hover{background:rgba(184,147,90,0.08);border-color:var(--gold);box-shadow:none}
 
-@media(max-width:879px){.bro-bignum{font-size:120px}}
+@media(max-width:879px){.bro-bignum{font-size:clamp(140px,30vw,200px)}}
 @media(max-width:600px){
   .bro-stage{min-height:100svh}
   .bro-photo{min-height:38vh;max-height:42vh}
   .bro-body{padding:32px 20px 40px;overflow:hidden}
   .bro-counter{top:16px;right:20px}
-  .bro-bignum{font-size:clamp(80px,28vw,120px);top:-10px;left:16px;opacity:0.9}
+  .bro-bignum{font-size:clamp(104px,32vw,164px);top:18px;left:16px;opacity:0.9}
   .bro-content h2{font-size:clamp(26px,7vw,36px);margin-bottom:14px}
   .bro-lead{font-size:15px;margin-bottom:18px}
   .bro-list{gap:8px;margin-bottom:18px}
@@ -76,8 +78,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 }
 .btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:10px 16px;color:rgba(245,241,235,0.65);transition:color .3s}
 .btn-back:hover{color:var(--ivory)}
-.bro-back{display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:rgba(26,47,35,0.45);transition:color .25s;margin-bottom:24px;padding:0}
-.bro-back:hover{color:var(--forest)}
+.bro-back{display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:rgba(245,241,235,0.4);transition:color .25s;margin-bottom:24px;padding:0}
+.bro-back:hover{color:var(--gold)}
 .bro-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
@@ -88,6 +90,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     <div class="bro-photo" style="background-image:url('fotos/web/toldo_panoramico_01.jpg')"></div>
     <div class="bro-body">
       
+      <span class="bro-counter"></span>
       <span class="bro-bignum">01</span>
       <div class="bro-content">
         <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
@@ -95,11 +98,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
         <h2>El escenario de tu día</h2>
         <p class="bro-lead">7 horas para vivir cada momento: 5 hrs de recepción + 1 hr de área de alberca y coctelería + 1 hr en la Capilla Cristo del Romeral.</p>
         <ul class="bro-list">
-          <li>Toldo panorámico de 16 × 26 m</li>
-          <li>Planta de luz de respaldo</li>
-          <li>Estacionamiento para 250 autos</li>
-          <li>Seguridad privada y valet parking</li>
-          <li>Personal para sanitarios</li>
+          <li><span class="material-symbols-outlined">festival</span><span>Toldo panorámico de 16 × 26 m</span></li>
+          <li><span class="material-symbols-outlined">bolt</span><span>Planta de luz de respaldo</span></li>
+          <li><span class="material-symbols-outlined">local_parking</span><span>Estacionamiento para 250 autos</span></li>
+          <li><span class="material-symbols-outlined">security</span><span>Seguridad privada y valet parking</span></li>
+          <li><span class="material-symbols-outlined">wc</span><span>Personal para sanitarios</span></li>
         </ul>
         <div class="bro-cortesias">
           <p class="bro-sub">Parte de tu experiencia</p>
@@ -114,6 +117,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     <div class="bro-photo" style="background-image:url('fotos/web/banquete_mesa_01.jpg')"></div>
     <div class="bro-body">
       
+      <span class="bro-counter"></span>
       <span class="bro-bignum">02</span>
       <div class="bro-content">
         <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
@@ -121,13 +125,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
         <h2>Cocina propia, sabor a casa</h2>
         <p class="bro-lead">Un menú de 3 tiempos preparado en nuestra cocina, servido con detalle.</p>
         <ul class="bro-list">
-          <li>Entrada: crema o ensalada</li>
-          <li>Plato fuerte: Pollo, Cerdo, Res o Salmón</li>
-          <li>Postre</li>
-          <li>Vajilla Arcoroc · mantelería fina · molletón</li>
-          <li>Mesas redondas o cuadradas</li>
-          <li>1 mesero por cada 15 personas · capitán de meseros</li>
-          <li>Menú impreso · numeración de mesas · pan individual</li>
+          <li><span class="material-symbols-outlined">soup_kitchen</span><span>Entrada: crema o ensalada</span></li>
+          <li><span class="material-symbols-outlined">restaurant</span><span>Plato fuerte: Pollo, Cerdo, Res o Salmón</span></li>
+          <li><span class="material-symbols-outlined">cake</span><span>Postre</span></li>
+          <li><span class="material-symbols-outlined">dinner_dining</span><span>Vajilla Arcoroc · mantelería fina · molletón</span></li>
+          <li><span class="material-symbols-outlined">table_restaurant</span><span>Mesas redondas o cuadradas</span></li>
+          <li><span class="material-symbols-outlined">room_service</span><span>1 mesero por cada 15 personas · capitán de meseros</span></li>
+          <li><span class="material-symbols-outlined">menu_book</span><span>Menú impreso · numeración de mesas · pan individual</span></li>
         </ul>
         <button class="cta bro-next">Siguiente <span>&rarr;</span></button>
       </div>
@@ -138,6 +142,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     <div class="bro-photo" style="background-image:url('fotos/web/banquete_quesos_01.jpg')"></div>
     <div class="bro-body">
       
+      <span class="bro-counter"></span>
       <span class="bro-bignum">03</span>
       <div class="bro-content">
         <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
@@ -145,12 +150,12 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
         <h2>Bebidas sin alcohol</h2>
         <p class="bro-lead">Barra completamente equipada para mantener a tus invitados refrescados toda la noche.</p>
         <ul class="bro-list">
-          <li>Mobiliario de barra · fábrica de hielo</li>
-          <li>Coca, Diet, Mineral, Squirt y Quina</li>
-          <li>Jugos de uva, piña, naranja y arándano</li>
-          <li>1 bartender por cada 100 personas</li>
-          <li>2 lavavajillas · barra de madera · acero inoxidable</li>
-          <li>Cristalería completa</li>
+          <li><span class="material-symbols-outlined">local_bar</span><span>Mobiliario de barra · fábrica de hielo</span></li>
+          <li><span class="material-symbols-outlined">local_drink</span><span>Coca, Diet, Mineral, Squirt y Quina</span></li>
+          <li><span class="material-symbols-outlined">nutrition</span><span>Jugos de uva, piña, naranja y arándano</span></li>
+          <li><span class="material-symbols-outlined">concierge</span><span>1 bartender por cada 100 personas</span></li>
+          <li><span class="material-symbols-outlined">countertops</span><span>2 lavavajillas · barra de madera · acero inoxidable</span></li>
+          <li><span class="material-symbols-outlined">wine_bar</span><span>Cristalería completa</span></li>
         </ul>
         <button class="cta bro-next">Siguiente <span>&rarr;</span></button>
       </div>
@@ -161,6 +166,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     <div class="bro-photo" id="iluPhoto" style="background-image:url('fotos/web/jardin_lago_atardecer_iluminado_01.jpg')"></div>
     <div class="bro-body">
       
+      <span class="bro-counter"></span>
       <span class="bro-bignum">04</span>
       <div class="bro-content">
         <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
@@ -176,6 +182,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     <div class="bro-photo" style="background-image:url('fotos/web/boda_pista_baile_noche_01.jpg')"></div>
     <div class="bro-body">
       
+      <span class="bro-counter"></span>
       <span class="bro-bignum">05</span>
       <div class="bro-content">
         <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
@@ -183,13 +190,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
         <h2>Que no pare la música</h2>
         <p class="bro-lead">Producción de audio e iluminación profesional para llenar la pista.</p>
         <ul class="bro-list">
-          <li>Equipo Bose · rack · mezcladora · cabina DJ</li>
-          <li>11 subwoofers · 12 bocinas en 3 zonas</li>
-          <li>Consola de 12 canales · 2 micrófonos</li>
-          <li>8 luces robóticas · 4 par led</li>
-          <li>8 chisperos en pista · bazuca de mariposas</li>
-          <li>Pista pintada a mano</li>
-          <li>DJ Romeral durante 5 horas</li>
+          <li><span class="material-symbols-outlined">speaker</span><span>Equipo Bose · rack · mezcladora · cabina DJ</span></li>
+          <li><span class="material-symbols-outlined">surround_sound</span><span>11 subwoofers · 12 bocinas en 3 zonas</span></li>
+          <li><span class="material-symbols-outlined">mic</span><span>Consola de 12 canales · 2 micrófonos</span></li>
+          <li><span class="material-symbols-outlined">flare</span><span>8 luces robóticas · 4 par led</span></li>
+          <li><span class="material-symbols-outlined">celebration</span><span>8 chisperos en pista · bazuca de mariposas</span></li>
+          <li><span class="material-symbols-outlined">brush</span><span>Pista pintada a mano</span></li>
+          <li><span class="material-symbols-outlined">headphones</span><span>DJ Romeral durante 5 horas</span></li>
         </ul>
         <button class="cta bro-next">Siguiente <span>&rarr;</span></button>
       </div>

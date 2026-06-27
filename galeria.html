@@ -8,14 +8,14 @@
 <meta name="theme-color" content="#0D1A12">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400;700&family=Marcellus&display=swap" rel="stylesheet">
 <style>
 :root{
   --gold:#B8935A; --gold-light:#D4AF7A;
   --forest:#1A2F23; --forest-deep:#0D1A12; --night:#141310;
   --ivory:#F5F1EB;
   --border:1px solid rgba(184,147,90,0.2);
-  --display:'DM Serif Display', Georgia, serif;
+  --display:'Marcellus', Georgia, serif;
   --body:'Lato', system-ui, sans-serif;
   --ease-out:cubic-bezier(0.23, 1, 0.32, 1);
   --spring:cubic-bezier(0.34, 1.4, 0.5, 1);
@@ -226,6 +226,7 @@ const FALLBACK = CLD + 'ana-diego/ana_diego_001.jpg';
 
 // transformaciones Cloudinary (f_auto = WebP/AVIF · q_auto · width cap)
 const cld   = (url, w)     => url.replace('/upload/', `/upload/f_auto,q_auto,w_${w}/`);
+const cldR  = (url, w)     => url.replace('/upload/', `/upload/f_auto,q_auto,dpr_auto,w_${w}/`); // modal "La Historia": retina-aware
 const cldAr = (url, w, ar) => url.replace('/upload/', `/upload/f_auto,q_auto,c_fill,g_auto,ar_${ar},w_${w}/`);
 
 // metadatos de cada pareja (sin mostrar nombres ni estilos)
@@ -311,12 +312,12 @@ function pintarTiles(){
 // ── MODAL "La Historia" ──
 function cell(url, idx, ar, w, extra){
   return `<div class="st-cell ${extra}" data-idx="${idx}" role="button" tabindex="0" aria-label="Ampliar foto ${idx+1}">`
-    + `<img alt="El Romeral — foto ${idx+1}" loading="lazy" decoding="async" src="${cld(url,w)}" onload="this.classList.add('loaded')" onerror="onImgError(this)"></div>`;
+    + `<img alt="El Romeral — foto ${idx+1}" loading="lazy" decoding="async" src="${cldR(url,w)}" onload="this.classList.add('loaded')" onerror="onImgError(this)"></div>`;
 }
 function buildStory(ci){
   const c = COUPLES[ci], fotos = c.fotos, n = fotos.length;
   let html = `<div class="st-cover">
-    <img src="${cld(fotos[0],1600)}" alt="El Romeral — ${c.fecha}" data-idx="0">
+    <img src="${cldR(fotos[0],1600)}" alt="El Romeral — ${c.fecha}" data-idx="0">
     <div class="cap">
       <div class="eyebrow">Galería</div>
       <div class="fecha">${c.fecha}</div>
@@ -332,7 +333,7 @@ function buildStory(ci){
     let need = { full:1, duo:2, asym:2 }[type];
     if (rem < need){ type = rem >= 2 ? 'duo' : 'full'; need = rem >= 2 ? 2 : 1; }
     if (type === 'full'){
-      html += `<div class="st-block st-full">${cell(fotos[i], i, '1.5', 1400, '')}</div>`;
+      html += `<div class="st-block st-full">${cell(fotos[i], i, '1.5', 1600, '')}</div>`;
     } else if (type === 'duo'){
       html += `<div class="st-block st-duo">${cell(fotos[i], i, '0.8', 900, '')}${cell(fotos[i+1], i+1, '0.8', 900, '')}</div>`;
     } else {

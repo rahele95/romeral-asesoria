@@ -1,3 +1,4 @@
 fotos/galeria/
 fotos/web/galeria/*
 !fotos/web/galeria/manifest.json
+.playwright-mcp/

@@ -59,7 +59,7 @@ body.intro-open{overflow:hidden}
 
 /* ---------- BROCHURE ---------- */
 #brochure{background:var(--forest-deep);position:relative;min-height:100svh}
-.bro-stage{display:none;flex-direction:column;width:100%;height:100svh;overflow:hidden}
+.bro-stage{display:none;flex-direction:column;width:100%;height:100svh;overflow:hidden;touch-action:pan-y}
 .bro-stage.active{display:flex}
 
 /* Hero: imagen que se funde hacia abajo con gradiente hacia #0D1A12, título y subtítulo encima */
@@ -75,8 +75,8 @@ body.intro-open{overflow:hidden}
 .loc-dot:hover::before{background:rgba(184,147,90,0.7)}
 .loc-dot.is-active::before{background:var(--gold);transform:scale(1.25)}
 .bro-counter{position:absolute;top:clamp(18px,4vw,30px);right:clamp(28px,6vw,76px);z-index:3;font-size:12px;letter-spacing:.22em;color:var(--gold);font-weight:700;background:rgba(13,26,18,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:6px 12px;border-radius:100px;text-shadow:0 1px 4px rgba(13,26,18,0.95)}
-.bro-back{position:absolute;top:clamp(14px,3.5vw,24px);left:clamp(20px,5vw,60px);z-index:3;display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:rgba(245,241,235,0.8);transition:color .25s;padding:0;text-shadow:0 1px 6px rgba(13,26,18,0.6)}
-.bro-back:hover{color:var(--gold)}
+.bro-back{position:absolute;top:clamp(14px,3.5vw,24px);left:clamp(20px,5vw,60px);z-index:3;display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:rgba(245,241,235,0.9);background:rgba(0,0,0,0.4);border:1px solid rgba(184,147,90,0.3);padding:8px 16px;border-radius:4px;transition:color .25s,background .25s,border-color .25s;text-shadow:0 1px 6px rgba(13,26,18,0.6)}
+.bro-back:hover{color:var(--gold);background:rgba(0,0,0,0.55);border-color:rgba(184,147,90,0.5)}
 .bro-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .bro-bignum{position:absolute;bottom:clamp(18px,5vw,54px);left:clamp(16px,4vw,52px);font-family:'Lato',sans-serif;font-weight:300;font-size:clamp(120px,22vw,240px);color:rgba(245,241,235,0.10);line-height:1;pointer-events:none;z-index:1}
 .bro-hero-text{position:relative;z-index:2;max-width:640px;animation:fadeUp .7s var(--ease) both}
@@ -95,8 +95,16 @@ body.intro-open{overflow:hidden}
 .bro-cortesias{background:rgba(184,147,90,0.08);border-left:3px solid var(--gold);padding:clamp(10px,1.6vh,16px) 20px;border-radius:0 4px 4px 0;margin-bottom:clamp(14px,2.2vh,30px)}
 .bro-cortesias .bro-sub{margin-top:0}
 .bro-cortesias p{font-size:clamp(12.5px,1.6vh,14px);color:rgba(245,241,235,0.65);line-height:1.6}
-.bro-next{align-self:flex-start;background:transparent;color:var(--gold);border:1px solid rgba(184,147,90,0.45);box-shadow:none}
-.bro-next:hover{background:rgba(184,147,90,0.08);border-color:var(--gold);box-shadow:none}
+.bro-next{align-self:flex-start;background:rgba(184,147,90,0.10);color:var(--gold);border:1px solid rgba(184,147,90,0.6);box-shadow:none}
+.bro-next:hover{background:rgba(184,147,90,0.18);border-color:var(--gold);box-shadow:none}
+
+/* desktop: títulos más grandes + contenido más arriba para llenar el espacio vertical */
+@media(min-width:1024px){
+  .bro-kicker{font-size:clamp(3.2rem,7.5vh,4.6rem)}
+  .bro-hero-text h2{font-size:clamp(23px,3.4vh,32px)}
+  .bro-hero{flex-basis:40%;padding-bottom:clamp(20px,2.6vh,36px)}
+  .bro-content{padding-top:clamp(10px,1.8vh,22px)}
+}
 
 @media(max-width:600px){
   .bro-hero{flex-basis:46%;padding:18px 20px 22px}
@@ -311,7 +319,7 @@ if(tieneDJ){ stages.push('ilu','dj'); }
 
 // Subtítulo dinámico del introScreen: número de secciones = stages.length (no hardcodeado)
 const introSub = document.getElementById('introSub');
-if(introSub){ introSub.textContent = `Te presentamos los ${stages.length} elementos que la componen`; }
+if(introSub){ introSub.textContent = `Te presentamos los ${stages.length} elementos indispensables que la componen`; }
 
 let broIdx = 0;
 function pad(n){ return String(n).padStart(2,'0'); }
@@ -344,6 +352,26 @@ document.getElementById('brochure').addEventListener('click', function(e){
     else { showStage(broIdx-1); }
   }
 });
+
+// Swipe horizontal (mobile) como navegación adicional entre secciones — no reemplaza los botones.
+// Axis-lock: solo cambia de sección si |dx| > |dy| y |dx| > 50px. touch-action:pan-y deja libre el scroll vertical.
+(function(){
+  const area = document.getElementById('brochure');
+  let sx = 0, sy = 0, tracking = false;
+  area.addEventListener('touchstart', function(e){
+    if(e.touches.length !== 1){ tracking = false; return; }
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY; tracking = true;
+  }, {passive:true});
+  area.addEventListener('touchend', function(e){
+    if(!tracking) return; tracking = false;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - sx, dy = t.clientY - sy;
+    if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50){
+      if(dx < 0){ if(broIdx < stages.length-1) showStage(broIdx+1); }   // izquierda → siguiente sección
+      else { if(broIdx > 0) showStage(broIdx-1); }                       // derecha → sección anterior
+    }
+  }, {passive:true});
+})();
 
 // FIX5: si se regresa desde precio.html (?back=1), reabrir el brochure en la última sección vista
 const returningFromPrecio = new URLSearchParams(location.search).get('back')==='1';

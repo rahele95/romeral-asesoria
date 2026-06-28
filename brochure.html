@@ -98,12 +98,22 @@ body.intro-open{overflow:hidden}
 .bro-next{align-self:flex-start;background:rgba(184,147,90,0.10);color:var(--gold);border:1px solid rgba(184,147,90,0.6);box-shadow:none}
 .bro-next:hover{background:rgba(184,147,90,0.18);border-color:var(--gold);box-shadow:none}
 
+/* affordance de swipe (mobile): pista breve al cargar cada sección */
+.swipe-hint{position:fixed;left:50%;top:clamp(110px,22vh,200px);transform:translateX(-50%);z-index:35;pointer-events:none;
+  font:700 11px/1 'Lato',sans-serif;letter-spacing:.28em;text-transform:uppercase;color:rgba(245,241,235,0.9);
+  background:rgba(13,26,18,0.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  padding:9px 18px;border-radius:100px;border:1px solid rgba(184,147,90,0.35);white-space:nowrap;
+  opacity:0;transition:opacity .45s var(--ease)}
+.swipe-hint.show{opacity:1}
+@media(min-width:768px){ .swipe-hint{display:none} }
+@media (prefers-reduced-motion: reduce){ .swipe-hint{transition:none} }
+
 /* desktop: títulos más grandes + contenido más arriba para llenar el espacio vertical */
 @media(min-width:1024px){
   .bro-kicker{font-size:clamp(3.2rem,7.5vh,4.6rem)}
   .bro-hero-text h2{font-size:clamp(23px,3.4vh,32px)}
-  .bro-hero{flex-basis:40%;padding-bottom:clamp(20px,2.6vh,36px)}
-  .bro-content{padding-top:clamp(10px,1.8vh,22px)}
+  .bro-hero{flex-basis:35%;max-height:35vh;padding-bottom:clamp(20px,2.6vh,36px)}
+  .bro-content{padding-top:clamp(8px,1.4vh,18px)}
 }
 
 @media(max-width:600px){
@@ -250,7 +260,7 @@ body.intro-open{overflow:hidden}
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
-      <span class="bro-bignum">04</span>
+      <span class="bro-bignum">05</span>
       <div class="bro-hero-text">
         <p class="bro-kicker">Iluminación</p>
         <h2 id="iluTitle">Calidez que envuelve la noche</h2>
@@ -280,7 +290,7 @@ body.intro-open{overflow:hidden}
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
-      <span class="bro-bignum">05</span>
+      <span class="bro-bignum">04</span>
       <div class="bro-hero-text">
         <p class="bro-kicker">DJ Romeral y pista</p>
         <h2>La música que hace vibrar cada momento</h2>
@@ -307,6 +317,7 @@ body.intro-open{overflow:hidden}
     </div>
   </div>
 
+  <div class="swipe-hint" id="swipeHint" aria-hidden="true">‹ Desliza ›</div>
 </div>
 
 <script>
@@ -315,13 +326,24 @@ const CON_DJ = ['boda','xv','corporativo','social'];
 const tieneDJ = CON_DJ.includes(d.tipo);
 
 let stages = ['loc','cat','bar'];
-if(tieneDJ){ stages.push('ilu','dj'); }
+if(tieneDJ){ stages.push('dj','ilu'); }
 
 // Subtítulo dinámico del introScreen: número de secciones = stages.length (no hardcodeado)
 const introSub = document.getElementById('introSub');
 if(introSub){ introSub.textContent = `Te presentamos los ${stages.length} elementos indispensables que la componen`; }
 
 let broIdx = 0;
+// Affordance de swipe (solo mobile): pista breve al ver cada sección, se oculta a los 2s
+let broVisible = false;
+const swipeHint = document.getElementById('swipeHint');
+let swipeHintTimer = null;
+function showSwipeHint(){
+  if(!swipeHint || !broVisible) return;
+  if(!window.matchMedia('(max-width:767px)').matches) return;
+  clearTimeout(swipeHintTimer);
+  swipeHint.classList.add('show');
+  swipeHintTimer = setTimeout(function(){ swipeHint.classList.remove('show'); }, 2000);
+}
 function pad(n){ return String(n).padStart(2,'0'); }
 
 function showStage(i){
@@ -338,6 +360,7 @@ function showStage(i){
   const c = el.querySelector('.bro-content');
   c.style.animation='none'; void c.offsetWidth; c.style.animation='';
   window.scrollTo({top:0,behavior:'instant'});
+  showSwipeHint();
 }
 
 document.getElementById('brochure').addEventListener('click', function(e){
@@ -390,6 +413,7 @@ function dismissIntro(){
   introScreen.classList.add('hide');
   document.body.classList.remove('intro-open');
   window.scrollTo({top:0,behavior:'instant'});
+  broVisible = true; showSwipeHint();
   window.removeEventListener('wheel',dismissIntro);
   window.removeEventListener('touchmove',dismissIntro);
   window.removeEventListener('keydown',onIntroKey);

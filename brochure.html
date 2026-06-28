@@ -85,29 +85,29 @@ body.intro-open{overflow:hidden}
 /* protagonista: el KICKER (grande, dorado, con presencia) · título descriptivo secundario (peso 300) */
 .bro-kicker{font-size:clamp(2rem,5.4vh,3rem);letter-spacing:.04em;text-transform:uppercase;color:var(--gold);font-weight:700;line-height:1.05;margin-bottom:clamp(8px,1.6vh,16px);text-shadow:0 2px 16px rgba(13,26,18,0.55)}
 .bro-hero-text h2{font-size:clamp(17px,2.5vh,23px);font-weight:300;color:rgba(245,241,235,0.9);margin-bottom:clamp(8px,1.4vh,14px);line-height:1.25;text-wrap:balance;text-shadow:0 2px 16px rgba(13,26,18,0.55)}
-.bro-lead{font-size:clamp(13px,1.7vh,15px);color:rgba(245,241,235,0.82);max-width:46ch;text-shadow:0 1px 10px rgba(13,26,18,0.5)}
+.bro-lead{font-size:clamp(14px,1.7vh,15px);color:rgba(245,241,235,0.82);max-width:46ch;text-shadow:0 1px 10px rgba(13,26,18,0.5)}
 
 /* Content debajo del hero, sobre fondo sólido */
 .bro-content{position:relative;flex:1 1 56%;min-height:0;overflow:hidden;background:var(--forest-deep);display:flex;flex-direction:column;justify-content:flex-start;padding:clamp(12px,1.8vh,26px) clamp(28px,6vw,76px) clamp(16px,2.5vh,52px);animation:fadeUp .7s var(--ease) both}
 .bro-list{list-style:none;display:flex;flex-direction:column;gap:clamp(6px,1.4vh,11px);margin-bottom:clamp(12px,2vh,24px)}
-.bro-list li{display:flex;align-items:flex-start;gap:12px;font-size:clamp(13px,1.7vh,15px);color:rgba(245,241,235,0.85);max-width:48ch}
+.bro-list li{display:flex;align-items:flex-start;gap:12px;font-size:clamp(15px,1.9vh,16px);color:rgba(245,241,235,0.85);max-width:48ch}
 .bro-list li .material-symbols-outlined{font-size:19px;line-height:1.3;color:var(--gold);flex-shrink:0;font-variation-settings:'FILL' 0,'wght' 200,'GRAD' 0,'opsz' 20}
 .bro-sub{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,147,90,0.85);font-weight:700;margin:6px 0 12px}
 .bro-cortesias{background:rgba(184,147,90,0.08);border-left:3px solid var(--gold);padding:clamp(10px,1.6vh,16px) 20px;border-radius:0 4px 4px 0;margin-bottom:clamp(14px,2.2vh,30px)}
 .bro-cortesias .bro-sub{margin-top:0}
-.bro-cortesias p{font-size:clamp(12.5px,1.6vh,14px);color:rgba(245,241,235,0.65);line-height:1.6}
+.bro-cortesias p{font-size:clamp(14px,1.7vh,15px);color:rgba(245,241,235,0.65);line-height:1.6}
 .bro-next{align-self:flex-start;background:rgba(184,147,90,0.10);color:var(--gold);border:1px solid rgba(184,147,90,0.6);box-shadow:none}
 .bro-next:hover{background:rgba(184,147,90,0.18);border-color:var(--gold);box-shadow:none}
 
 /* indicadores de navegación lateral — estilo "Desliza para descubrir" (intro-hint) */
 .bro-nav{position:fixed;top:50%;transform:translateY(-50%);z-index:35;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:10px;
-  font:700 11px/1 'Lato',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,241,235,0.7);
+  font:700 11px/1 'Lato',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);
   text-shadow:0 1px 6px rgba(13,26,18,0.6);transition:color .3s var(--ease),opacity .3s var(--ease)}
 .bro-nav-prev{left:16px}
 .bro-nav-next{right:16px}
 .bro-nav-arrow{font-size:22px;line-height:1;color:var(--gold)}
-.bro-nav:hover{color:var(--ivory)}
+.bro-nav:hover,.bro-nav:hover .bro-nav-arrow{color:#D4AF7A}
 .bro-nav.edge-hidden{opacity:0;pointer-events:none}    /* oculto en primera (regresar) / última (continuar) */
 
 /* desktop (≥1024px): Opción B — split horizontal (imagen izquierda · contenido derecha) */
@@ -127,9 +127,10 @@ body.intro-open{overflow:hidden}
   .bro-bignum{font-size:clamp(90px,26vw,150px);bottom:auto;top:34px;right:14px;left:auto}
   .bro-kicker{font-size:clamp(1.7rem,7vw,2.4rem);letter-spacing:.03em}
   .bro-hero-text h2{font-size:clamp(16px,4.4vw,21px)}
-  .bro-lead{font-size:clamp(12.5px,1.7vh,14px)}
+  .bro-lead{font-size:clamp(14px,1.8vh,15px)}
   .bro-content{padding:clamp(14px,2vh,28px) 20px}
-  .bro-list li{font-size:clamp(12.5px,1.7vh,14px)}
+  .bro-list li{font-size:15px}
+  .bro-content{overflow-y:auto}   /* secciones densas (p. ej. Catering) scrollean si no caben en mobile */
   .bro-cortesias{padding:10px 16px}
   .cta{width:100%;justify-content:center;padding:14px 22px}
 }

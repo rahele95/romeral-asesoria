@@ -62,7 +62,7 @@ body.intro-open{overflow:hidden}
 .bro-swipe-cue{display:none}
 @keyframes swipeNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
 @media(max-width:1023px){
-  .loc-back{display:inline-flex;position:absolute;top:max(18px,env(safe-area-inset-top));left:18px;z-index:4}
+  .loc-back{display:inline-flex;position:absolute;top:max(18px,env(safe-area-inset-top));left:18px;z-index:4;min-height:44px;padding:8px 16px;background:rgba(13,26,18,0.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:100px}
   .bro-swipe-cue{display:flex;align-items:center;gap:8px;position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:36;font:700 11px/1 'Lato',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,241,235,0.85);background:rgba(13,26,18,0.62);border:1px solid rgba(184,147,90,0.25);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:9px 18px;border-radius:100px;opacity:0;pointer-events:none;transition:opacity .6s var(--ease)}
   .bro-swipe-cue.show{opacity:1}
   .bro-swipe-cue span{font-size:15px;color:var(--gold);animation:swipeNudge 1.6s var(--ease) infinite}

@@ -57,6 +57,16 @@ body.intro-open{overflow:hidden}
 .btn-back:hover{opacity:1}
 #introScreen .btn-back{position:absolute;top:max(18px,env(safe-area-inset-top));left:18px;z-index:2}
 @keyframes introBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+/* FIX mobile: back a "Invitados" (solo en la 1ª sección) e indicador sutil de swipe; ambos solo <1024px */
+.loc-back{display:none}
+.bro-swipe-cue{display:none}
+@keyframes swipeNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+@media(max-width:1023px){
+  .loc-back{display:inline-flex;position:absolute;top:max(18px,env(safe-area-inset-top));left:18px;z-index:4}
+  .bro-swipe-cue{display:flex;align-items:center;gap:8px;position:fixed;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:36;font:700 11px/1 'Lato',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,241,235,0.85);background:rgba(13,26,18,0.62);border:1px solid rgba(184,147,90,0.25);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:9px 18px;border-radius:100px;opacity:0;pointer-events:none;transition:opacity .6s var(--ease)}
+  .bro-swipe-cue.show{opacity:1}
+  .bro-swipe-cue span{font-size:15px;color:var(--gold);animation:swipeNudge 1.6s var(--ease) infinite}
+}
 
 /* ---------- BROCHURE ---------- */
 #brochure{background:var(--forest-deep);position:relative;min-height:100svh}
@@ -168,6 +178,7 @@ body.intro-open{overflow:hidden}
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
+      <button class="btn-back loc-back" type="button" aria-label="Volver a invitados" onclick="event.stopPropagation();window.location.href='index.html?back=1'">&larr; Invitados</button>
       <span class="bro-bignum">01</span>
       <div class="bro-hero-text">
         <p class="bro-kicker">Locación</p>
@@ -338,6 +349,7 @@ body.intro-open{overflow:hidden}
     <span>Continuar</span>
     <span class="bro-nav-arrow">&rarr;</span>
   </button>
+  <div class="bro-swipe-cue" id="broSwipeCue" aria-hidden="true">Desliza <span>&rarr;</span></div>
 </div>
 
 <script>
@@ -361,6 +373,16 @@ let broIdx = 0;
 // Indicadores de navegación lateral (estáticos): ocultar "Regresar" en la primera y "Continuar" en la última
 const broNavPrev = document.querySelector('.bro-nav-prev');
 const broNavNext = document.querySelector('.bro-nav-next');
+// FIX mobile: indicador sutil de swipe — aparece en la 1ª sección al salir de la intro y se desvanece a los 3s
+const broSwipeCue = document.getElementById('broSwipeCue');
+let swipeCueTimer = null;
+function showSwipeCue(){
+  if(!broSwipeCue || broIdx !== 0) return;
+  broSwipeCue.classList.add('show');
+  clearTimeout(swipeCueTimer);
+  swipeCueTimer = setTimeout(function(){ broSwipeCue.classList.remove('show'); }, 3000);
+}
+function hideSwipeCue(){ if(broSwipeCue){ clearTimeout(swipeCueTimer); broSwipeCue.classList.remove('show'); } }
 function showSwipeHint(){
   // REGRESAR siempre visible (en la 1ª lleva a index); CONTINUAR oculto solo en la última
   if(broNavNext) broNavNext.classList.toggle('edge-hidden', broIdx === stages.length - 1);
@@ -374,6 +396,7 @@ function pad(n){ return String(n).padStart(2,'0'); }
 
 function showStage(i){
   broIdx = i;
+  hideSwipeCue();   // al cambiar de sección, oculta el indicador de swipe
   try{ sessionStorage.setItem('broStage', i); }catch(e){}
   const key = stages[i];
   document.querySelectorAll('.bro-stage').forEach(s=>s.classList.remove('active'));
@@ -472,6 +495,7 @@ function dismissIntro(){
   document.body.classList.remove('intro-open');
   window.scrollTo({top:0,behavior:'instant'});
   showSwipeHint();
+  showSwipeCue();   // muestra el indicador sutil de swipe (mobile, 1ª sección, se desvanece a los 3s)
   window.removeEventListener('wheel',dismissIntro);
   window.removeEventListener('touchmove',dismissIntro);
   window.removeEventListener('keydown',onIntroKey);

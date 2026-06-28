@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Asesoría Virtual · El Romeral</title>
+<meta name="description" content="Diseña tu experiencia en El Romeral, venue de lujo en Zapopan. Elige fecha, tipo de evento e invitados y obtén tu inversión estimada.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
@@ -32,13 +34,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .hero-eyebrow{font-size:clamp(24px,3.8vw,42px);letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px}
 #hero h1{font-size:clamp(13px,1.4vw,18px);max-width:30ch;margin-bottom:4px;letter-spacing:.04em;font-weight:300;opacity:.75;font-family:'Lato',sans-serif}
 #hero h1 .gold{color:var(--gold)}
-.hero-sub{font-size:12px;color:rgba(245,241,235,0.45);font-weight:300;max-width:36ch;margin:10px auto 0;letter-spacing:.01em}
+.hero-sub{font-size:12px;color:rgba(245,241,235,0.7);font-weight:300;max-width:36ch;margin:10px auto 0;letter-spacing:.01em}
 .cta{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:var(--forest-deep);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;padding:12px 30px;border-radius:2px;transition:transform .5s var(--spring),box-shadow .4s var(--ease),background .3s;box-shadow:0 10px 34px rgba(184,147,90,0.28);width:100%;justify-content:center}
 .cta:hover{transform:translateY(-2px) scale(1.01);box-shadow:0 16px 44px rgba(184,147,90,0.4)}
 .cta:active{transform:translateY(0) scale(.99)}
 .cta:disabled{background:#363531;color:#9a8f81;box-shadow:none;cursor:not-allowed;transform:none}
 .hero-cal{width:100%;display:flex;flex-direction:column;align-items:center;margin-top:0;gap:0;flex:1;justify-content:center}
-.cal-label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,241,235,0.5);font-weight:700;margin-bottom:8px}
+.cal-label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,241,235,0.7);font-weight:700;margin-bottom:8px}
 .hero-cal .step-cta{margin-top:16px;width:100%;max-width:420px}
 #steps{background:var(--forest-deep);flex-direction:column;align-items:center;justify-content:center;padding:48px 20px}
 .steps-inner{width:100%;max-width:760px;text-align:center}
@@ -66,7 +68,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .cal-month-title{font-family:'Lato',sans-serif;font-size:17px;color:var(--ivory);letter-spacing:.01em;text-align:center;flex:1}
 .cal-days{width:100%}
 .cal-dows{display:grid;grid-template-columns:repeat(7,1fr);gap:0;margin-bottom:8px}
-.cal-dow{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,241,235,0.45);text-align:center;font-weight:700}
+.cal-dow{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,241,235,0.66);text-align:center;font-weight:700}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0;row-gap:6px}
 .cal-day{height:50px;width:50px;display:flex;align-items:center;justify-content:center;font-size:16px;border-radius:50%;color:var(--ivory);transition:background .25s,color .25s,transform .4s var(--spring);margin:0 auto}
 .cal-day.empty{visibility:hidden}
@@ -132,11 +134,11 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-ra
 <body>
 <section id="hero" class="phase active">
   <p class="hero-eyebrow">El Romeral</p>
-  <h1><span class="gold">¡Creamos momentos que perduran!</span></h1>
+  <h1><span class="gold">Creamos momentos que perduran.</span></h1>
   <div class="hero-cal">
     <p class="cal-label">Selecciona la fecha de tu evento</p>
     <div class="cal" id="cal"></div>
-    <span class="reward" id="dateReward"></span>
+    <span class="reward" id="dateReward" role="status" aria-live="polite"></span>
     <div class="step-cta"><button class="cta" id="cta1" disabled>Continuar &rarr;</button><p class="cta-hint">Elige una fecha para continuar</p></div>
   </div>
 </section>
@@ -186,6 +188,8 @@ const calEl=document.getElementById('cal');
 function pad(n){return String(n).padStart(2,'0')}
 function clampMonth(){if(viewY===today.getFullYear()&&viewM<today.getMonth())viewM=today.getMonth()}
 const MONTHS_FULL=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+// Convierte ISO "2026-02-14" → "14 de febrero de 2026"
+function fmtFechaLarga(iso){if(!iso)return '';const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);if(!m)return iso;return `${parseInt(m[3],10)} de ${MONTHS_FULL[parseInt(m[2],10)-1].toLowerCase()} de ${m[1]}`;}
 const todayIso=`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
 function renderCal(){
   const first=new Date(viewY,viewM,1).getDay();
@@ -235,7 +239,7 @@ function updateGuests(val,instant){S.personas=val;if(instant||typeof gsap==='und
 // FIX1: al arrastrar, el número salta exacto al valor del slider (step=5) sin lag de animación → fácil aterrizar en cifras como 185
 slider.oninput=()=>updateGuests(+slider.value,true);
 updateGuests(120);
-document.getElementById('cta3').onclick=()=>{sessionStorage.setItem('romeral',JSON.stringify({fecha:S.fecha,tipo:S.tipo,personas:S.personas}));window.location.href='brochure.html'};
+document.getElementById('cta3').onclick=()=>{sessionStorage.setItem('romeral',JSON.stringify({fecha:S.fecha,fechaTexto:fmtFechaLarga(S.fecha),tipo:S.tipo,personas:S.personas}));window.location.href='brochure.html'};
 // Si viene de brochure con ?back=1, restaurar al paso 3
 if(new URLSearchParams(window.location.search).get('back')==='1'){
   const saved=JSON.parse(sessionStorage.getItem('romeral')||'{}');

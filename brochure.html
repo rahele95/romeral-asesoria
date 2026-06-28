@@ -99,23 +99,24 @@ body.intro-open{overflow:hidden}
 .bro-next:hover{background:rgba(184,147,90,0.18);border-color:var(--gold);box-shadow:none}
 
 /* chevrons de navegación lateral (todas las pantallas): aparecen a 800ms, fadeout a los 2s; clicables */
-.swipe-chevron{position:fixed;top:50%;transform:translateY(-50%);z-index:35;pointer-events:none;cursor:pointer;
+.swipe-chevron{position:fixed;top:50%;transform:translateY(-50%);z-index:35;pointer-events:auto;cursor:pointer;
   width:48px;height:48px;display:flex;align-items:center;justify-content:center;
   font:300 2rem/1 'Lato',sans-serif;color:var(--gold);
   background:rgba(13,26,18,0.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   border:1px solid rgba(184,147,90,0.45);border-radius:50%;
-  opacity:0;transition:opacity .5s var(--ease)}
+  opacity:0.35;transition:opacity .4s var(--ease)}      /* reposo: siempre visible y clicable */
 .swipe-prev{left:clamp(8px,3vw,20px)}
 .swipe-next{right:clamp(8px,3vw,20px)}
-.swipe-chevron.show{opacity:1;pointer-events:auto}
-.swipe-chevron:hover{background:rgba(13,26,18,0.78);border-color:var(--gold)}
+.swipe-chevron.show{opacity:1}                          /* realce 2s al entrar a la sección */
+.swipe-chevron:hover{opacity:1;background:rgba(13,26,18,0.78);border-color:var(--gold)}
+.swipe-chevron.edge-hidden{opacity:0;pointer-events:none} /* oculto en primera (‹) / última (›) */
 @media (prefers-reduced-motion: reduce){ .swipe-chevron{transition:none} }
 
 /* desktop (≥1024px): Opción B — split horizontal (imagen izquierda · contenido derecha) */
 @media(min-width:1024px){
   .bro-stage{flex-direction:row}
-  /* mismo degradado suave que en mobile (sobre la imagen full-height del split) */
-  .bro-hero::after{background:linear-gradient(to bottom,rgba(13,26,18,0.10) 0%,rgba(13,26,18,0.30) 35%,rgba(13,26,18,0.60) 58%,rgba(13,26,18,0.85) 80%,var(--forest-deep) 100%)}
+  /* split: la imagen se funde hacia abajo (como mobile) Y hacia la derecha con la columna de contenido */
+  .bro-hero::after{background:linear-gradient(to right, transparent 60%, var(--forest-deep) 100%), linear-gradient(to bottom, rgba(13,26,18,0.10) 0%, rgba(13,26,18,0.30) 35%, rgba(13,26,18,0.60) 58%, rgba(13,26,18,0.85) 80%, var(--forest-deep) 100%)}
   .bro-hero{flex:0 0 45%;max-height:none;padding-bottom:clamp(28px,5vh,72px)}
   .bro-content{flex:1 1 55%;justify-content:safe center;overflow-y:auto;
     padding:clamp(40px,7vh,80px) clamp(40px,5vw,80px)}
@@ -345,20 +346,20 @@ let broIdx = 0;
 let broVisible = true;
 const swipePrev = document.querySelector('.swipe-prev');
 const swipeNext = document.querySelector('.swipe-next');
-let chevShowTimer = null, chevHideTimer = null;
+let chevHideTimer = null;
 function showSwipeHint(){
   if(!broVisible) return;
-  clearTimeout(chevShowTimer); clearTimeout(chevHideTimer);
-  if(swipePrev) swipePrev.classList.remove('show');
-  if(swipeNext) swipeNext.classList.remove('show');
-  chevShowTimer = setTimeout(function(){
-    if(swipePrev && broIdx > 0) swipePrev.classList.add('show');                 // ‹ solo si no es la primera
-    if(swipeNext && broIdx < stages.length - 1) swipeNext.classList.add('show'); // › solo si no es la última
-  }, 800);
+  clearTimeout(chevHideTimer);
+  // ocultar ‹ en la primera sección y › en la última (no hay destino)
+  if(swipePrev) swipePrev.classList.toggle('edge-hidden', broIdx === 0);
+  if(swipeNext) swipeNext.classList.toggle('edge-hidden', broIdx === stages.length - 1);
+  // realce a opacity 1 al entrar; tras 2s vuelve al reposo (0.35), nunca a 0
+  if(swipePrev) swipePrev.classList.add('show');
+  if(swipeNext) swipeNext.classList.add('show');
   chevHideTimer = setTimeout(function(){
     if(swipePrev) swipePrev.classList.remove('show');
     if(swipeNext) swipeNext.classList.remove('show');
-  }, 2800);
+  }, 2000);
 }
 // clic en los chevrons → navegar (solo activos cuando son visibles vía pointer-events)
 if(swipePrev) swipePrev.addEventListener('click', function(){ if(broIdx > 0) showStage(broIdx - 1); });

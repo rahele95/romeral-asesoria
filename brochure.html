@@ -67,6 +67,9 @@ body.intro-open{overflow:hidden}
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 .bro-kicker{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:clamp(6px,1.2vh,12px);text-shadow:0 1px 8px rgba(13,26,18,0.5)}.bro-hero-text h2{font-size:clamp(2.5rem,6vh,3.5rem);color:var(--ivory);margin-bottom:clamp(8px,1.4vh,14px);line-height:1.1;text-wrap:balance;text-shadow:0 2px 16px rgba(13,26,18,0.55)}
 .bro-lead{font-size:clamp(13px,1.7vh,15px);color:rgba(245,241,235,0.82);max-width:46ch;text-shadow:0 1px 10px rgba(13,26,18,0.5)}
+/* jerarquía reforzada: título dominante (bold) sobre copy reducido — solo cat/bar/ilu/dj */
+.bro-stage[data-stage="cat"] .bro-hero-text h2,.bro-stage[data-stage="bar"] .bro-hero-text h2,.bro-stage[data-stage="ilu"] .bro-hero-text h2,.bro-stage[data-stage="dj"] .bro-hero-text h2{font-weight:700;font-size:clamp(2.6rem,6.8vh,3.5rem);letter-spacing:-.015em}
+.bro-stage[data-stage="cat"] .bro-lead,.bro-stage[data-stage="bar"] .bro-lead,.bro-stage[data-stage="ilu"] .bro-lead,.bro-stage[data-stage="dj"] .bro-lead{font-size:clamp(11.5px,1.5vh,13px);color:rgba(245,241,235,0.7)}
 
 /* Content debajo del hero, sobre fondo sólido */
 .bro-content{position:relative;flex:1 1 56%;min-height:0;overflow:hidden;background:var(--forest-deep);display:flex;flex-direction:column;justify-content:center;padding:clamp(16px,2.5vh,52px) clamp(28px,6vw,76px);animation:fadeUp .7s var(--ease) both}

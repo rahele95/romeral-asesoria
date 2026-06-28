@@ -152,7 +152,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
         <div class="field"><label for="fWhats">WhatsApp</label><input type="tel" id="fWhats" placeholder="33 1234 5678" autocomplete="tel"></div>
         <div class="field"><label for="fEmail">Correo <span class="opt">(opcional)</span></label><input type="email" id="fEmail" placeholder="correo@ejemplo.com" autocomplete="email"></div>
       </div>
-      <p class="inv-micro">Un solo asesor, por el canal que tú elijas. Nada de spam.</p>
+      <p class="inv-micro">Un solo asesor, por el canal que prefieras. Tus datos quedan solo con nosotros — nada de spam.</p>
       <p class="form-status" id="formStatus" role="alert" aria-live="polite"></p>
       <div class="inv-actions">
         <button class="cta" id="btnSubmit">Ver mis fechas disponibles <span>&rarr;</span></button>
@@ -243,12 +243,12 @@ function revealForm(which){
   invFormWrap.hidden = false;
   const isCita = which === 'cita';
   document.getElementById('invAsk').textContent = isCita
-    ? 'Confirmemos que tu fecha sigue libre'
-    : 'Déjanos tus datos y te enviamos todo por correo';
+    ? 'Demos el siguiente paso juntos'
+    : 'Te lo enviamos ahora';
   document.getElementById('invSub').textContent = isCita
-    ? 'Con tu nombre y WhatsApp, un asesor revisa la disponibilidad y te confirma hoy mismo. Sin compromiso.'
-    : 'Te enviamos tu experiencia por correo y un asesor te contacta sin compromiso.';
-  btnSubmit.innerHTML = (isCita ? 'Ver mis fechas disponibles' : 'Enviar') + ' <span>&rarr;</span>';
+    ? 'Déjanos tu nombre y WhatsApp: un asesor te acompaña personalmente para afinar cada detalle de tu día. Sin compromiso.'
+    : 'Déjanos tu correo y recibes tu inversión estimada y todo lo que incluye, sin compromiso.';
+  btnSubmit.innerHTML = (isCita ? 'Agendar mi visita' : 'Enviar mi propuesta') + ' <span>&rarr;</span>';
   setStatus('', '');
   fNombre.focus();
   invFormWrap.scrollIntoView({behavior: prefersReduce ? 'auto' : 'smooth', block:'center'});

@@ -190,7 +190,7 @@ body.intro-open{overflow:hidden}
       </ul>
       <div class="bro-cortesias">
         <p class="bro-sub">Parte de su experiencia</p>
-        <p>Suite de novia desde las 8 de la mañana · cisnes negros, patos y gansos en el lago · fogata decorativa junto al lago · valet parking.</p>
+        <p><span id="locRoom">Room de novia</span> desde las 8 de la mañana · cisnes negros, patos y gansos en el lago · fogata decorativa junto al lago · valet parking.</p>
       </div>
       <button class="cta bro-next">Siguiente <span>&rarr;</span></button>
     </div>
@@ -288,7 +288,7 @@ body.intro-open{overflow:hidden}
       <ul class="bro-list">
         <li><span class="material-symbols-outlined">lightbulb</span><span>40 unidades de luz LED ámbar</span></li>
         <li><span class="material-symbols-outlined">wb_twilight</span><span>Iluminación en puntos clave del jardín</span></li>
-        <li><span class="material-symbols-outlined">auto_awesome</span><span>Ambiente cálido que envuelve la noche</span></li>
+        <li><span class="material-symbols-outlined">auto_awesome</span><span>Tonos ámbar que dan calidez al jardín</span></li>
       </ul>
       <button class="cta bro-next">Siguiente <span>&rarr;</span></button>
     </div>
@@ -344,6 +344,11 @@ body.intro-open{overflow:hidden}
 const d = JSON.parse(sessionStorage.getItem('romeral') || '{}');
 const CON_DJ = ['boda','xv','corporativo','social'];
 const tieneDJ = CON_DJ.includes(d.tipo);
+
+// Locación: el "room" de preparación se adapta al tipo de evento
+const ROOM_LABEL = {boda:'Room de novia', xv:'Room para quinceañera', social:'Room', corporativo:'Room', bautizo:'Room para festejados', comunion:'Room para festejados'};
+const locRoomEl = document.getElementById('locRoom');
+if(locRoomEl){ locRoomEl.textContent = ROOM_LABEL[d.tipo] || 'Room de novia'; }
 
 let stages = ['loc','cat','bar'];
 if(tieneDJ){ stages.push('dj','ilu'); }

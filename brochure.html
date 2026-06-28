@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,200..400,0,0&display=swap" rel="stylesheet">
 <!-- solo se precarga el hero de la sección 1; el resto se carga al navegar (carrusel diferido) -->
 <link rel="preload" as="image" href="fotos/web/locacion/locacion_01.jpg">
 <style>
@@ -379,10 +379,14 @@ function showStage(i){
   document.querySelectorAll('.bro-stage').forEach(s=>s.classList.remove('active'));
   const el = document.querySelector(`.bro-stage[data-stage="${key}"]`);
   el.classList.add('active');
+  // autoplay solo en la sección activa: pausa todos los carretes y arranca el de esta sección
+  document.querySelectorAll('.loc-slider').forEach(function(s){ if(s._broStop) s._broStop(); });
+  const _activeSlider = el.querySelector('.loc-slider');
+  if(_activeSlider && _activeSlider._broStart) _activeSlider._broStart();
   el.querySelector('.bro-counter').textContent = `${pad(i+1)} / ${pad(stages.length)}`;
   // botón inferior: solo en la última sección ("Ver mi inversión"); oculto en primera e intermedias
   const nextBtn = el.querySelector('.bro-next');
-  if(i === stages.length-1){ nextBtn.style.display=''; nextBtn.innerHTML='Ver nuestra inversión <span>&rarr;</span>'; }
+  if(i === stages.length-1){ nextBtn.style.display=''; nextBtn.innerHTML='Ver su inversión <span>&rarr;</span>'; }
   else { nextBtn.style.display='none'; }
   const c = el.querySelector('.bro-content');
   c.style.animation='none'; void c.offsetWidth; c.style.animation='';
@@ -504,9 +508,14 @@ if(returningFromPrecio){ dismissIntro(); }
     }
     function start(){ if(reduce) return; stop(); timer = setInterval(function(){ go(idx+1); }, 4000); }
     function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+    slider._broStart = start; slider._broStop = stop;   // expuestos para que showStage controle el autoplay
     dots.forEach(function(d,n){ d.addEventListener('click', function(){ go(n); start(); }); });
-    go(0); start();
+    go(0);   // sin auto-start: solo la sección activa reproduce (lo gestiona showStage)
   });
+  // arranca el carrete de la sección activa al cargar
+  var _as = document.querySelector('.bro-stage.active');
+  var _asl = _as && _as.querySelector('.loc-slider');
+  if(_asl && _asl._broStart) _asl._broStart();
 })();
 </script>
 </body>

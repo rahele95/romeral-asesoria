@@ -78,6 +78,7 @@ body.intro-open{overflow:hidden}
 .bro-back{position:absolute;top:clamp(14px,3.5vw,24px);left:clamp(20px,5vw,60px);z-index:3;display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:rgba(245,241,235,0.9);background:rgba(0,0,0,0.4);border:1px solid rgba(184,147,90,0.3);padding:8px 16px;border-radius:4px;transition:color .25s,background .25s,border-color .25s;text-shadow:0 1px 6px rgba(13,26,18,0.6)}
 .bro-back:hover{color:var(--gold);background:rgba(0,0,0,0.55);border-color:rgba(184,147,90,0.5)}
 .bro-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bro-stage .bro-back{display:none}   /* navegación atrás vía indicador REGRESAR; se conserva el del introScreen */
 .bro-bignum{position:absolute;bottom:clamp(18px,5vw,54px);left:clamp(16px,4vw,52px);font-family:'Lato',sans-serif;font-weight:300;font-size:clamp(120px,22vw,240px);color:rgba(245,241,235,0.10);line-height:1;pointer-events:none;z-index:1}
 .bro-hero-text{position:relative;z-index:2;max-width:640px;animation:fadeUp .7s var(--ease) both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
@@ -349,10 +350,13 @@ let broIdx = 0;
 const broNavPrev = document.querySelector('.bro-nav-prev');
 const broNavNext = document.querySelector('.bro-nav-next');
 function showSwipeHint(){
-  if(broNavPrev) broNavPrev.classList.toggle('edge-hidden', broIdx === 0);
+  // REGRESAR siempre visible (en la 1ª lleva a index); CONTINUAR oculto solo en la última
   if(broNavNext) broNavNext.classList.toggle('edge-hidden', broIdx === stages.length - 1);
 }
-if(broNavPrev) broNavPrev.addEventListener('click', function(){ if(broIdx > 0) showStage(broIdx - 1); });
+if(broNavPrev) broNavPrev.addEventListener('click', function(){
+  if(broIdx === 0){ window.location.href = 'index.html?back=1'; }   // 1ª sección: salir al formulario
+  else { showStage(broIdx - 1); }
+});
 if(broNavNext) broNavNext.addEventListener('click', function(){ if(broIdx < stages.length - 1) showStage(broIdx + 1); });
 function pad(n){ return String(n).padStart(2,'0'); }
 
@@ -364,9 +368,10 @@ function showStage(i){
   const el = document.querySelector(`.bro-stage[data-stage="${key}"]`);
   el.classList.add('active');
   el.querySelector('.bro-counter').textContent = `${pad(i+1)} / ${pad(stages.length)}`;
-  el.querySelector('.bro-next').innerHTML = (i === stages.length-1)
-    ? 'Ver mi inversión <span>&rarr;</span>'
-    : 'Siguiente <span>&rarr;</span>';
+  // botón inferior: solo en la última sección ("Ver mi inversión"); oculto en primera e intermedias
+  const nextBtn = el.querySelector('.bro-next');
+  if(i === stages.length-1){ nextBtn.style.display=''; nextBtn.innerHTML='Ver mi inversión <span>&rarr;</span>'; }
+  else { nextBtn.style.display='none'; }
   const c = el.querySelector('.bro-content');
   c.style.animation='none'; void c.offsetWidth; c.style.animation='';
   window.scrollTo({top:0,behavior:'instant'});

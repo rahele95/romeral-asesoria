@@ -176,7 +176,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     <div class="inv-actions" id="invIntent">
       <button class="cta" id="btnIntentCita">Agendar mi visita <span>&rarr;</span></button>
       <a href="galeria.html" class="btn-outline">Ver bodas reales en El Romeral <span>&rarr;</span></a>
-      <button class="btn-ghost" id="btnIntentInfo">Prefiero recibir la información por correo</button>
+      <button class="btn-ghost" id="btnIntentInfo">Prefiero que un asesor me escriba</button>
     </div>
 
     <!-- Paso 2: formulario (se revela al expresar intención) -->
@@ -278,13 +278,21 @@ function revealForm(which){
   invIntent.hidden = true;
   invFormWrap.hidden = false;
   const isCita = which === 'cita';
-  document.getElementById('invAsk').textContent = isCita
-    ? 'Demos el siguiente paso juntos'
-    : 'Te lo enviamos ahora';
-  document.getElementById('invSub').textContent = isCita
-    ? 'Déjanos tu nombre y WhatsApp: un asesor te acompaña personalmente para afinar cada detalle de tu día. Sin compromiso.'
-    : 'Déjanos tu correo y recibes tu inversión estimada y todo lo que incluye, sin compromiso.';
-  btnSubmit.innerHTML = (isCita ? 'Agendar mi visita' : 'Enviar mi propuesta') + ' <span>&rarr;</span>';
+  const invAskEl = document.getElementById('invAsk');
+  const invMicroEl = document.querySelector('.inv-micro');
+  if(isCita){
+    invAskEl.textContent = 'Demos el siguiente paso juntos';
+    invAskEl.style.display = '';
+    document.getElementById('invSub').textContent = 'Déjanos tu nombre y WhatsApp: un asesor te acompaña personalmente para afinar cada detalle de tu día. Sin compromiso.';
+    if(invMicroEl) invMicroEl.style.display = '';
+    btnSubmit.innerHTML = 'Agendar mi visita <span>&rarr;</span>';
+  } else {
+    invAskEl.textContent = '';
+    invAskEl.style.display = 'none';
+    document.getElementById('invSub').textContent = 'Un asesor de experiencias de El Romeral te contacta personalmente para acompañarte en cada detalle.';
+    if(invMicroEl) invMicroEl.style.display = 'none';
+    btnSubmit.innerHTML = 'Enviar mis datos <span>&rarr;</span>';
+  }
   setStatus('', '');
   fNombre.focus();
   invFormWrap.scrollIntoView({behavior: prefersReduce ? 'auto' : 'smooth', block:'center'});

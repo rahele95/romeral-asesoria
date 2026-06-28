@@ -3,18 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Tu Experiencia · El Romeral</title>
-<meta name="description" content="Descubre todo lo que incluye tu experiencia en El Romeral: locación, gastronomía, barra, iluminación y DJ.">
+<title>Su Experiencia · El Romeral</title>
+<meta name="description" content="Descubran todo lo que incluye su experiencia en El Romeral: locación, gastronomía, barra, iluminación y DJ.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<!-- solo se precarga el hero de la sección 1; el resto se carga al navegar (carrusel diferido) -->
 <link rel="preload" as="image" href="fotos/web/locacion/locacion_01.jpg">
-<link rel="preload" as="image" href="fotos/web/catering/catering_01.jpg">
-<link rel="preload" as="image" href="fotos/web/barra/barra_01.jpg">
-<link rel="preload" as="image" href="fotos/web/iluminacion/iluminacion_01.jpg">
-<link rel="preload" as="image" href="fotos/web/dj/dj_01.jpg">
 <style>
 :root{
   --gold:#B8935A; --forest:#1A2F23; --forest-deep:#0D1A12;
@@ -56,7 +53,7 @@ body.intro-open{overflow:hidden}
 .intro-hint{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,241,235,0.65);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:10px}
 .intro-hint span{font-size:22px;color:var(--gold);animation:introBounce 1.8s var(--ease) infinite}
 /* botón de retroceso de la pantalla de transición — mismo estilo que index (pasos) */
-.btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:14px 0;transition:opacity .3s;opacity:.7;color:rgba(245,241,235,0.7)}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:14px 0;transition:opacity .3s,color .3s;opacity:.9;color:rgba(245,241,235,0.95);text-shadow:0 1px 6px rgba(0,0,0,0.5)}
 .btn-back:hover{opacity:1}
 #introScreen .btn-back{position:absolute;top:max(18px,env(safe-area-inset-top));left:18px;z-index:2}
 @keyframes introBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
@@ -153,10 +150,10 @@ body.intro-open{overflow:hidden}
 <section id="introScreen">
   <button class="btn-back btn-back-steps" type="button" onclick="event.stopPropagation();window.location.href='index.html?back=1'">&larr; Invitados</button>
   <div class="intro-inner">
-    <p class="intro-eyebrow">Tu experiencia</p>
-    <h1 class="intro-title">Aquí comienza tu experiencia en <span style="color:var(--gold)">El Romeral</span></h1>
+    <p class="intro-eyebrow">El recorrido</p>
+    <h1 class="intro-title">Aquí comienza su experiencia en <span style="color:var(--gold)">El Romeral</span></h1>
     <p class="intro-sub" id="introSub"></p>
-    <p class="intro-hint">Desliza para descubrir <span>&darr;</span></p>
+    <p class="intro-hint">Deslicen para descubrir <span>&darr;</span></p>
   </div>
 </section>
 
@@ -192,8 +189,8 @@ body.intro-open{overflow:hidden}
         <li><span class="material-symbols-outlined">wc</span><span>Personal para sanitarios</span></li>
       </ul>
       <div class="bro-cortesias">
-        <p class="bro-sub">Parte de tu experiencia</p>
-        <p>Bride room desde las 8 de la mañana · cisnes negros, patos y gansos en el lago · fogata decorativa junto al lago · valet parking.</p>
+        <p class="bro-sub">Parte de su experiencia</p>
+        <p>Suite de novia desde las 8 de la mañana · cisnes negros, patos y gansos en el lago · fogata decorativa junto al lago · valet parking.</p>
       </div>
       <button class="cta bro-next">Siguiente <span>&rarr;</span></button>
     </div>
@@ -210,7 +207,7 @@ body.intro-open{overflow:hidden}
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
       <span class="bro-bignum">02</span>
       <div class="bro-hero-text">
-        <p class="bro-kicker">Catering</p>
+        <p class="bro-kicker">Gastronomía</p>
         <h2>Cocina propia: en tiempo, calidad y temperatura</h2>
       </div>
       <div class="loc-dots">
@@ -224,7 +221,7 @@ body.intro-open{overflow:hidden}
       <ul class="bro-list">
         <li><span class="material-symbols-outlined">restaurant_menu</span><span>Un menú de 3 tiempos preparado en nuestra cocina, servido con detalle.</span></li>
         <li><span class="material-symbols-outlined">soup_kitchen</span><span>Entrada: crema o ensalada</span></li>
-        <li><span class="material-symbols-outlined">restaurant</span><span>Plato fuerte: Pollo, Cerdo, Res o Salmón</span></li>
+        <li><span class="material-symbols-outlined">restaurant</span><span>Plato fuerte: pollo, cerdo, res o salmón</span></li>
         <li><span class="material-symbols-outlined">cake</span><span>Postre</span></li>
         <li><span class="material-symbols-outlined">dinner_dining</span><span>Vajilla Arcoroc · mantelería fina · molletón</span></li>
         <li><span class="material-symbols-outlined">table_restaurant</span><span>Mesas redondas o cuadradas</span></li>
@@ -256,7 +253,7 @@ body.intro-open{overflow:hidden}
     <div class="bro-content">
       <p class="bro-sub">Lo que contempla</p>
       <ul class="bro-list">
-        <li><span class="material-symbols-outlined">groups</span><span>Barra completamente equipada para todos tus invitados por un periodo de 5 horas</span></li>
+        <li><span class="material-symbols-outlined">groups</span><span>Barra completamente equipada para todos sus invitados por un periodo de 5 horas</span></li>
         <li><span class="material-symbols-outlined">local_bar</span><span>Mobiliario de barra · fábrica de hielo</span></li>
         <li><span class="material-symbols-outlined">local_drink</span><span>Coca, Diet, Mineral, Squirt y Quina</span></li>
         <li><span class="material-symbols-outlined">nutrition</span><span>Jugos de uva, piña, naranja y arándano</span></li>
@@ -324,7 +321,7 @@ body.intro-open{overflow:hidden}
         <li><span class="material-symbols-outlined">speaker</span><span>Equipo Bose · rack · mezcladora · cabina DJ</span></li>
         <li><span class="material-symbols-outlined">surround_sound</span><span>11 subwoofers · 12 bocinas en 3 zonas</span></li>
         <li><span class="material-symbols-outlined">mic</span><span>Consola de 12 canales · 2 micrófonos</span></li>
-        <li><span class="material-symbols-outlined">flare</span><span>8 luces robóticas · 4 par led</span></li>
+        <li><span class="material-symbols-outlined">flare</span><span>8 luces robóticas · 4 pares de luces LED</span></li>
         <li><span class="material-symbols-outlined">celebration</span><span>8 chisperos en pista · bazuca de mariposas</span></li>
         <li><span class="material-symbols-outlined">brush</span><span>Pista pintada a mano</span></li>
         <li><span class="material-symbols-outlined">headphones</span><span>DJ Romeral durante 5 horas</span></li>
@@ -353,7 +350,7 @@ if(tieneDJ){ stages.push('dj','ilu'); }
 
 // Subtítulo dinámico del introScreen: número de secciones = stages.length (no hardcodeado)
 const introSub = document.getElementById('introSub');
-if(introSub){ introSub.textContent = `Te presentamos los ${stages.length} elementos indispensables que la componen`; }
+if(introSub){ introSub.textContent = `Les presentamos los ${stages.length} elementos indispensables que la componen`; }
 
 let broIdx = 0;
 // Indicadores de navegación lateral (estáticos): ocultar "Regresar" en la primera y "Continuar" en la última
@@ -380,7 +377,7 @@ function showStage(i){
   el.querySelector('.bro-counter').textContent = `${pad(i+1)} / ${pad(stages.length)}`;
   // botón inferior: solo en la última sección ("Ver mi inversión"); oculto en primera e intermedias
   const nextBtn = el.querySelector('.bro-next');
-  if(i === stages.length-1){ nextBtn.style.display=''; nextBtn.innerHTML='Ver mi inversión <span>&rarr;</span>'; }
+  if(i === stages.length-1){ nextBtn.style.display=''; nextBtn.innerHTML='Ver nuestra inversión <span>&rarr;</span>'; }
   else { nextBtn.style.display='none'; }
   const c = el.querySelector('.bro-content');
   c.style.animation='none'; void c.offsetWidth; c.style.animation='';

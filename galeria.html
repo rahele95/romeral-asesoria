@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>El Romeral · Galería</title>
+<title>Galería · El Romeral</title>
 <meta name="description" content="Galería de bodas y eventos reales celebrados en El Romeral, Zapopan.">
 <meta name="theme-color" content="#0D1A12">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -33,9 +33,9 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 header.top{ position:sticky; top:0; z-index:40; background:rgba(13,20,13,.92); backdrop-filter:blur(10px);
   display:flex; align-items:center; justify-content:space-between; padding:16px 28px; border-bottom:var(--border) }
 header.top .logo{ font:400 11px/1 var(--body); letter-spacing:.42em; text-transform:uppercase; color:var(--gold) }
-header.top .back{ display:inline-flex; align-items:center; min-height:44px; font:700 12px/1 var(--body); letter-spacing:.12em;
-  text-transform:uppercase; color:rgba(245,241,235,.78); transition:color .3s ease }
-@media(hover:hover) and (pointer:fine){ header.top .back:hover{ color:var(--gold-light) } }
+header.top .back{ display:inline-flex; align-items:center; min-height:44px; font:700 13px/1 var(--body); letter-spacing:.08em;
+  text-transform:uppercase; color:rgba(245,241,235,.95); text-shadow:0 1px 6px rgba(0,0,0,0.5); transition:color .3s ease }
+@media(hover:hover) and (pointer:fine){ header.top .back:hover{ color:var(--ivory) } }
 
 /* ── hero editorial ── */
 .hero-g{ padding:clamp(70px,11vw,140px) 6vw clamp(34px,5vw,60px); max-width:1500px; margin:0 auto }
@@ -184,13 +184,13 @@ header.top .back{ display:inline-flex; align-items:center; min-height:44px; font
 
 <header class="top">
   <div class="logo">El Romeral</div>
-  <a href="precio.html" class="back">← Volver a mi propuesta</a>
+  <a href="precio.html" class="back">← Volver a nuestra propuesta</a>
 </header>
 
 <section class="hero-g">
   <div class="eyebrow">Galería</div>
   <h1>Lo que hemos <em>diseñado</em> juntos</h1>
-  <p class="sub">Cada celebración, única e irrepetible. Abre una historia para vivirla completa.</p>
+  <p class="sub">Cada celebración, única e irrepetible. Abran una historia para vivirla completa.</p>
 </section>
 
 <div class="masonry" id="masonry"></div>
@@ -224,7 +224,6 @@ const FALLBACK = CLD + 'ana-diego/ana_diego_001.jpg';
 // transformaciones Cloudinary (f_auto = WebP/AVIF · q_auto · width cap)
 const cld   = (url, w)     => url.replace('/upload/', `/upload/f_auto,q_auto,w_${w}/`);
 const cldR  = (url, w)     => url.replace('/upload/', `/upload/f_auto,q_auto,dpr_auto,w_${w}/`); // modal "La Historia": retina-aware
-const cldAr = (url, w, ar) => url.replace('/upload/', `/upload/f_auto,q_auto,c_fill,g_auto,ar_${ar},w_${w}/`);
 
 // metadatos de cada pareja (sin mostrar nombres ni estilos)
 const COUPLES = [
@@ -319,7 +318,7 @@ function buildStory(ci){
       <div class="eyebrow">Galería</div>
       <div class="fecha">${c.fecha}</div>
       <div class="meta">${n} momentos</div>
-      <div class="hint">↓ Desliza para recorrer</div>
+      <div class="hint">↓ Deslicen para recorrer</div>
     </div>
   </div><div class="st-flow">`;
   const pattern = ['full','duo','asym','duo'];

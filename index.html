@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Asesoría Virtual · El Romeral</title>
-<meta name="description" content="Diseña tu experiencia en El Romeral, venue de lujo en Zapopan. Elige fecha, tipo de evento e invitados y obtén tu inversión estimada.">
+<meta name="description" content="Diseñen su experiencia en El Romeral, venue de lujo en Zapopan. Elijan fecha, tipo de evento e invitados y obtengan su inversión estimada.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
 :root{--gold:#B8935A;--forest:#1A2F23;--forest-deep:#0D1A12;--ivory:#F5F1EB;--text:#2A2A2A;--spring:cubic-bezier(0.34,1.56,0.64,1);--ease:cubic-bezier(0.22,1,0.36,1)}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -21,11 +21,11 @@ body{font-family:'Lato',sans-serif;font-weight:300;font-size:15px;line-height:1.
 h1,h2,h3,.serif{font-family:'Lato',sans-serif;font-weight:300;line-height:1.12}
 img{display:block;max-width:100%}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
-.btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:14px 0;transition:opacity .3s;opacity:.7}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:14px 0;transition:opacity .3s,color .3s;opacity:.9;text-shadow:0 1px 6px rgba(0,0,0,0.5)}
 .btn-back:hover{opacity:1}
-.btn-back-hero{color:rgba(245,241,235,0.7);position:absolute;top:max(18px,env(safe-area-inset-top));left:18px;z-index:10}
+.btn-back-hero{color:rgba(245,241,235,0.95);position:absolute;top:max(18px,env(safe-area-inset-top));left:18px;z-index:10}
 .btn-back-hero:hover{color:var(--ivory)}
-.btn-back-steps{color:rgba(245,241,235,0.7);margin-bottom:8px}
+.btn-back-steps{color:rgba(245,241,235,0.95);margin-bottom:8px}
 .back-row{display:flex;align-items:center;margin-bottom:4px}
 .phase{display:none;min-height:100vh;width:100%}
 .phase.active{display:flex}
@@ -61,12 +61,12 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .cal-ytab{padding:0 18px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:2px;font-size:12px;font-weight:700;letter-spacing:.04em;color:rgba(245,241,235,0.6);border:1px solid rgba(184,147,90,0.16);transition:all .3s;cursor:pointer;background:none}
 .cal-ytab:hover{color:var(--ivory);border-color:rgba(245,241,235,0.4)}
 .cal-ytab.on{background:var(--gold);border-color:var(--gold);color:var(--forest-deep)}
-.cal-nav-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-nav-row{display:flex;align-items:center;justify-content:center;gap:28px;margin-bottom:14px}
 .cal-nav-btn{width:50px;height:50px;background:var(--forest);border:1.5px solid rgba(184,147,90,0.4);cursor:pointer;color:var(--gold);font-size:1.8rem;display:inline-flex;align-items:center;justify-content:center;transition:color .2s,background .2s,border-color .2s,transform .2s;line-height:1;font-family:inherit}
 .cal-nav-btn:hover:not(:disabled){background:var(--gold);color:#1a2818;border-color:var(--gold)}
 .cal-nav-btn:active{transform:scale(0.9)}
 .cal-nav-btn:disabled{color:rgba(245,241,235,0.2);cursor:not-allowed}
-.cal-month-title{font-family:'Lato',sans-serif;font-size:17px;color:var(--ivory);letter-spacing:.01em;text-align:center;flex:1}
+.cal-month-title{font-family:'Lato',sans-serif;font-size:17px;color:var(--ivory);letter-spacing:.01em;text-align:center;min-width:150px}
 .cal-days{width:100%}
 .cal-dows{display:grid;grid-template-columns:repeat(7,1fr);gap:0;margin-bottom:8px}
 .cal-dow{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,241,235,0.66);text-align:center;font-weight:700}
@@ -137,10 +137,10 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-ra
   <p class="hero-eyebrow">El Romeral</p>
   <h1><span class="gold">Creamos momentos que perduran.</span></h1>
   <div class="hero-cal">
-    <p class="cal-label">Selecciona la fecha de tu evento</p>
+    <p class="cal-label">Seleccionen la fecha de su evento</p>
     <div class="cal" id="cal"></div>
     <span class="reward" id="dateReward" role="status" aria-live="polite"></span>
-    <div class="step-cta"><button class="cta" id="cta1" disabled>Continuar &rarr;</button><p class="cta-hint">Elige una fecha para continuar</p></div>
+    <div class="step-cta"><button class="cta" id="cta1" disabled>Continuar &rarr;</button><p class="cta-hint">Elijan una fecha para continuar</p></div>
   </div>
 </section>
 <section id="steps" class="phase">
@@ -154,23 +154,23 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-ra
         <button class="type-card" data-tipo="boda" aria-pressed="false"><div class="type-ico"><span class="material-symbols-outlined">favorite</span></div><div class="type-name">Boda</div><span class="type-check" aria-hidden="true">✓</span></button>
         <button class="type-card" data-tipo="xv" aria-pressed="false"><div class="type-ico"><span class="material-symbols-outlined">stars</span></div><div class="type-name">XV Años</div><span class="type-check" aria-hidden="true">✓</span></button>
         <button class="type-card" data-tipo="corporativo" aria-pressed="false"><div class="type-ico"><span class="material-symbols-outlined">business_center</span></div><div class="type-name">Corporativo</div><span class="type-check" aria-hidden="true">✓</span></button>
-        <button class="type-card" data-tipo="social" aria-pressed="false"><div class="type-ico"><span class="material-symbols-outlined">celebration</span></div><div class="type-name">Social</div><span class="type-check" aria-hidden="true">✓</span></button>
+        <button class="type-card" data-tipo="social" aria-pressed="false"><div class="type-ico"><span class="material-symbols-outlined">celebration</span></div><div class="type-name">Evento social</div><span class="type-check" aria-hidden="true">✓</span></button>
         <button class="type-card" data-tipo="bautizo" aria-pressed="false"><div class="type-ico"><span class="material-symbols-outlined">child_care</span></div><div class="type-name">Bautizo</div><span class="type-check" aria-hidden="true">✓</span></button>
-        <button class="type-card" data-tipo="comunion" aria-pressed="false"><div class="type-ico"><span class="material-symbols-outlined">church</span></div><div class="type-name">1ra Comunión</div><span class="type-check" aria-hidden="true">✓</span></button>
+        <button class="type-card" data-tipo="comunion" aria-pressed="false"><div class="type-ico"><span class="material-symbols-outlined">church</span></div><div class="type-name">Primera Comunión</div><span class="type-check" aria-hidden="true">✓</span></button>
       </div>
-      <div class="step-cta"><button class="cta" id="cta2" disabled>Continuar &rarr;</button><p class="cta-hint">Selecciona el tipo de evento para continuar</p></div>
+      <div class="step-cta"><button class="cta" id="cta2" disabled>Continuar &rarr;</button><p class="cta-hint">Seleccionen el tipo de evento para continuar</p></div>
     </div>
     <div class="step" data-step="3">
       <div class="back-row"><button class="btn-back btn-back-steps" id="back3">&larr; Tipo de evento</button></div>
       <h2>¿Cuántos invitados esperan?</h2>
-      <p class="lead">Desliza para ajustar el número de invitados.</p>
+      <p class="lead">Deslicen para ajustar el número de invitados.</p>
       <div class="guest-num" id="guestNum">120</div>
       <div class="guest-label">Invitados</div>
       <div class="slider-wrap">
         <input type="range" id="guestSlider" min="50" max="400" step="5" value="120">
         <div class="slider-ends"><span>50</span><span>400</span></div>
       </div>
-      <div class="step-cta"><button class="cta" id="cta3">Comenzar mi experiencia <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></button></div>
+      <div class="step-cta"><button class="cta" id="cta3">Comenzar nuestra experiencia <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></button></div>
     </div>
   </div>
 </section>
@@ -204,7 +204,7 @@ function renderCal(){
     const past=dateObj<today;
     const blocked=BLOCKED_SET.has(iso);
     const sel=S.fecha===iso;
-    grid+=`<div class="cal-day ${past?'disabled':blocked?'blocked avail':'avail'} ${sel?'sel':''}${iso===todayIso?' today':''}" data-iso="${iso}" ${past?'':'data-pick="1"'}>${d}</div>`;
+    grid+=`<div class="cal-day ${past?'disabled':blocked?'blocked avail':'avail'} ${sel?'sel':''}${iso===todayIso?' today':''}" data-iso="${iso}" ${past?'':'data-pick="1" role="button" tabindex="0"'}>${d}</div>`;
   }
   grid+=`</div>`;
   const yearNow=today.getFullYear();
@@ -216,12 +216,12 @@ function renderCal(){
   calEl.querySelectorAll('.cal-ytab').forEach(b=>{b.onclick=()=>{viewY=+b.dataset.y;clampMonth();renderCal();}});
   document.getElementById('calPrev').onclick=()=>{if(!isPrevDisabled){viewM--;if(viewM<0){viewM=11;viewY--;}clampMonth();renderCal();}};
   document.getElementById('calNext').onclick=()=>{if(!isNextDisabled){viewM++;if(viewM>11){viewM=0;viewY++;}renderCal();}};
-  calEl.querySelectorAll('[data-pick]').forEach(c=>{c.onclick=()=>pickDate(c.dataset.iso)});
+  calEl.querySelectorAll('[data-pick]').forEach(c=>{c.onclick=()=>pickDate(c.dataset.iso);c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pickDate(c.dataset.iso);}}});
 }
 function pickDate(iso){
   const reward=document.getElementById('dateReward');
   const cta=document.getElementById('cta1');
-  if(BLOCKED_SET.has(iso)){S.fecha='';reward.textContent='Esa fecha ya está reservada. Te sugerimos otra fecha cercana.';reward.style.color='rgba(245,100,100,0.9)';reward.classList.add('show');cta.disabled=true}
+  if(BLOCKED_SET.has(iso)){S.fecha='';reward.textContent='Esa fecha ya está reservada. Les sugerimos otra fecha cercana.';reward.style.color='rgba(245,100,100,0.9)';reward.classList.add('show');cta.disabled=true}
   else{S.fecha=iso;reward.textContent='¡Esa fecha está disponible!';reward.style.color='var(--gold)';reward.classList.add('show');cta.disabled=false}
   renderCal();
 }

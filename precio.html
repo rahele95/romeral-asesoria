@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Tu Inversión · El Romeral</title>
-<meta name="description" content="Tu inversión estimada para tu evento en El Romeral, venue de lujo en Zapopan, Jalisco.">
+<title>Su Inversión · El Romeral</title>
+<meta name="description" content="Su inversión estimada para su evento en El Romeral, venue de lujo en Zapopan, Jalisco.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
 :root{
   --gold:#B8935A; --forest:#1A2F23; --forest-deep:#0D1A12;
@@ -137,16 +137,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .sched-card.featured h3{font-size:24px}
 .sched-tag{display:block;width:fit-content;font:700 10px/1 'Lato',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--forest-deep);background:var(--gold);padding:6px 12px;border-radius:2px;margin:0 auto 16px}
 
-/* indicador de navegación lateral — idéntico al de brochure.html */
-.bro-nav{position:fixed;top:50%;transform:translateY(-50%);z-index:35;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;gap:10px;
-  font:700 11px/1 'Lato',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);
-  text-shadow:0 1px 6px rgba(13,26,18,0.6);transition:color .3s var(--ease),opacity .3s var(--ease)}
-.bro-nav-prev{left:16px}
-.bro-nav-arrow{font-size:22px;line-height:1;color:var(--gold)}
-.bro-nav:hover,.bro-nav:hover .bro-nav-arrow{color:#D4AF7A}
-/* mobile: navegación por swipe/scroll; el indicador fixed se encimaría sobre el contenido */
-@media(max-width:1023px){.bro-nav-prev,.bro-nav-next{display:none}}
+/* botón de retroceso — homologado (ivory alta visibilidad, igual que index/brochure/galería) */
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:14px 0;opacity:.9;color:rgba(245,241,235,0.95);text-shadow:0 1px 6px rgba(0,0,0,0.5);transition:opacity .3s,color .3s}
+.btn-back:hover{opacity:1}
+#investment .btn-back{position:absolute;top:max(18px,env(safe-area-inset-top));left:18px;z-index:5}
 
 /* ---------- A4: reduce motion ---------- */
 @media (prefers-reduced-motion: reduce){
@@ -158,61 +152,58 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 <!-- ===================== INVESTMENT ===================== -->
 <section id="investment" style="position:relative">
-  <button class="bro-nav bro-nav-prev" type="button" aria-label="Volver al brochure" onclick="window.location.href='brochure.html?back=1'">
-    <span class="bro-nav-arrow">&larr;</span>
-    <span>Regresar</span>
-  </button>
+  <button class="btn-back" type="button" aria-label="Volver al brochure" onclick="window.location.href='brochure.html?back=1'">&larr; Regresar</button>
   <div class="inv-inner">
     <!-- ZONA 1 · Veredicto -->
     <p class="inv-basis" id="invBasis"></p>
     <h1 class="inv-eyebrow">Inversión estimada</h1>
     <div class="inv-total" id="invTotal"></div>
-    <p class="inv-note">Esta es la base de tu experiencia. A partir de aquí, la personalizamos juntos.</p>
+    <p class="inv-note">Esta es la base de su experiencia. A partir de aquí, la personalizamos juntos.</p>
 
     <!-- ZONA 2 · Decisión -->
     <!-- Paso 1: intención (CTA sin formulario) -->
     <div class="inv-actions" id="invIntent">
-      <button class="cta" id="btnIntentCita">Agendar mi visita <span>&rarr;</span></button>
-      <button class="btn-ghost" id="btnIntentInfo">Prefiero que un asesor me escriba</button>
+      <button class="cta" id="btnIntentCita">Agendar nuestra visita <span>&rarr;</span></button>
+      <button class="btn-ghost" id="btnIntentInfo">Preferimos que un asesor nos escriba</button>
       <a href="galeria.html" class="btn-outline">Ver bodas reales en El Romeral <span>&rarr;</span></a>
     </div>
 
     <!-- Paso 2: formulario (se revela al expresar intención) -->
     <div class="inv-form-wrap" id="invFormWrap" hidden>
-      <p class="inv-ask" id="invAsk">Confirmemos que tu fecha sigue libre</p>
-      <p class="inv-sub" id="invSub">Con tu nombre y WhatsApp, un asesor revisa la disponibilidad y te confirma hoy mismo. Sin compromiso.</p>
+      <p class="inv-ask" id="invAsk">Demos el siguiente paso juntos</p>
+      <p class="inv-sub" id="invSub">Déjennos su nombre y WhatsApp: un asesor los acompaña personalmente para afinar cada detalle de su día. Sin compromiso.</p>
       <div class="inv-form" id="invForm">
-        <div class="field"><label id="nameLabel" for="fNombre">Tu nombre</label><input type="text" id="fNombre" placeholder="Escribe aquí" autocomplete="name"></div>
+        <div class="field"><label id="nameLabel" for="fNombre">Su nombre</label><input type="text" id="fNombre" placeholder="Escribe aquí" autocomplete="name"></div>
         <div class="field"><label for="fWhats">WhatsApp</label><input type="tel" id="fWhats" placeholder="33 1234 5678" autocomplete="tel"></div>
         <div class="field"><label for="fEmail">Correo <span class="opt">(opcional)</span></label><input type="email" id="fEmail" placeholder="correo@ejemplo.com" autocomplete="email"></div>
       </div>
-      <p class="inv-micro">Un solo asesor, por el canal que prefieras. Tus datos quedan solo con nosotros — nada de spam.</p>
+      <p class="inv-micro">Un solo asesor, por el canal que prefieran. Sus datos quedan solo con nosotros — sin spam.</p>
       <p class="form-status" id="formStatus" role="alert" aria-live="polite"></p>
       <div class="inv-actions">
-        <button class="cta" id="btnSubmit">Ver mis fechas disponibles <span>&rarr;</span></button>
+        <button class="cta" id="btnSubmit">Ver nuestras fechas disponibles <span>&rarr;</span></button>
         <button class="btn-ghost" id="btnFormBack">Volver</button>
       </div>
     </div>
 
     <!-- Estado final (ruta "solo información") -->
     <div class="inv-done" id="invDone">
-      <p>Un asesor te contactará muy pronto.</p>
-      <button class="cta" id="btnReconsiderar">Mejor sí quiero agendar mi cita <span>&rarr;</span></button>
+      <p>Un asesor los contactará muy pronto.</p>
+      <button class="cta" id="btnReconsiderar">Mejor sí queremos agendar nuestra cita <span>&rarr;</span></button>
     </div>
 
     <!-- ZONA 3 · Captura pasiva (al final, separada por hairline) -->
     <form class="inv-save" id="invSave" novalidate>
-      <p class="inv-save-title">¿Quieres guardar esta propuesta?</p>
-      <p class="inv-save-sub">Te la enviamos a tu correo para que la revises con calma.</p>
+      <p class="inv-save-title">¿Quieren guardar esta propuesta?</p>
+      <p class="inv-save-sub">Se la enviamos a su correo para que la revisen con calma.</p>
       <div class="inv-save-row">
         <div class="inv-save-field">
-          <label for="fSaveEmail">Tu correo</label>
+          <label for="fSaveEmail">Su correo</label>
           <input type="email" id="fSaveEmail" placeholder="nombre@correo.com" autocomplete="email" inputmode="email">
         </div>
         <button type="submit" class="inv-save-btn" id="btnSaveEmail">Enviar <span>&rarr;</span></button>
       </div>
       <p class="inv-save-status" id="saveStatus" role="status" aria-live="polite"></p>
-      <p class="inv-save-priv">Solo para enviarte tu estimación. Sin spam.</p>
+      <p class="inv-save-priv">Solo para enviarles su propuesta. Sin spam.</p>
     </form>
   </div>
 </section>
@@ -223,13 +214,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   <div class="sched-grid">
     <a class="sched-card featured" href="https://cal.com/ricardo-heredia-jxuu3m/presencial?overlayCalendar=true" target="_blank" rel="noopener">
       <span class="sched-tag">Recomendada</span>
-      <span class="sched-ico material-symbols-outlined" aria-hidden="true">nature</span><h3>Visita presencial</h3><p>Recorre El Romeral en persona.</p>
+      <span class="sched-ico material-symbols-outlined" aria-hidden="true">nature</span><h3>Visita presencial</h3><p>Recorran El Romeral en persona.</p>
     </a>
     <a class="sched-card" href="https://cal.com/ricardo-heredia-jxuu3m/video-llamada" target="_blank" rel="noopener">
-      <span class="sched-ico material-symbols-outlined" aria-hidden="true">videocam</span><h3>Videollamada</h3><p>Conócenos desde donde estés.</p>
+      <span class="sched-ico material-symbols-outlined" aria-hidden="true">videocam</span><h3>Videollamada</h3><p>Conózcannos desde donde estén.</p>
     </a>
     <a class="sched-card" href="https://wa.me/523338708159" target="_blank" rel="noopener">
-      <span class="sched-ico material-symbols-outlined" aria-hidden="true">chat</span><h3>WhatsApp</h3><p>Escríbenos directamente.</p>
+      <span class="sched-ico material-symbols-outlined" aria-hidden="true">chat</span><h3>WhatsApp</h3><p>Escríbannos directamente.</p>
     </a>
   </div>
 </section>
@@ -258,20 +249,20 @@ function fmtFechaLarga(iso){ if(!iso) return ''; const m=/^(\d{4})-(\d{2})-(\d{2
 const fechaLegible = d.fechaTexto || fmtFechaLarga(d.fecha);
 
 const NAME_LABELS = { boda:'Nombre de los novios', xv:'Nombre de la festejada', corporativo:'Empresa y nombre de contacto' };
-const tipoNice = {boda:'Boda',xv:'XV Años',corporativo:'Corporativo',social:'Evento social',bautizo:'Bautizo',comunion:'1ra Comunión'};
+const tipoNice = {boda:'Boda',xv:'XV Años',corporativo:'Corporativo',social:'Evento social',bautizo:'Bautizo',comunion:'Primera Comunión'};
 
 const total = calcularTotal(d.personas || 120, d.tipo);
 
 document.getElementById('invBasis').textContent = `Basado en ${d.personas || 120} invitados · ${tipoNice[d.tipo] || ''} · ${fechaLegible}`;
-document.getElementById('nameLabel').textContent = NAME_LABELS[d.tipo] || 'Tu nombre';
+document.getElementById('nameLabel').textContent = NAME_LABELS[d.tipo] || 'Su nombre';
 
 // A7: el precio es visible por defecto; GSAP solo lo realza (no controla su visibilidad)
 const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const el = document.getElementById('invTotal');
 el.textContent = fmt(total);
-if(typeof gsap !== 'undefined' && !prefersReduce){
-  requestAnimationFrame(()=>gsap.from(el,{opacity:0,y:16,duration:1,ease:'power3.out',delay:.15}));
-}
+// GSAP carga con defer: si aún no está, esperamos a DOMContentLoaded (los scripts defer ya ejecutaron) para no perder el realce
+function animPrecio(){ if(typeof gsap !== 'undefined' && !prefersReduce){ requestAnimationFrame(()=>gsap.from(el,{opacity:0,y:16,duration:1,ease:'power3.out',delay:.15})); } }
+if(typeof gsap !== 'undefined'){ animPrecio(); } else { window.addEventListener('DOMContentLoaded', animPrecio); }
 
 // ---------- M1: revelar el formulario solo al expresar intención ----------
 const invIntent = document.getElementById('invIntent');
@@ -300,15 +291,15 @@ function revealForm(which){
   if(isCita){
     invAskEl.textContent = 'Demos el siguiente paso juntos';
     invAskEl.style.display = '';
-    document.getElementById('invSub').textContent = 'Déjanos tu nombre y WhatsApp: un asesor te acompaña personalmente para afinar cada detalle de tu día. Sin compromiso.';
+    document.getElementById('invSub').textContent = 'Déjennos su nombre y WhatsApp: un asesor los acompaña personalmente para afinar cada detalle de su día. Sin compromiso.';
     if(invMicroEl) invMicroEl.style.display = '';
-    btnSubmit.innerHTML = 'Agendar mi visita <span>&rarr;</span>';
+    btnSubmit.innerHTML = 'Agendar nuestra visita <span>&rarr;</span>';
   } else {
     invAskEl.textContent = '';
     invAskEl.style.display = 'none';
-    document.getElementById('invSub').textContent = 'Un asesor de experiencias de El Romeral te contacta personalmente para acompañarte en cada detalle.';
+    document.getElementById('invSub').textContent = 'Un asesor de experiencias de El Romeral los contacta personalmente para acompañarlos en cada detalle.';
     if(invMicroEl) invMicroEl.style.display = 'none';
-    btnSubmit.innerHTML = 'Enviar mis datos <span>&rarr;</span>';
+    btnSubmit.innerHTML = 'Enviar nuestros datos <span>&rarr;</span>';
   }
   setStatus('', '');
   fNombre.focus();
@@ -326,7 +317,7 @@ function validForm(){
   const n = fNombre.value.trim();
   const w = fWhats.value.trim();
   if(!n || !w){
-    setStatus('Completa tu nombre y WhatsApp, por favor.', 'error');
+    setStatus('Completen su nombre y WhatsApp, por favor.', 'error');
     (!n ? fNombre : fWhats).focus();
     return false;
   }
@@ -389,7 +380,7 @@ async function submitLead(){
   }catch(err){
     btnSubmit.disabled = false;
     btnSubmit.innerHTML = original;
-    setStatus('No pudimos enviar tu información. Revisa tu conexión e inténtalo de nuevo.', 'error');
+    setStatus('No pudimos enviar su información. Revisen su conexión e inténtenlo de nuevo.', 'error');
   }
 }
 btnSubmit.onclick = submitLead;
@@ -435,7 +426,7 @@ async function savePartialLead(email){
 invSave.addEventListener('submit', async (e)=>{
   e.preventDefault();
   const email = fSaveEmail.value.trim();
-  if(!isValidEmail(email)){ setSaveStatus('Escribe un correo válido, por favor.', 'error'); fSaveEmail.focus(); return; }
+  if(!isValidEmail(email)){ setSaveStatus('Escriban un correo válido, por favor.', 'error'); fSaveEmail.focus(); return; }
   // Guardar localmente para pre-llenar el formulario completo (aunque la red falle)
   d.email = email;
   try{ sessionStorage.setItem('romeral', JSON.stringify(d)); }catch(_){}
@@ -448,11 +439,11 @@ invSave.addEventListener('submit', async (e)=>{
     const ok = await savePartialLead(email);
     if(!ok) throw new Error('request-failed');
     invSave.classList.add('done');
-    invSave.querySelector('.inv-save-title').textContent = '¡Listo! Te enviamos tu propuesta.';
+    invSave.querySelector('.inv-save-title').textContent = '¡Listo! Les enviamos su propuesta.';
   }catch(err){
     btnSaveEmail.disabled = false;
     btnSaveEmail.innerHTML = orig;
-    setSaveStatus('No pudimos guardar tu correo. Inténtalo de nuevo.', 'error');
+    setSaveStatus('No pudimos guardar su correo. Inténtenlo de nuevo.', 'error');
   }
 });
 

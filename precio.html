@@ -46,14 +46,14 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 /* ---------- INVESTMENT ---------- */
 #investment{
   background:radial-gradient(120% 120% at 50% 0%, #1A2F23 0%, #0D1A12 70%);
-  color:var(--ivory);display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100vh;min-height:100svh;padding:32px 24px;text-align:center;
+  color:var(--ivory);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  min-height:100vh;min-height:100svh;padding:clamp(48px,9vh,96px) 24px;text-align:center;
 }
 .inv-inner{width:100%;max-width:600px;animation:fadeUp .8s var(--ease) both}
 .inv-basis{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(184,147,90,0.85);font-weight:700;margin-bottom:16px}
 .inv-eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(245,241,235,0.65);margin-bottom:8px}
 .inv-total{font-family:'Lato',sans-serif;font-weight:300;font-size:clamp(48px,8vw,78px);color:var(--gold);line-height:1;font-variant-numeric:tabular-nums}
-.inv-note{font-size:15px;color:rgba(245,241,235,0.82);font-weight:300;max-width:42ch;margin:16px auto 16px;font-style:italic}
+.inv-note{font-size:15px;color:rgba(245,241,235,0.82);font-weight:300;max-width:42ch;margin:16px auto clamp(40px,7vh,56px);font-style:italic}
 .inv-proof{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,241,235,0.58);font-weight:400;margin:0 auto 30px}
 .inv-proof strong{color:var(--gold);font-weight:700;letter-spacing:.1em}
 /* Captura inline suave de correo (opcional, discreta) */
@@ -77,6 +77,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .inv-save.done .inv-save-sub,.inv-save.done .inv-save-row,.inv-save.done .inv-save-status,.inv-save.done .inv-save-priv{display:none}
 .inv-actions{display:flex;flex-direction:column;gap:12px;align-items:center}
 .inv-actions[hidden]{display:none}
+/* Zona 3 · Decisión — separada por hairline */
+.inv-zone3{margin-top:40px;border-top:1px solid rgba(184,147,90,0.15);padding-top:clamp(28px,5vh,40px)}
+#btnIntentInfo{margin-top:20px}
 .inv-form-wrap{animation:fadeUp .5s var(--ease) both;margin-top:8px}
 .inv-ask{font-family:'Lato',sans-serif;font-size:clamp(20px,3vw,28px);color:var(--ivory);margin:6px 0 10px}
 .inv-sub{font-size:14px;line-height:1.55;color:rgba(245,241,235,0.72);font-weight:300;max-width:40ch;margin:0 auto 22px}
@@ -153,42 +156,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 <section id="investment" style="position:relative">
   <button class="btn-back" onclick="window.location.href='brochure.html?back=1'">&larr; Atrás</button>
   <div class="inv-inner">
+    <!-- ZONA 1 · Veredicto -->
     <p class="inv-basis" id="invBasis"></p>
     <h1 class="inv-eyebrow">Inversión estimada</h1>
     <div class="inv-total" id="invTotal"></div>
     <p class="inv-note">Esta es la base de tu experiencia. A partir de aquí, la personalizamos juntos.</p>
 
-    <!-- Paso 1: intención (CTA principal primero, sin formulario) -->
-    <div class="inv-actions" id="invIntent">
-      <button class="cta" id="btnIntentCita">Agendar mi visita <span>&rarr;</span></button>
-      <a href="galeria.html" class="btn-outline">Ver bodas reales en El Romeral <span>&rarr;</span></a>
-      <button class="btn-ghost" id="btnIntentInfo">Prefiero que un asesor me escriba</button>
-    </div>
-
-    <!-- Paso 2: formulario (se revela al expresar intención) -->
-    <div class="inv-form-wrap" id="invFormWrap" hidden>
-      <p class="inv-ask" id="invAsk">Confirmemos que tu fecha sigue libre</p>
-      <p class="inv-sub" id="invSub">Con tu nombre y WhatsApp, un asesor revisa la disponibilidad y te confirma hoy mismo. Sin compromiso.</p>
-      <div class="inv-form" id="invForm">
-        <div class="field"><label id="nameLabel" for="fNombre">Tu nombre</label><input type="text" id="fNombre" placeholder="Escribe aquí" autocomplete="name"></div>
-        <div class="field"><label for="fWhats">WhatsApp</label><input type="tel" id="fWhats" placeholder="33 1234 5678" autocomplete="tel"></div>
-        <div class="field"><label for="fEmail">Correo <span class="opt">(opcional)</span></label><input type="email" id="fEmail" placeholder="correo@ejemplo.com" autocomplete="email"></div>
-      </div>
-      <p class="inv-micro">Un solo asesor, por el canal que prefieras. Tus datos quedan solo con nosotros — nada de spam.</p>
-      <p class="form-status" id="formStatus" role="alert" aria-live="polite"></p>
-      <div class="inv-actions">
-        <button class="cta" id="btnSubmit">Ver mis fechas disponibles <span>&rarr;</span></button>
-        <button class="btn-ghost" id="btnFormBack">Volver</button>
-      </div>
-    </div>
-
-    <!-- Estado final (ruta "solo información") -->
-    <div class="inv-done" id="invDone">
-      <p>Un asesor te contactará muy pronto.</p>
-      <button class="cta" id="btnReconsiderar">Mejor sí quiero agendar mi cita <span>&rarr;</span></button>
-    </div>
-
-    <!-- Captura inline suave de correo (opcional · debajo de los CTAs) -->
+    <!-- ZONA 2 · Captura pasiva -->
     <form class="inv-save" id="invSave" novalidate>
       <p class="inv-save-title">¿Quieres guardar esta propuesta?</p>
       <p class="inv-save-sub">Te la enviamos a tu correo para que la revises con calma.</p>
@@ -202,6 +176,39 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
       <p class="inv-save-status" id="saveStatus" role="status" aria-live="polite"></p>
       <p class="inv-save-priv">Solo para enviarte tu estimación. Sin spam.</p>
     </form>
+
+    <!-- ZONA 3 · Decisión (hairline arriba) -->
+    <div class="inv-zone3">
+      <!-- Paso 1: intención (CTA sin formulario) -->
+      <div class="inv-actions" id="invIntent">
+        <a href="galeria.html" class="btn-outline">Ver bodas reales en El Romeral <span>&rarr;</span></a>
+        <button class="cta" id="btnIntentCita">Agendar mi visita <span>&rarr;</span></button>
+        <button class="btn-ghost" id="btnIntentInfo">Prefiero que un asesor me escriba</button>
+      </div>
+
+      <!-- Paso 2: formulario (se revela al expresar intención) -->
+      <div class="inv-form-wrap" id="invFormWrap" hidden>
+        <p class="inv-ask" id="invAsk">Confirmemos que tu fecha sigue libre</p>
+        <p class="inv-sub" id="invSub">Con tu nombre y WhatsApp, un asesor revisa la disponibilidad y te confirma hoy mismo. Sin compromiso.</p>
+        <div class="inv-form" id="invForm">
+          <div class="field"><label id="nameLabel" for="fNombre">Tu nombre</label><input type="text" id="fNombre" placeholder="Escribe aquí" autocomplete="name"></div>
+          <div class="field"><label for="fWhats">WhatsApp</label><input type="tel" id="fWhats" placeholder="33 1234 5678" autocomplete="tel"></div>
+          <div class="field"><label for="fEmail">Correo <span class="opt">(opcional)</span></label><input type="email" id="fEmail" placeholder="correo@ejemplo.com" autocomplete="email"></div>
+        </div>
+        <p class="inv-micro">Un solo asesor, por el canal que prefieras. Tus datos quedan solo con nosotros — nada de spam.</p>
+        <p class="form-status" id="formStatus" role="alert" aria-live="polite"></p>
+        <div class="inv-actions">
+          <button class="cta" id="btnSubmit">Ver mis fechas disponibles <span>&rarr;</span></button>
+          <button class="btn-ghost" id="btnFormBack">Volver</button>
+        </div>
+      </div>
+
+      <!-- Estado final (ruta "solo información") -->
+      <div class="inv-done" id="invDone">
+        <p>Un asesor te contactará muy pronto.</p>
+        <button class="cta" id="btnReconsiderar">Mejor sí quiero agendar mi cita <span>&rarr;</span></button>
+      </div>
+    </div>
   </div>
 </section>
 

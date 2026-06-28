@@ -392,8 +392,8 @@ document.getElementById('brochure').addEventListener('click', function(e){
   }
 });
 
-// Swipe horizontal (mobile) como navegación adicional entre secciones — no reemplaza los botones.
-// Axis-lock: solo cambia de sección si |dx| > |dy| y |dx| > 50px. touch-action:pan-y deja libre el scroll vertical.
+// Swipe horizontal (touch + Pointer Events para desktop/trackpad) — navegación adicional, no reemplaza los botones.
+// Axis-lock: |dx| > |dy|. Umbral 50px en touch, 60px en pointer. touch-action:pan-y deja libre el scroll vertical.
 (function(){
   const area = document.getElementById('brochure');
   let sx = 0, sy = 0, tracking = false;
@@ -410,6 +410,21 @@ document.getElementById('brochure').addEventListener('click', function(e){
       else { if(broIdx > 0) showStage(broIdx-1); }                       // derecha → sección anterior
     }
   }, {passive:true});
+  // Pointer Events (mouse/trackpad/lápiz): swipe en desktop. Excluye 'touch' (ya lo cubre touchstart/touchend).
+  let psx = 0, psy = 0, pTracking = false;
+  area.addEventListener('pointerdown', function(e){
+    if(e.pointerType === 'touch') return;
+    psx = e.clientX; psy = e.clientY; pTracking = true;
+  }, {passive:true});
+  area.addEventListener('pointerup', function(e){
+    if(!pTracking || e.pointerType === 'touch') return; pTracking = false;
+    const dx = e.clientX - psx, dy = e.clientY - psy;
+    if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60){   // axis-lock + umbral 60px
+      if(dx < 0){ if(broIdx < stages.length-1) showStage(broIdx+1); }
+      else { if(broIdx > 0) showStage(broIdx-1); }
+    }
+  }, {passive:true});
+  area.addEventListener('pointercancel', function(){ pTracking = false; }, {passive:true});
 })();
 
 // FIX5: si se regresa desde precio.html (?back=1), reabrir el brochure en la última sección vista

@@ -75,7 +75,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .inv-save-status.error{color:#E58A8A}
 .inv-save-priv{font-size:11px;color:rgba(245,241,235,0.65);margin-top:6px;letter-spacing:.01em}
 .inv-save.done .inv-save-sub,.inv-save.done .inv-save-row,.inv-save.done .inv-save-status,.inv-save.done .inv-save-priv{display:none}
-.inv-actions{display:flex;flex-direction:column;gap:12px;align-items:center}
+.inv-actions{display:flex;flex-direction:column;gap:20px;align-items:center}
 .inv-actions[hidden]{display:none}
 .inv-form-wrap{animation:fadeUp .5s var(--ease) both;margin-top:8px}
 .inv-ask{font-family:'Lato',sans-serif;font-size:clamp(20px,3vw,28px);color:var(--ivory);margin:6px 0 10px}
@@ -140,11 +140,11 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 /* indicador de navegación lateral — idéntico al de brochure.html */
 .bro-nav{position:fixed;top:50%;transform:translateY(-50%);z-index:35;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:10px;
-  font:700 11px/1 'Lato',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,241,235,0.7);
+  font:700 11px/1 'Lato',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);
   text-shadow:0 1px 6px rgba(13,26,18,0.6);transition:color .3s var(--ease),opacity .3s var(--ease)}
 .bro-nav-prev{left:16px}
 .bro-nav-arrow{font-size:22px;line-height:1;color:var(--gold)}
-.bro-nav:hover{color:var(--ivory)}
+.bro-nav:hover,.bro-nav:hover .bro-nav-arrow{color:#D4AF7A}
 
 /* ---------- A4: reduce motion ---------- */
 @media (prefers-reduced-motion: reduce){

@@ -425,6 +425,18 @@ document.getElementById('brochure').addEventListener('click', function(e){
     }
   }, {passive:true});
   area.addEventListener('pointercancel', function(){ pTracking = false; }, {passive:true});
+  // Wheel (trackpad): el swipe de dos dedos emite wheel con deltaX, no pointer.
+  // Axis-lock horizontal + cooldown 800ms (una pasada = un solo cambio de sección).
+  let wheelLock = false;
+  area.addEventListener('wheel', function(e){
+    if(Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;   // vertical dominante → scroll normal, no tocar
+    e.preventDefault();                                     // consume el swipe horizontal (evita back/forward del navegador)
+    if(wheelLock || Math.abs(e.deltaX) < 30) return;        // en cooldown o movimiento mínimo → no navegar
+    wheelLock = true;
+    setTimeout(function(){ wheelLock = false; }, 800);      // cooldown ≥800ms
+    if(e.deltaX > 0){ if(broIdx < stages.length-1) showStage(broIdx+1); }   // hacia la derecha → siguiente
+    else { if(broIdx > 0) showStage(broIdx-1); }                            // hacia la izquierda → anterior
+  }, {passive:false});
 })();
 
 // FIX5: si se regresa desde precio.html (?back=1), reabrir el brochure en la última sección vista

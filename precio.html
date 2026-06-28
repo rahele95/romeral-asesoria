@@ -54,6 +54,25 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .inv-note{font-size:15px;color:rgba(245,241,235,0.82);font-weight:300;max-width:42ch;margin:16px auto 16px;font-style:italic}
 .inv-proof{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,241,235,0.58);font-weight:400;margin:0 auto 30px}
 .inv-proof strong{color:var(--gold);font-weight:700;letter-spacing:.1em}
+/* Captura inline suave de correo (opcional, discreta) */
+.inv-save{max-width:440px;margin:0 auto 28px;text-align:center}
+.inv-save-title{font-size:14px;font-weight:700;color:rgba(245,241,235,0.9);letter-spacing:.01em;margin-bottom:4px}
+.inv-save-sub{font-size:13px;line-height:1.5;color:rgba(245,241,235,0.6);font-weight:300;margin-bottom:14px}
+.inv-save-row{display:flex;gap:8px;align-items:flex-end;text-align:left}
+.inv-save-field{flex:1}
+.inv-save-field label{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,235,0.55);margin-bottom:6px}
+.inv-save-field input{width:100%;background:rgba(245,241,235,0.06);border:1px solid rgba(184,147,90,0.2);border-radius:4px;padding:11px 14px;color:var(--ivory);font-family:inherit;font-size:15px;transition:border-color .3s}
+.inv-save-field input:focus{outline:none;border-color:var(--gold)}
+.inv-save-field input:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-color:var(--gold)}
+.inv-save-field input::placeholder{color:rgba(245,241,235,0.4)}
+.inv-save-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;background:transparent;color:var(--gold);border:1px solid rgba(184,147,90,0.45);font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:11px 18px;border-radius:4px;white-space:nowrap;transition:background .3s,border-color .3s}
+.inv-save-btn:hover{background:rgba(184,147,90,0.08);border-color:var(--gold)}
+.inv-save-btn:disabled{opacity:.5;cursor:not-allowed}
+.inv-save-status{font-size:12px;min-height:16px;margin-top:8px;color:rgba(245,241,235,0.6)}
+.inv-save-status.ok{color:var(--gold)}
+.inv-save-status.error{color:#E58A8A}
+.inv-save-priv{font-size:11px;color:rgba(245,241,235,0.4);margin-top:6px;letter-spacing:.01em}
+.inv-save.done .inv-save-sub,.inv-save.done .inv-save-row,.inv-save.done .inv-save-status,.inv-save.done .inv-save-priv{display:none}
 .inv-actions{display:flex;flex-direction:column;gap:12px;align-items:center}
 .inv-actions[hidden]{display:none}
 .inv-form-wrap{animation:fadeUp .5s var(--ease) both;margin-top:8px}
@@ -95,6 +114,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .inv-form{gap:12px;margin-bottom:14px}
   .field input{padding:14px;font-size:16px}
   .inv-ask{font-size:clamp(20px,5.5vw,26px);margin-bottom:18px}
+  .inv-save-row{flex-direction:column;align-items:stretch}
+  .inv-save-btn{width:100%;justify-content:center;padding:13px}
   .cta,.btn-outline{width:100%;justify-content:center;padding:16px 24px}
   .btn-back{padding:14px 16px;font-size:11px}
   #schedule{padding:48px 18px}
@@ -135,6 +156,21 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     <div class="inv-total" id="invTotal"></div>
     <p class="inv-note">Esta es la base de tu experiencia. A partir de aquí, la personalizamos juntos.</p>
     <p class="inv-proof"><strong>+200 bodas</strong> celebradas en El Romeral</p>
+
+    <!-- Captura inline suave de correo (opcional · no bloquea los CTAs) -->
+    <form class="inv-save" id="invSave" novalidate>
+      <p class="inv-save-title">¿Quieres guardar esta propuesta?</p>
+      <p class="inv-save-sub">Te la enviamos a tu correo para que la revises con calma.</p>
+      <div class="inv-save-row">
+        <div class="inv-save-field">
+          <label for="fSaveEmail">Tu correo</label>
+          <input type="email" id="fSaveEmail" placeholder="nombre@correo.com" autocomplete="email" inputmode="email">
+        </div>
+        <button type="submit" class="inv-save-btn" id="btnSaveEmail">Enviar <span>&rarr;</span></button>
+      </div>
+      <p class="inv-save-status" id="saveStatus" role="status" aria-live="polite"></p>
+      <p class="inv-save-priv">Solo para enviarte tu estimación. Sin spam.</p>
+    </form>
 
     <!-- Paso 1: intención (CTA principal primero, sin formulario) -->
     <div class="inv-actions" id="invIntent">
@@ -332,6 +368,68 @@ async function submitLead(){
   }
 }
 btnSubmit.onclick = submitLead;
+
+// ---------- Captura inline suave de correo: guarda parcial + pre-llena el formulario completo ----------
+const invSave = document.getElementById('invSave');
+const fSaveEmail = document.getElementById('fSaveEmail');
+const btnSaveEmail = document.getElementById('btnSaveEmail');
+const saveStatus = document.getElementById('saveStatus');
+function isValidEmail(s){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+function setSaveStatus(msg, type){ saveStatus.textContent = msg || ''; saveStatus.className = 'inv-save-status' + (type ? ' ' + type : ''); }
+
+// Pre-llenado si ya hay un correo capturado antes (p. ej. al volver a la página)
+if(d.email){ fSaveEmail.value = d.email; fEmail.value = d.email; }
+
+// Validación de formato en blur (antes de guardar)
+fSaveEmail.addEventListener('blur', ()=>{
+  const v = fSaveEmail.value.trim();
+  if(v && !isValidEmail(v)) setSaveStatus('Ese correo no parece válido.', 'error');
+  else setSaveStatus('', '');
+});
+
+// saveLead parcial: solo el correo + los datos que ya tenemos
+async function savePartialLead(email){
+  const payload = {
+    email: email,
+    fecha: d.fecha,
+    tipoEvento: d.tipo,
+    tipo_evento: d.tipo,
+    personas: d.personas,
+    total: total,
+    total_estimado: total,
+    lead_parcial: true
+  };
+  const ctrl = new AbortController();
+  const timer = setTimeout(()=>ctrl.abort(), 10000);
+  try{
+    const res = await fetch('/api/leads', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), signal:ctrl.signal });
+    return res.ok;
+  } finally { clearTimeout(timer); }
+}
+
+invSave.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const email = fSaveEmail.value.trim();
+  if(!isValidEmail(email)){ setSaveStatus('Escribe un correo válido, por favor.', 'error'); fSaveEmail.focus(); return; }
+  // Guardar localmente para pre-llenar el formulario completo (aunque la red falle)
+  d.email = email;
+  try{ sessionStorage.setItem('romeral', JSON.stringify(d)); }catch(_){}
+  fEmail.value = email;
+  const orig = btnSaveEmail.innerHTML;
+  btnSaveEmail.disabled = true;
+  btnSaveEmail.textContent = 'Enviando…';
+  setSaveStatus('', '');
+  try{
+    const ok = await savePartialLead(email);
+    if(!ok) throw new Error('request-failed');
+    invSave.classList.add('done');
+    invSave.querySelector('.inv-save-title').textContent = '¡Listo! Te enviamos tu propuesta.';
+  }catch(err){
+    btnSaveEmail.disabled = false;
+    btnSaveEmail.innerHTML = orig;
+    setSaveStatus('No pudimos guardar tu correo. Inténtalo de nuevo.', 'error');
+  }
+});
 
 document.getElementById('btnReconsiderar').onclick = ()=>{ saveLead(true).catch(()=>{}); showSchedule(); };
 </script>

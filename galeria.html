@@ -225,14 +225,14 @@ const FALLBACK = CLD + 'ana-diego/ana_diego_001.jpg';
 const cld   = (url, w)     => url.replace('/upload/', `/upload/f_auto,q_auto,w_${w}/`);
 const cldR  = (url, w)     => url.replace('/upload/', `/upload/f_auto,q_auto,dpr_auto,w_${w}/`); // modal "La Historia": retina-aware
 
-// metadatos de cada pareja (sin mostrar nombres ni estilos)
+// metadatos de cada pareja — se muestra el estilo de boda (sin fechas)
 const COUPLES = [
-  { slug:'sarahi-emmanuel',    pareja:'Sarahí & Emmanuel',    fecha:'Octubre 2025' },
-  { slug:'henry-stephanie',    pareja:'Henry & Stephanie',    fecha:'Noviembre 2025' },
-  { slug:'ana-diego',          pareja:'Ana & Diego',          fecha:'Febrero 2026' },
-  { slug:'daniel-bernardette', pareja:'Daniel & Bernardette', fecha:'Enero 2026' },
-  { slug:'perla-alexis',       pareja:'Perla & Alexis',       fecha:'Marzo 2026' },
-  { slug:'paty-alex',          pareja:'Paty & Alex',          fecha:'Abril 2026' },
+  { slug:'sarahi-emmanuel',    pareja:'Sarahí & Emmanuel',    estilo:'Vintage Glam' },
+  { slug:'henry-stephanie',    pareja:'Henry & Stephanie',    estilo:'Jardín Romántico' },
+  { slug:'ana-diego',          pareja:'Ana & Diego',          estilo:'Elegancia Contemporánea' },
+  { slug:'daniel-bernardette', pareja:'Daniel & Bernardette', estilo:'Garden Party' },
+  { slug:'perla-alexis',       pareja:'Perla & Alexis',       estilo:'Moderno Minimalista' },
+  { slug:'paty-alex',          pareja:'Paty & Alex',          estilo:'Boho Chic' },
 ];
 
 // fallback (file:// o sin red): reconstruye URLs de Cloudinary
@@ -268,7 +268,7 @@ let storyCi=0, storyTotal=0, storyOrigin=null;
   pintarTiles();
 })();
 
-// ── tiles (solo fecha) ──
+// ── tiles (estilo de boda, sin fecha) ──
 function pintarTiles(){
   COUPLES.forEach((c, ci) => {
     const tile = document.createElement('div');
@@ -276,14 +276,14 @@ function pintarTiles(){
     const vacia = !c.fotos || c.fotos.length === 0;
     if (vacia){
       tile.className = 'tile empty';
-      tile.innerHTML = `<div class="ov"><div class="fecha">${c.fecha}</div><div class="soon">Galería en camino</div></div>`;
+      tile.innerHTML = `<div class="ov"><div class="fecha">${c.estilo}</div><div class="soon">Galería en camino</div></div>`;
     } else {
       tile.className = 'tile';
-      tile.tabIndex = 0; tile.setAttribute('role','button'); tile.setAttribute('aria-label', `Ver galería · ${c.fecha}`);
+      tile.tabIndex = 0; tile.setAttribute('role','button'); tile.setAttribute('aria-label', `Ver galería · ${c.estilo}`);
       tile.innerHTML = `
-        <img src="${cld(c.fotos[0],900)}" alt="El Romeral — ${c.fecha}" loading="lazy" onerror="onImgError(this)">
+        <img src="${cld(c.fotos[0],900)}" alt="El Romeral — ${c.estilo}" loading="lazy" onerror="onImgError(this)">
         <div class="ov">
-          <div class="fecha">${c.fecha}</div>
+          <div class="fecha">${c.estilo}</div>
           <div class="ln"></div>
           <div class="meta">${c.fotos.length} momentos</div>
         </div>`;
@@ -313,10 +313,10 @@ function cell(url, idx, ar, w, extra){
 function buildStory(ci){
   const c = COUPLES[ci], fotos = c.fotos, n = fotos.length;
   let html = `<div class="st-cover">
-    <img src="${cldR(fotos[0],1600)}" alt="El Romeral — ${c.fecha}" data-idx="0">
+    <img src="${cldR(fotos[0],1600)}" alt="El Romeral — ${c.estilo}" data-idx="0">
     <div class="cap">
       <div class="eyebrow">Galería</div>
-      <div class="fecha">${c.fecha}</div>
+      <div class="fecha">${c.estilo}</div>
       <div class="meta">${n} momentos</div>
       <div class="hint">↓ Deslicen para recorrer</div>
     </div>
@@ -337,7 +337,7 @@ function buildStory(ci){
     }
     i += need; p++;
   }
-  html += `</div><div class="st-end"><div class="ln"></div><div class="name">El Romeral</div><div class="d">${c.fecha}</div></div>`;
+  html += `</div><div class="st-end"><div class="ln"></div><div class="name">El Romeral</div></div>`;
   storyScroll.innerHTML = html;
   storyTotal = n;
   // por si alguna imagen ya estaba en caché
@@ -405,8 +405,8 @@ function pintar(){
   const c = COUPLES[lbCi];
   lbImg.classList.remove('on');
   lbImg.src = cld(c.fotos[lbIdx], 1600);
-  lbImg.alt = `El Romeral — ${c.fecha} · ${lbIdx+1} de ${c.fotos.length}`;
-  lbFecha.textContent = c.fecha;
+  lbImg.alt = `El Romeral — ${c.estilo} · ${lbIdx+1} de ${c.fotos.length}`;
+  lbFecha.textContent = c.estilo;
   lbCount.textContent = `${lbIdx+1} / ${c.fotos.length}`;
   const n = c.fotos.length;
   [ (lbIdx+1)%n, (lbIdx-1+n)%n ].forEach(i => { const im = new Image(); im.src = cld(c.fotos[i], 1600); });

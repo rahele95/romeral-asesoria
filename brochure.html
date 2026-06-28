@@ -58,6 +58,15 @@ body.intro-open{overflow:hidden}
 /* Hero: imagen que se funde hacia abajo con gradiente hacia #0D1A12, título y subtítulo encima */
 .bro-hero{position:relative;flex:0 0 44%;min-height:0;background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(20px,4vh,76px) clamp(28px,6vw,76px);overflow:hidden}
 .bro-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(13,26,18,0.10) 0%,rgba(13,26,18,0.30) 35%,rgba(13,26,18,0.60) 58%,rgba(13,26,18,0.85) 80%,var(--forest-deep) 100%);z-index:0}
+/* carrete Locación — capas bajo el overlay ::after */
+.loc-slider{position:absolute;inset:0;z-index:0;overflow:hidden}
+.loc-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.1s var(--ease)}
+.loc-slide.is-active{opacity:1}
+.loc-dots{position:absolute;z-index:3;bottom:clamp(14px,2.2vh,26px);right:clamp(22px,5vw,58px);display:flex;gap:4px}
+.loc-dot{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;background:none;border:none;padding:0;cursor:pointer}
+.loc-dot::before{content:"";width:7px;height:7px;border-radius:50%;background:rgba(184,147,90,0.4);transition:background .3s,transform .3s}
+.loc-dot:hover::before{background:rgba(184,147,90,0.7)}
+.loc-dot.is-active::before{background:var(--gold);transform:scale(1.25)}
 .bro-counter{position:absolute;top:clamp(18px,4vw,30px);right:clamp(28px,6vw,76px);z-index:3;font-size:12px;letter-spacing:.22em;color:var(--gold);font-weight:700;background:rgba(13,26,18,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:6px 12px;border-radius:100px;text-shadow:0 1px 4px rgba(13,26,18,0.95)}
 .bro-back{position:absolute;top:clamp(14px,3.5vw,24px);left:clamp(20px,5vw,60px);z-index:3;display:inline-flex;align-items:center;gap:6px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:rgba(245,241,235,0.8);transition:color .25s;padding:0;text-shadow:0 1px 6px rgba(13,26,18,0.6)}
 .bro-back:hover{color:var(--gold)}
@@ -111,19 +120,29 @@ body.intro-open{overflow:hidden}
 <div id="brochure">
 
   <div class="bro-stage" data-stage="loc">
-    <div class="bro-hero" style="background-image:url('fotos/web/toldo_panoramico_01.jpg')">
+    <div class="bro-hero">
+      <div class="loc-slider" aria-hidden="true">
+        <div class="loc-slide is-active" style="background-image:url('fotos/web/locacion/locacion_01.jpg')"></div>
+        <div class="loc-slide" style="background-image:url('fotos/web/locacion/locacion_02.jpg')"></div>
+        <div class="loc-slide" style="background-image:url('fotos/web/locacion/locacion_03.jpg')"></div>
+      </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
       <span class="bro-bignum">01</span>
       <div class="bro-hero-text">
         <p class="bro-kicker">Locación</p>
         <h2>El jardín que lo enmarca todo</h2>
-        <p class="bro-lead">7 horas para vivir cada momento: 5 hrs de recepción + 1 hr de área de alberca y coctelería + 1 hr en la Capilla Cristo del Romeral.</p>
+      </div>
+      <div class="loc-dots">
+        <button class="loc-dot is-active" type="button" aria-label="Ver imagen 1"></button>
+        <button class="loc-dot" type="button" aria-label="Ver imagen 2"></button>
+        <button class="loc-dot" type="button" aria-label="Ver imagen 3"></button>
       </div>
     </div>
     <div class="bro-content">
       <p class="bro-sub">Lo que contempla</p>
       <ul class="bro-list">
+        <li><span class="material-symbols-outlined">schedule</span><span>7 horas para vivir cada momento: 5 hrs de recepción + 1 hr de área de alberca y coctelería + 1 hr en la Capilla Cristo del Romeral.</span></li>
         <li><span class="material-symbols-outlined">festival</span><span>Toldo panorámico de 16 × 26 m</span></li>
         <li><span class="material-symbols-outlined">bolt</span><span>Planta de luz para áreas generales de El Romeral</span></li>
         <li><span class="material-symbols-outlined">local_parking</span><span>Estacionamiento para 250 autos</span></li>
@@ -138,19 +157,29 @@ body.intro-open{overflow:hidden}
   </div>
 
   <div class="bro-stage" data-stage="cat">
-    <div class="bro-hero" style="background-image:url('fotos/web/banquete_mesa_01.jpg')">
+    <div class="bro-hero">
+      <div class="loc-slider" aria-hidden="true">
+        <div class="loc-slide is-active" style="background-image:url('fotos/web/catering/catering_01.jpg')"></div>
+        <div class="loc-slide" style="background-image:url('fotos/web/catering/catering_02.jpg')"></div>
+        <div class="loc-slide" style="background-image:url('fotos/web/catering/catering_03.jpg')"></div>
+      </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
       <span class="bro-bignum">02</span>
       <div class="bro-hero-text">
         <p class="bro-kicker">Catering</p>
         <h2>Cocina propia: en tiempo, calidad y temperatura</h2>
-        <p class="bro-lead">Un menú de 3 tiempos preparado en nuestra cocina, servido con detalle.</p>
+      </div>
+      <div class="loc-dots">
+        <button class="loc-dot is-active" type="button" aria-label="Ver imagen 1"></button>
+        <button class="loc-dot" type="button" aria-label="Ver imagen 2"></button>
+        <button class="loc-dot" type="button" aria-label="Ver imagen 3"></button>
       </div>
     </div>
     <div class="bro-content">
       <p class="bro-sub">Lo que contempla</p>
       <ul class="bro-list">
+        <li><span class="material-symbols-outlined">restaurant_menu</span><span>Un menú de 3 tiempos preparado en nuestra cocina, servido con detalle.</span></li>
         <li><span class="material-symbols-outlined">soup_kitchen</span><span>Entrada: crema o ensalada</span></li>
         <li><span class="material-symbols-outlined">restaurant</span><span>Plato fuerte: Pollo, Cerdo, Res o Salmón</span></li>
         <li><span class="material-symbols-outlined">cake</span><span>Postre</span></li>
@@ -164,19 +193,27 @@ body.intro-open{overflow:hidden}
   </div>
 
   <div class="bro-stage" data-stage="bar">
-    <div class="bro-hero" style="background-image:url('fotos/web/banquete_quesos_01.jpg')">
+    <div class="bro-hero">
+      <div class="loc-slider" aria-hidden="true">
+        <div class="loc-slide is-active" style="background-image:url('fotos/web/barra/barra_01.jpg')"></div>
+        <div class="loc-slide" style="background-image:url('fotos/web/barra/barra_02.jpg')"></div>
+      </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
       <span class="bro-bignum">03</span>
       <div class="bro-hero-text">
         <p class="bro-kicker">Barra y bebidas</p>
         <h2>Una barra siempre servida</h2>
-        <p class="bro-lead">Barra completamente equipada para todos tus invitados por un periodo de 5 hrs</p>
+      </div>
+      <div class="loc-dots">
+        <button class="loc-dot is-active" type="button" aria-label="Ver imagen 1"></button>
+        <button class="loc-dot" type="button" aria-label="Ver imagen 2"></button>
       </div>
     </div>
     <div class="bro-content">
       <p class="bro-sub">Lo que contempla</p>
       <ul class="bro-list">
+        <li><span class="material-symbols-outlined">groups</span><span>Barra completamente equipada para todos tus invitados por un periodo de 5 hrs</span></li>
         <li><span class="material-symbols-outlined">local_bar</span><span>Mobiliario de barra · fábrica de hielo</span></li>
         <li><span class="material-symbols-outlined">local_drink</span><span>Coca, Diet, Mineral, Squirt y Quina</span></li>
         <li><span class="material-symbols-outlined">nutrition</span><span>Jugos de uva, piña, naranja y arándano</span></li>
@@ -189,13 +226,21 @@ body.intro-open{overflow:hidden}
   </div>
 
   <div class="bro-stage" data-stage="ilu">
-    <div class="bro-hero" id="iluPhoto" style="background-image:url('fotos/web/jardin_lago_atardecer_iluminado_01.jpg')">
+    <div class="bro-hero" id="iluPhoto">
+      <div class="loc-slider" aria-hidden="true">
+        <div class="loc-slide is-active" style="background-image:url('fotos/web/iluminacion/iluminacion_01.jpg')"></div>
+        <div class="loc-slide" style="background-image:url('fotos/web/iluminacion/iluminacion_02.jpg')"></div>
+      </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
       <span class="bro-bignum">04</span>
       <div class="bro-hero-text">
         <p class="bro-kicker">Iluminación</p>
         <h2 id="iluTitle">Calidez que envuelve la noche</h2>
+      </div>
+      <div class="loc-dots">
+        <button class="loc-dot is-active" type="button" aria-label="Ver imagen 1"></button>
+        <button class="loc-dot" type="button" aria-label="Ver imagen 2"></button>
       </div>
     </div>
     <div class="bro-content">
@@ -210,7 +255,12 @@ body.intro-open{overflow:hidden}
   </div>
 
   <div class="bro-stage" data-stage="dj">
-    <div class="bro-hero" style="background-image:url('fotos/web/boda_pista_baile_noche_01.jpg')">
+    <div class="bro-hero">
+      <div class="loc-slider" aria-hidden="true">
+        <div class="loc-slide is-active" style="background-image:url('fotos/web/dj/dj_01.jpg')"></div>
+        <div class="loc-slide" style="background-image:url('fotos/web/dj/dj_02.jpg')"></div>
+        <div class="loc-slide" style="background-image:url('fotos/web/dj/dj_03.jpg')"></div>
+      </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
       <span class="bro-bignum">05</span>
@@ -218,6 +268,11 @@ body.intro-open{overflow:hidden}
         <p class="bro-kicker">DJ Romeral y pista</p>
         <h2>La música que hace vibrar cada momento</h2>
         <p class="bro-lead">Producción de audio e iluminación profesional para llenar la pista.</p>
+      </div>
+      <div class="loc-dots">
+        <button class="loc-dot is-active" type="button" aria-label="Ver imagen 1"></button>
+        <button class="loc-dot" type="button" aria-label="Ver imagen 2"></button>
+        <button class="loc-dot" type="button" aria-label="Ver imagen 3"></button>
       </div>
     </div>
     <div class="bro-content">
@@ -305,6 +360,28 @@ window.addEventListener('keydown',onIntroKey);
 introScreen.addEventListener('click',dismissIntro);
 // FIX5: al volver desde precio, omitir la pantalla de transición
 if(returningFromPrecio){ dismissIntro(); }
+</script>
+<script>
+/* Carretes del brochure (Locación, Catering) — aislado, no toca el flujo/fade */
+(function(){
+  document.querySelectorAll('.loc-slider').forEach(function(slider){
+    var hero = slider.closest('.bro-hero');
+    var slides = Array.prototype.slice.call(slider.querySelectorAll('.loc-slide'));
+    var dots = hero ? Array.prototype.slice.call(hero.querySelectorAll('.loc-dot')) : [];
+    if(slides.length < 2) return;
+    var idx = 0, timer = null;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function go(i){
+      idx = (i % slides.length + slides.length) % slides.length;
+      slides.forEach(function(s,n){ s.classList.toggle('is-active', n===idx); });
+      dots.forEach(function(d,n){ d.classList.toggle('is-active', n===idx); });
+    }
+    function start(){ if(reduce) return; stop(); timer = setInterval(function(){ go(idx+1); }, 4000); }
+    function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+    dots.forEach(function(d,n){ d.addEventListener('click', function(){ go(n); start(); }); });
+    go(0); start();
+  });
+})();
 </script>
 </body>
 </html>

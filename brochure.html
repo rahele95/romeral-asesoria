@@ -11,6 +11,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="fotos/web/locacion/locacion_01.jpg">
+<link rel="preload" as="image" href="fotos/web/catering/catering_01.jpg">
+<link rel="preload" as="image" href="fotos/web/barra/barra_01.jpg">
+<link rel="preload" as="image" href="fotos/web/iluminacion/iluminacion_01.jpg">
+<link rel="preload" as="image" href="fotos/web/dj/dj_01.jpg">
 <style>
 :root{
   --gold:#B8935A; --forest:#1A2F23; --forest-deep:#0D1A12;
@@ -128,8 +132,8 @@ body.intro-open{overflow:hidden}
     <div class="bro-hero">
       <div class="loc-slider" aria-hidden="true">
         <div class="loc-slide is-active" style="background-image:url('fotos/web/locacion/locacion_01.jpg')"></div>
-        <div class="loc-slide" style="background-image:url('fotos/web/locacion/locacion_02.jpg')"></div>
-        <div class="loc-slide" style="background-image:url('fotos/web/locacion/locacion_03.jpg')"></div>
+        <div class="loc-slide" data-bg="fotos/web/locacion/locacion_02.jpg"></div>
+        <div class="loc-slide" data-bg="fotos/web/locacion/locacion_03.jpg"></div>
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
@@ -165,8 +169,8 @@ body.intro-open{overflow:hidden}
     <div class="bro-hero">
       <div class="loc-slider" aria-hidden="true">
         <div class="loc-slide is-active" style="background-image:url('fotos/web/catering/catering_01.jpg')"></div>
-        <div class="loc-slide" style="background-image:url('fotos/web/catering/catering_02.jpg')"></div>
-        <div class="loc-slide" style="background-image:url('fotos/web/catering/catering_03.jpg')"></div>
+        <div class="loc-slide" data-bg="fotos/web/catering/catering_02.jpg"></div>
+        <div class="loc-slide" data-bg="fotos/web/catering/catering_03.jpg"></div>
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
@@ -201,7 +205,7 @@ body.intro-open{overflow:hidden}
     <div class="bro-hero">
       <div class="loc-slider" aria-hidden="true">
         <div class="loc-slide is-active" style="background-image:url('fotos/web/barra/barra_01.jpg')"></div>
-        <div class="loc-slide" style="background-image:url('fotos/web/barra/barra_02.jpg')"></div>
+        <div class="loc-slide" data-bg="fotos/web/barra/barra_02.jpg"></div>
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
@@ -234,7 +238,7 @@ body.intro-open{overflow:hidden}
     <div class="bro-hero" id="iluPhoto">
       <div class="loc-slider" aria-hidden="true">
         <div class="loc-slide is-active" style="background-image:url('fotos/web/iluminacion/iluminacion_01.jpg')"></div>
-        <div class="loc-slide" style="background-image:url('fotos/web/iluminacion/iluminacion_02.jpg')"></div>
+        <div class="loc-slide" data-bg="fotos/web/iluminacion/iluminacion_02.jpg"></div>
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
@@ -263,8 +267,8 @@ body.intro-open{overflow:hidden}
     <div class="bro-hero">
       <div class="loc-slider" aria-hidden="true">
         <div class="loc-slide is-active" style="background-image:url('fotos/web/dj/dj_01.jpg')"></div>
-        <div class="loc-slide" style="background-image:url('fotos/web/dj/dj_02.jpg')"></div>
-        <div class="loc-slide" style="background-image:url('fotos/web/dj/dj_03.jpg')"></div>
+        <div class="loc-slide" data-bg="fotos/web/dj/dj_02.jpg"></div>
+        <div class="loc-slide" data-bg="fotos/web/dj/dj_03.jpg"></div>
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
@@ -380,8 +384,15 @@ if(returningFromPrecio){ dismissIntro(); }
     if(slides.length < 2) return;
     var idx = 0, timer = null;
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // carga diferida: la imagen de cada slide (data-bg) se asigna al activarse
+    function ensureBg(n){
+      var s = slides[n];
+      if(s && s.dataset.bg){ s.style.backgroundImage = "url('" + s.dataset.bg + "')"; delete s.dataset.bg; }
+    }
     function go(i){
       idx = (i % slides.length + slides.length) % slides.length;
+      ensureBg(idx);                          // carga la slide activa
+      ensureBg((idx + 1) % slides.length);    // prefetch de la siguiente (crossfade fluido)
       slides.forEach(function(s,n){ s.classList.toggle('is-active', n===idx); });
       dots.forEach(function(d,n){ d.classList.toggle('is-active', n===idx); });
     }

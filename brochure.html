@@ -98,22 +98,27 @@ body.intro-open{overflow:hidden}
 .bro-next{align-self:flex-start;background:rgba(184,147,90,0.10);color:var(--gold);border:1px solid rgba(184,147,90,0.6);box-shadow:none}
 .bro-next:hover{background:rgba(184,147,90,0.18);border-color:var(--gold);box-shadow:none}
 
-/* affordance de swipe (mobile): pista breve al cargar cada sección */
-.swipe-hint{position:fixed;left:50%;top:clamp(110px,22vh,200px);transform:translateX(-50%);z-index:35;pointer-events:none;
-  font:700 11px/1 'Lato',sans-serif;letter-spacing:.28em;text-transform:uppercase;color:rgba(245,241,235,0.9);
-  background:rgba(13,26,18,0.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  padding:9px 18px;border-radius:100px;border:1px solid rgba(184,147,90,0.35);white-space:nowrap;
-  opacity:0;transition:opacity .45s var(--ease)}
-.swipe-hint.show{opacity:1}
-@media(min-width:768px){ .swipe-hint{display:none} }
-@media (prefers-reduced-motion: reduce){ .swipe-hint{transition:none} }
+/* affordance de swipe (mobile/tablet <1024px): chevrons centrados en los bordes */
+.swipe-chevron{position:fixed;top:50%;transform:translateY(-50%);z-index:35;pointer-events:none;
+  width:46px;height:46px;display:flex;align-items:center;justify-content:center;
+  font:300 38px/1 'Lato',sans-serif;color:rgba(245,241,235,0.9);
+  background:rgba(13,26,18,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  border:1px solid rgba(184,147,90,0.35);border-radius:50%;
+  opacity:0;transition:opacity .5s var(--ease)}
+.swipe-prev{left:clamp(8px,3vw,18px)}
+.swipe-next{right:clamp(8px,3vw,18px)}
+.swipe-chevron.show{opacity:1}
+@media(min-width:1024px){ .swipe-chevron{display:none} }
+@media (prefers-reduced-motion: reduce){ .swipe-chevron{transition:none} }
 
-/* desktop: títulos más grandes + contenido más arriba para llenar el espacio vertical */
+/* desktop (≥1024px): Opción B — split horizontal (imagen izquierda · contenido derecha) */
 @media(min-width:1024px){
-  .bro-kicker{font-size:clamp(3.2rem,7.5vh,4.6rem)}
-  .bro-hero-text h2{font-size:clamp(23px,3.4vh,32px)}
-  .bro-hero{flex-basis:35%;max-height:35vh;padding-bottom:clamp(20px,2.6vh,36px)}
-  .bro-content{padding-top:clamp(8px,1.4vh,18px)}
+  .bro-stage{flex-direction:row}
+  .bro-hero{flex:0 0 45%;max-height:none;padding-bottom:clamp(28px,5vh,72px)}
+  .bro-content{flex:1 1 55%;justify-content:safe center;overflow-y:auto;
+    padding:clamp(40px,7vh,80px) clamp(40px,5vw,80px)}
+  .bro-kicker{font-size:clamp(3rem,6vh,4.4rem)}
+  .bro-hero-text h2{font-size:clamp(22px,3vh,30px)}
 }
 
 @media(max-width:600px){
@@ -317,7 +322,8 @@ body.intro-open{overflow:hidden}
     </div>
   </div>
 
-  <div class="swipe-hint" id="swipeHint" aria-hidden="true">‹ Desliza ›</div>
+  <div class="swipe-chevron swipe-prev" aria-hidden="true">‹</div>
+  <div class="swipe-chevron swipe-next" aria-hidden="true">›</div>
 </div>
 
 <script>
@@ -333,16 +339,25 @@ const introSub = document.getElementById('introSub');
 if(introSub){ introSub.textContent = `Te presentamos los ${stages.length} elementos indispensables que la componen`; }
 
 let broIdx = 0;
-// Affordance de swipe (solo mobile): pista breve al ver cada sección, se oculta a los 2s
+// Affordance de swipe (mobile/tablet <1024px): chevrons que aparecen a 800ms y se ocultan a 2s
 let broVisible = false;
-const swipeHint = document.getElementById('swipeHint');
-let swipeHintTimer = null;
+const swipePrev = document.querySelector('.swipe-prev');
+const swipeNext = document.querySelector('.swipe-next');
+let chevShowTimer = null, chevHideTimer = null;
 function showSwipeHint(){
-  if(!swipeHint || !broVisible) return;
-  if(!window.matchMedia('(max-width:767px)').matches) return;
-  clearTimeout(swipeHintTimer);
-  swipeHint.classList.add('show');
-  swipeHintTimer = setTimeout(function(){ swipeHint.classList.remove('show'); }, 2000);
+  if(!broVisible) return;
+  if(!window.matchMedia('(max-width:1023px)').matches) return;
+  clearTimeout(chevShowTimer); clearTimeout(chevHideTimer);
+  if(swipePrev) swipePrev.classList.remove('show');
+  if(swipeNext) swipeNext.classList.remove('show');
+  chevShowTimer = setTimeout(function(){
+    if(swipePrev && broIdx > 0) swipePrev.classList.add('show');                 // ‹ solo si no es la primera
+    if(swipeNext && broIdx < stages.length - 1) swipeNext.classList.add('show'); // › solo si no es la última
+  }, 800);
+  chevHideTimer = setTimeout(function(){
+    if(swipePrev) swipePrev.classList.remove('show');
+    if(swipeNext) swipeNext.classList.remove('show');
+  }, 2000);
 }
 function pad(n){ return String(n).padStart(2,'0'); }
 

@@ -56,7 +56,7 @@ body.intro-open{overflow:hidden}
 .intro-hint{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,241,235,0.65);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:10px}
 .intro-hint span{font-size:22px;color:var(--gold);animation:introBounce 1.8s var(--ease) infinite}
 /* botón de retroceso de la pantalla de transición — mismo estilo que index (pasos) */
-.btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:10px 0;transition:opacity .3s;opacity:.7;color:rgba(245,241,235,0.7)}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:14px 0;transition:opacity .3s;opacity:.7;color:rgba(245,241,235,0.7)}
 .btn-back:hover{opacity:1}
 #introScreen .btn-back{position:absolute;top:max(18px,env(safe-area-inset-top));left:18px;z-index:2}
 @keyframes introBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
@@ -115,6 +115,8 @@ body.intro-open{overflow:hidden}
 .bro-nav-arrow{font-size:22px;line-height:1;color:var(--gold)}
 .bro-nav:hover,.bro-nav:hover .bro-nav-arrow{color:#D4AF7A}
 .bro-nav.edge-hidden{opacity:0;pointer-events:none}    /* oculto en primera (regresar) / última (continuar) */
+/* mobile: la navegación es por swipe táctil; los indicadores fixed se encimarían sobre el contenido */
+@media(max-width:1023px){.bro-nav-prev,.bro-nav-next{display:none}}
 
 /* desktop (≥1024px): Opción B — split horizontal (imagen izquierda · contenido derecha) */
 @media(min-width:1024px){
@@ -137,7 +139,8 @@ body.intro-open{overflow:hidden}
   .bro-content{padding:clamp(14px,2vh,28px) 20px}
   .bro-list li{font-size:15px}
   .bro-content{overflow-y:auto}   /* secciones densas (p. ej. Catering) scrollean si no caben en mobile */
-  .bro-cortesias{padding:10px 16px}
+  .bro-cortesias{padding:8px 14px;margin-bottom:12px}
+  .bro-cortesias p{font-size:13px;line-height:1.5}
   .cta{width:100%;justify-content:center;padding:14px 22px}
 }
 @media (prefers-reduced-motion: reduce){

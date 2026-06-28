@@ -91,7 +91,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .form-status{font-size:13px;line-height:1.5;margin:4px auto 12px;max-width:440px;min-height:18px;color:rgba(245,241,235,0.7)}
 .form-status.error{color:#E58A8A;font-weight:400}
 .form-status.ok{color:var(--gold);font-weight:400}
-.btn-ghost{color:rgba(245,241,235,0.7);font-size:13px;letter-spacing:.1em;text-decoration:underline;text-underline-offset:4px;transition:color .3s}
+.btn-ghost{color:rgba(245,241,235,0.7);font-size:13px;letter-spacing:.1em;text-decoration:underline;text-underline-offset:4px;transition:color .3s;padding-top:14px;padding-bottom:14px}
 .btn-ghost:hover{color:var(--gold)}
 .btn-outline{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:transparent;color:var(--gold);border:1px solid rgba(184,147,90,0.45);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;padding:13px 28px;border-radius:2px;text-decoration:none;transition:background .3s,border-color .3s}
 .btn-outline:hover{background:rgba(184,147,90,0.08);border-color:var(--gold)}
@@ -145,6 +145,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .bro-nav-prev{left:16px}
 .bro-nav-arrow{font-size:22px;line-height:1;color:var(--gold)}
 .bro-nav:hover,.bro-nav:hover .bro-nav-arrow{color:#D4AF7A}
+/* mobile: navegación por swipe/scroll; el indicador fixed se encimaría sobre el contenido */
+@media(max-width:1023px){.bro-nav-prev,.bro-nav-next{display:none}}
 
 /* ---------- A4: reduce motion ---------- */
 @media (prefers-reduced-motion: reduce){

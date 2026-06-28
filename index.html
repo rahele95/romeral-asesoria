@@ -231,8 +231,9 @@ document.getElementById('cta2').onclick=()=>showStep(3);
 const slider=document.getElementById('guestSlider');
 const guestNum=document.getElementById('guestNum');
 let guestObj={v:120};
-function updateGuests(val){S.personas=val;if(typeof gsap==='undefined'||window.matchMedia('(prefers-reduced-motion: reduce)').matches){guestObj.v=val;guestNum.textContent=val;return;}gsap.to(guestObj,{v:val,duration:.5,ease:'power2.out',onUpdate:()=>{guestNum.textContent=Math.round(guestObj.v)}})}
-slider.oninput=()=>updateGuests(+slider.value);
+function updateGuests(val,instant){S.personas=val;if(instant||typeof gsap==='undefined'||window.matchMedia('(prefers-reduced-motion: reduce)').matches){if(typeof gsap!=='undefined')gsap.killTweensOf(guestObj);guestObj.v=val;guestNum.textContent=val;return;}gsap.to(guestObj,{v:val,duration:.5,ease:'power2.out',onUpdate:()=>{guestNum.textContent=Math.round(guestObj.v)}})}
+// FIX1: al arrastrar, el número salta exacto al valor del slider (step=5) sin lag de animación → fácil aterrizar en cifras como 185
+slider.oninput=()=>updateGuests(+slider.value,true);
 updateGuests(120);
 document.getElementById('cta3').onclick=()=>{sessionStorage.setItem('romeral',JSON.stringify({fecha:S.fecha,tipo:S.tipo,personas:S.personas}));window.location.href='brochure.html'};
 // Si viene de brochure con ?back=1, restaurar al paso 3

@@ -114,8 +114,8 @@ body.intro-open{overflow:hidden}
 /* desktop (≥1024px): Opción B — split horizontal (imagen izquierda · contenido derecha) */
 @media(min-width:1024px){
   .bro-stage{flex-direction:row}
-  /* imagen alta full-height: refuerzo del degradado oscuro para contraste del kicker/subtítulo */
-  .bro-hero::after{background:linear-gradient(to bottom,rgba(13,26,18,0.32) 0%,rgba(13,26,18,0.42) 45%,rgba(13,26,18,0.72) 72%,rgba(13,26,18,0.95) 100%)}
+  /* mismo degradado suave que en mobile (sobre la imagen full-height del split) */
+  .bro-hero::after{background:linear-gradient(to bottom,rgba(13,26,18,0.10) 0%,rgba(13,26,18,0.30) 35%,rgba(13,26,18,0.60) 58%,rgba(13,26,18,0.85) 80%,var(--forest-deep) 100%)}
   .bro-hero{flex:0 0 45%;max-height:none;padding-bottom:clamp(28px,5vh,72px)}
   .bro-content{flex:1 1 55%;justify-content:safe center;overflow-y:auto;
     padding:clamp(40px,7vh,80px) clamp(40px,5vw,80px)}
@@ -342,7 +342,7 @@ if(introSub){ introSub.textContent = `Te presentamos los ${stages.length} elemen
 
 let broIdx = 0;
 // Affordance de swipe (mobile/tablet <1024px): chevrons que aparecen a 800ms y se ocultan a 2s
-let broVisible = false;
+let broVisible = true;
 const swipePrev = document.querySelector('.swipe-prev');
 const swipeNext = document.querySelector('.swipe-next');
 let chevShowTimer = null, chevHideTimer = null;

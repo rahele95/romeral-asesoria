@@ -325,13 +325,13 @@ function validForm(){
 }
 
 // Envía la propuesta por correo (fire-and-forget: no bloquea ni rompe el flujo si Resend falla)
-function sendProposal(email){
-  if(!email) return;
+// Envía la propuesta por correo. Devuelve true si Resend la aceptó; nunca lanza.
+async function sendProposal(email){
+  if(!email) return false;
   try{
-    fetch('/api/send-proposal', {
+    const r = await fetch('/api/send-proposal', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      keepalive:true,
       body: JSON.stringify({
         email: email,
         tipoEvento: tipoNice[d.tipo] || d.tipo || 'Evento',
@@ -339,8 +339,9 @@ function sendProposal(email){
         fecha: fechaLegible || '',
         total: total
       })
-    }).catch(function(){});
-  }catch(_){}
+    });
+    return r.ok;
+  }catch(_){ return false; }
 }
 
 // Devuelve true/false según el resultado real del envío (para feedback de éxito/error)
@@ -361,16 +362,18 @@ async function saveLead(quiereCita){
     quiere_cita: quiereCita,
     quiere_email: (intent === 'info')
   };
-  // N4: timeout de 10s — si la red cuelga, abortamos y dejamos que submitLead muestre el error con reintento
+  // Notion best-effort (no rompe el flujo si está caído / mal configurado); timeout 10s
+  let notionOk = false;
   const ctrl = new AbortController();
   const timer = setTimeout(()=>ctrl.abort(), 10000);
   try{
     const res = await fetch('/api/leads', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), signal:ctrl.signal });
-    if(res.ok) sendProposal(payload.email);   // enviar propuesta por correo (no bloquea el flujo)
-    return res.ok;
-  } finally {
-    clearTimeout(timer);
-  }
+    notionOk = res.ok;
+  }catch(_){ /* Notion caído: el lead igual se captura por el correo de notificación */ }
+  finally{ clearTimeout(timer); }
+  // Envía la propuesta + notificación interna por correo. Éxito = el lead se capturó por algún canal.
+  const mailOk = await sendProposal(payload.email);
+  return notionOk || mailOk;
 }
 
 function showSchedule(){
@@ -435,13 +438,18 @@ async function savePartialLead(email){
     total_estimado: total,
     lead_parcial: true
   };
+  // Notion best-effort (no rompe el flujo si está caído / mal configurado); timeout 10s
+  let notionOk = false;
   const ctrl = new AbortController();
   const timer = setTimeout(()=>ctrl.abort(), 10000);
   try{
     const res = await fetch('/api/leads', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), signal:ctrl.signal });
-    if(res.ok) sendProposal(payload.email);   // enviar propuesta por correo (no bloquea el flujo)
-    return res.ok;
-  } finally { clearTimeout(timer); }
+    notionOk = res.ok;
+  }catch(_){ /* Notion caído: el lead igual se captura por el correo de notificación */ }
+  finally{ clearTimeout(timer); }
+  // Envía la propuesta + notificación interna por correo. Éxito = el lead se capturó por algún canal.
+  const mailOk = await sendProposal(email);
+  return notionOk || mailOk;
 }
 
 invSave.addEventListener('submit', async (e)=>{

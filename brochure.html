@@ -61,6 +61,8 @@ body.intro-open{overflow:hidden}
 .bro-finale{align-self:center;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;background:none;border:none;font:700 11px/1.5 'Lato',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,241,235,0.7);text-align:center;max-width:26ch;padding:8px;margin-top:clamp(10px,2.6vh,30px);transition:color .3s var(--ease)}
 .bro-finale span{font-size:22px;color:var(--gold);animation:introBounce 1.8s var(--ease) infinite}
 .bro-finale:hover{color:rgba(245,241,235,0.95)}
+/* el indicador centrado es solo mobile; en desktop la navegación a precio va por el indicador lateral CONTINUAR */
+@media(min-width:1024px){ .bro-finale{display:none} }
 /* FIX mobile: back a "Invitados" (solo en la 1ª sección) e indicador sutil de swipe; ambos solo <1024px */
 .loc-back{display:none}
 .bro-swipe-cue{display:none}
@@ -94,7 +96,8 @@ body.intro-open{overflow:hidden}
 .bro-back:hover{color:var(--gold);background:rgba(0,0,0,0.55);border-color:rgba(184,147,90,0.5)}
 .bro-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .bro-stage .bro-back{display:none}   /* navegación atrás vía indicador REGRESAR; se conserva el del introScreen */
-.bro-bignum{position:absolute;bottom:clamp(18px,5vw,54px);left:clamp(16px,4vw,52px);font-family:'Lato',sans-serif;font-weight:300;font-size:clamp(120px,22vw,240px);color:rgba(245,241,235,0.10);line-height:1;pointer-events:none;z-index:1}
+/* número decorativo: marca de agua en el área de contenido (fondo oscuro) — legible sobre cualquier imagen, en desktop y mobile */
+.bro-bignum{position:absolute;right:clamp(12px,4vw,44px);bottom:clamp(36px,7vh,72px);font-family:'Lato',sans-serif;font-weight:300;font-size:clamp(120px,26vw,200px);color:rgba(245,241,235,0.08);line-height:1;letter-spacing:-.02em;pointer-events:none;z-index:0}
 .bro-hero-text{position:relative;z-index:2;max-width:640px;animation:fadeUp .7s var(--ease) both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 /* protagonista: el KICKER (grande, dorado, con presencia) · título descriptivo secundario (peso 300) */
@@ -104,6 +107,7 @@ body.intro-open{overflow:hidden}
 
 /* Content debajo del hero, sobre fondo sólido */
 .bro-content{position:relative;flex:1 1 56%;min-height:0;overflow:hidden;background:var(--forest-deep);display:flex;flex-direction:column;justify-content:flex-start;padding:clamp(12px,1.8vh,26px) clamp(28px,6vw,76px) clamp(16px,2.5vh,52px);animation:fadeUp .7s var(--ease) both}
+.bro-content > :not(.bro-bignum){position:relative;z-index:1}   /* texto por encima de la marca de agua */
 .bro-list{list-style:none;display:flex;flex-direction:column;gap:clamp(6px,1.4vh,11px);margin-bottom:clamp(12px,2vh,24px)}
 .bro-list li{display:flex;align-items:flex-start;gap:12px;font-size:clamp(15px,1.9vh,16px);color:rgba(245,241,235,0.85);max-width:48ch}
 .bro-list li .material-symbols-outlined{font-size:19px;line-height:1.3;color:var(--gold);flex-shrink:0;font-variation-settings:'FILL' 0,'wght' 200,'GRAD' 0,'opsz' 20}
@@ -143,7 +147,6 @@ body.intro-open{overflow:hidden}
 
 @media(max-width:600px){
   .bro-hero{flex-basis:46%;padding:18px 20px 22px}
-  .bro-bignum{font-size:clamp(90px,26vw,150px);bottom:auto;top:34px;right:14px;left:auto}
   .bro-kicker{font-size:clamp(1.7rem,7vw,2.4rem);letter-spacing:.03em}
   .bro-hero-text h2{font-size:clamp(16px,4.4vw,21px)}
   .bro-lead{font-size:clamp(14px,1.8vh,15px)}
@@ -162,8 +165,6 @@ body.intro-open{overflow:hidden}
   .bro-stage.bro-vis{display:flex;height:auto;min-height:100vh;min-height:100dvh;overflow:visible;scroll-snap-align:start}
   .bro-vis .bro-hero{flex:0 0 46vh;flex:0 0 46dvh}
   .bro-vis .bro-content{flex:1 1 auto;min-height:0;overflow:visible;padding-bottom:calc(clamp(14px,2vh,28px) + env(safe-area-inset-bottom))}
-  /* números decorativos: marca de agua más sutil sobre la imagen (no compiten/no se ven muddy) */
-  .bro-bignum{color:rgba(245,241,235,0.06)}
 }
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
@@ -384,6 +385,11 @@ if(introSub){ introSub.textContent = `Les presentamos los ${stages.length} eleme
 let broIdx = 0;
 // mobile (<1024px): navegación vertical por scroll-snap nativo; desktop conserva el swipe horizontal
 const isMobileBro = window.matchMedia('(max-width:1023px)').matches;
+// el número decorativo va dentro del contenido (fondo oscuro) para que no se pierda sobre la imagen
+document.querySelectorAll('.bro-stage').forEach(function(st){
+  const bn = st.querySelector('.bro-bignum'), ct = st.querySelector('.bro-content');
+  if(bn && ct) ct.appendChild(bn);
+});
 // Indicadores de navegación lateral (estáticos): ocultar "Regresar" en la primera y "Continuar" en la última
 const broNavPrev = document.querySelector('.bro-nav-prev');
 const broNavNext = document.querySelector('.bro-nav-next');
@@ -398,14 +404,19 @@ function showSwipeCue(){
 }
 function hideSwipeCue(){ if(broSwipeCue){ clearTimeout(swipeCueTimer); broSwipeCue.classList.remove('show'); } }
 function showSwipeHint(){
-  // REGRESAR siempre visible (en la 1ª lleva a index); CONTINUAR oculto solo en la última
-  if(broNavNext) broNavNext.classList.toggle('edge-hidden', broIdx === stages.length - 1);
+  // desktop: REGRESAR siempre visible; CONTINUAR siempre visible — en la última pasa a "Ver su inversión" (→ precio)
+  if(broNavNext){
+    const last = broIdx === stages.length - 1;
+    broNavNext.classList.remove('edge-hidden');
+    const label = broNavNext.querySelector('span:not(.bro-nav-arrow)');
+    if(label) label.textContent = last ? 'Ver su inversión' : 'Continuar';
+  }
 }
 if(broNavPrev) broNavPrev.addEventListener('click', function(){
   if(broIdx === 0){ window.location.href = 'index.html?back=1'; }   // 1ª sección: salir al formulario
   else { showStage(broIdx - 1); }
 });
-if(broNavNext) broNavNext.addEventListener('click', function(){ if(broIdx < stages.length - 1) showStage(broIdx + 1); });
+if(broNavNext) broNavNext.addEventListener('click', function(){ if(broIdx < stages.length - 1) showStage(broIdx + 1); else goPrecio(); });
 function pad(n){ return String(n).padStart(2,'0'); }
 function goPrecio(){ window.location.href = 'precio.html'; }
 // última sección: reemplaza el botón inferior por un indicador "Deslicen para descubrir su inversión" (clic/Enter → precio)
@@ -474,7 +485,7 @@ if(!isMobileBro)(function(){
     const t = e.changedTouches[0];
     const dx = t.clientX - sx, dy = t.clientY - sy;
     if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50){
-      if(dx < 0){ if(broIdx < stages.length-1) showStage(broIdx+1); }   // izquierda → siguiente sección
+      if(dx < 0){ if(broIdx < stages.length-1) showStage(broIdx+1); else goPrecio(); }   // izquierda → siguiente (o precio en la última)
       else { if(broIdx > 0) showStage(broIdx-1); }                       // derecha → sección anterior
     }
   }, {passive:true});
@@ -488,7 +499,7 @@ if(!isMobileBro)(function(){
     if(!pTracking || e.pointerType === 'touch') return; pTracking = false;
     const dx = e.clientX - psx, dy = e.clientY - psy;
     if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60){   // axis-lock + umbral 60px
-      if(dx < 0){ if(broIdx < stages.length-1) showStage(broIdx+1); }
+      if(dx < 0){ if(broIdx < stages.length-1) showStage(broIdx+1); else goPrecio(); }
       else { if(broIdx > 0) showStage(broIdx-1); }
     }
   }, {passive:true});
@@ -502,7 +513,7 @@ if(!isMobileBro)(function(){
     if(wheelLock || Math.abs(e.deltaX) < 30) return;        // en cooldown o movimiento mínimo → no navegar
     wheelLock = true;
     setTimeout(function(){ wheelLock = false; }, 800);      // cooldown ≥800ms
-    if(e.deltaX > 0){ if(broIdx < stages.length-1) showStage(broIdx+1); }   // hacia la derecha → siguiente
+    if(e.deltaX > 0){ if(broIdx < stages.length-1) showStage(broIdx+1); else goPrecio(); }   // hacia la derecha → siguiente (o precio en la última)
     else { if(broIdx > 0) showStage(broIdx-1); }                            // hacia la izquierda → anterior
   }, {passive:false});
 })();

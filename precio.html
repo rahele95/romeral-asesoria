@@ -325,6 +325,23 @@ function validForm(){
 }
 
 // Envía la propuesta por correo (fire-and-forget: no bloquea ni rompe el flujo si Resend falla)
+// Desglose de lo que incluye la inversión (se adapta al tipo de evento)
+function incluyeProp(){
+  const dj = CON_DJ.includes(d.tipo);
+  const n = d.personas || 120;
+  const items = [
+    'Locación y jardín · 7 horas de evento (5 de recepción + alberca + Capilla)',
+    `Banquete de 3 tiempos para ${n} invitados, con vajilla y mantelería fina`,
+    'Barra de bebidas equipada por 5 horas y montaje completo de mesas',
+    'Servicio de meseros (1 por cada 15 invitados) y capitán'
+  ];
+  if(dj){
+    items.push('Iluminación arquitectónica de jardines');
+    items.push('DJ / DJ Light, sonido profesional y pista de madera pintada a mano');
+  }
+  return items;
+}
+
 // Envía la propuesta por correo. Devuelve true si Resend la aceptó; nunca lanza.
 async function sendProposal(email){
   if(!email) return false;
@@ -337,7 +354,8 @@ async function sendProposal(email){
         tipoEvento: tipoNice[d.tipo] || d.tipo || 'Evento',
         personas: d.personas || 120,
         fecha: fechaLegible || '',
-        total: total
+        total: total,
+        incluye: incluyeProp()
       })
     });
     return r.ok;

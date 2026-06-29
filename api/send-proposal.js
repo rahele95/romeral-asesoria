@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
     const incluyeRows = incluyeArr.map((it) => `<tr><td valign="top" style="font-family:'Lato',Arial,Helvetica,sans-serif;font-size:14px;color:#d8d4cc;line-height:1.5;padding:9px 0;border-bottom:1px solid rgba(184,147,90,0.12);"><span style="color:#B8935A;font-weight:700;">&middot;</span>&nbsp;&nbsp;${esc(it)}</td></tr>`).join('')
     const incluyeHtml = incluyeArr.length ? `<p style="margin:32px 0 10px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#9aa39b;">Lo que incluye</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${incluyeRows}</table>` : ''
 
-    const FROM = 'El Romeral <onboarding@resend.dev>'
+    const FROM = 'El Romeral <propuestas@experiencias-romeral.com>'
     const CAL = 'https://cal.com/ricardo-heredia-jxuu3m/presencial?overlayCalendar=true'
     const WA = 'https://wa.me/523338708159?text=' + encodeURIComponent('Hola, acabo de recibir mi propuesta de El Romeral y quiero que un asesor me contacte.')
     const MAPS = 'https://maps.app.goo.gl/iFqUS9cJkDdY6oiT9'

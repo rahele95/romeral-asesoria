@@ -20,6 +20,9 @@ module.exports = async (req, res) => {
 
     const FROM = 'El Romeral <onboarding@resend.dev>'
     const CAL = 'https://cal.com/ricardo-heredia-jxuu3m/presencial?overlayCalendar=true'
+    // MODO PRUEBA (sandbox de Resend): sin dominio verificado solo se puede enviar al dueño de la cuenta.
+    // Redirige TODOS los correos a esta dirección. Poner null cuando el dominio esté verificado en Resend.
+    const SANDBOX_TO = 'ricardoheredia2012@hotmail.com'
 
     // ---------- Email al cliente: dark, bulletproof (tablas + estilos inline + botón bulletproof) ----------
     const clientHtml = `<!DOCTYPE html>
@@ -85,18 +88,22 @@ module.exports = async (req, res) => {
       return r.json()
     }
 
+    const toClient = SANDBOX_TO || email
+    const toInternal = SANDBOX_TO ? SANDBOX_TO : ['richie@netlab.mx', 'rafaelvacaromero@gmail.com']
+    const sandboxTag = SANDBOX_TO ? '[PRUEBA] ' : ''
+
     await Promise.all([
       sendEmail({
         from: FROM,
-        to: email,
+        to: toClient,
         reply_to: 'richie@netlab.mx',
-        subject: 'Su propuesta de experiencia · El Romeral',
+        subject: sandboxTag + 'Su propuesta de experiencia · El Romeral',
         html: clientHtml
       }),
       sendEmail({
         from: FROM,
-        to: ['richie@netlab.mx', 'rafaelvacaromero@gmail.com'],
-        subject: `Nuevo lead - ${b.tipoEvento || 'Evento'} - ${b.personas != null ? b.personas : ''} invitados`,
+        to: toInternal,
+        subject: `${sandboxTag}Nuevo lead - ${b.tipoEvento || 'Evento'} - ${b.personas != null ? b.personas : ''} invitados`,
         html: internalHtml
       })
     ])

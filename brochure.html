@@ -57,6 +57,10 @@ body.intro-open{overflow:hidden}
 .btn-back:hover{opacity:1}
 #introScreen .btn-back{position:absolute;top:max(18px,env(safe-area-inset-top));left:18px;z-index:2}
 @keyframes introBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+/* indicador final (reemplaza el botón "Ver su inversión"): estilo "Desliza para descubrir" + flecha dorada ↓ */
+.bro-finale{align-self:center;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;background:none;border:none;font:700 11px/1.5 'Lato',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,241,235,0.7);text-align:center;max-width:26ch;padding:8px;margin-top:clamp(10px,2.6vh,30px);transition:color .3s var(--ease)}
+.bro-finale span{font-size:22px;color:var(--gold);animation:introBounce 1.8s var(--ease) infinite}
+.bro-finale:hover{color:rgba(245,241,235,0.95)}
 /* FIX mobile: back a "Invitados" (solo en la 1ª sección) e indicador sutil de swipe; ambos solo <1024px */
 .loc-back{display:none}
 .bro-swipe-cue{display:none}
@@ -401,6 +405,22 @@ if(broNavPrev) broNavPrev.addEventListener('click', function(){
 });
 if(broNavNext) broNavNext.addEventListener('click', function(){ if(broIdx < stages.length - 1) showStage(broIdx + 1); });
 function pad(n){ return String(n).padStart(2,'0'); }
+function goPrecio(){ window.location.href = 'precio.html'; }
+// última sección: reemplaza el botón inferior por un indicador "Deslicen para descubrir su inversión" (clic/Enter → precio)
+function addFinale(el){
+  const nb = el.querySelector('.bro-next');
+  if(nb) nb.style.display = 'none';
+  if(el.querySelector('.bro-finale')) return;
+  const fin = document.createElement('div');
+  fin.className = 'bro-finale';
+  fin.setAttribute('role','button');
+  fin.setAttribute('tabindex','0');
+  fin.setAttribute('aria-label','Ver su inversión');
+  fin.innerHTML = 'Deslicen para descubrir su inversión <span>&darr;</span>';
+  fin.addEventListener('click', goPrecio);
+  fin.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); goPrecio(); } });
+  el.querySelector('.bro-content').appendChild(fin);
+}
 
 function showStage(i){
   broIdx = i;
@@ -415,9 +435,9 @@ function showStage(i){
   const _activeSlider = el.querySelector('.loc-slider');
   if(_activeSlider && _activeSlider._broStart) _activeSlider._broStart();
   el.querySelector('.bro-counter').textContent = `${pad(i+1)} / ${pad(stages.length)}`;
-  // botón inferior: solo en la última sección ("Ver mi inversión"); oculto en primera e intermedias
+  // última sección: indicador "Deslicen para descubrir su inversión" (clic → precio); resto oculta el botón
   const nextBtn = el.querySelector('.bro-next');
-  if(i === stages.length-1){ nextBtn.style.display=''; nextBtn.innerHTML='Ver su inversión <span>&rarr;</span>'; }
+  if(i === stages.length-1){ addFinale(el); }
   else { nextBtn.style.display='none'; }
   const c = el.querySelector('.bro-content');
   c.style.animation='none'; void c.offsetWidth; c.style.animation='';
@@ -504,9 +524,8 @@ function setupMobileVertical(startIdx){
     el.classList.add('bro-vis');
     cont.appendChild(el);   // reordena: el scroll vertical sigue el orden de stages (loc→cat→bar→dj→ilu)
     el.querySelector('.bro-counter').textContent = `${pad(i+1)} / ${pad(stages.length)}`;
-    const nb = el.querySelector('.bro-next');
-    if(i === stages.length-1){ nb.style.display=''; nb.innerHTML='Ver su inversión <span>&rarr;</span>'; }
-    else { nb.style.display='none'; }
+    if(i === stages.length-1){ addFinale(el); }
+    else { el.querySelector('.bro-next').style.display='none'; }
   });
   const io = new IntersectionObserver(function(entries){
     entries.forEach(function(en){
@@ -522,6 +541,15 @@ function setupMobileVertical(startIdx){
     });
   }, {root: cont, rootMargin:'-45% 0px -45% 0px', threshold:0});
   els.forEach(function(el){ io.observe(el); });
+  // en la última sección, un swipe hacia adelante (más allá del fondo) navega a precio
+  let _fy = null;
+  cont.addEventListener('touchstart', function(e){ if(e.touches.length === 1) _fy = e.touches[0].clientY; }, {passive:true});
+  cont.addEventListener('touchend', function(e){
+    if(_fy === null) return;
+    const dy = e.changedTouches[0].clientY - _fy; _fy = null;
+    const atBottom = cont.scrollTop >= cont.scrollHeight - cont.clientHeight - 4;
+    if(atBottom && dy < -55){ goPrecio(); }   // ya en el fondo y siguen deslizando hacia adelante → descubrir la inversión
+  }, {passive:true});
   if(startIdx > 0){ requestAnimationFrame(function(){ cont.scrollTop = els[startIdx].offsetTop; }); }
 }
 

@@ -157,7 +157,7 @@ body.intro-open{overflow:hidden}
   /* solo las secciones del flujo (.bro-vis, marcadas por JS) se muestran y participan del snap */
   .bro-stage.bro-vis{display:flex;height:auto;min-height:100vh;min-height:100dvh;overflow:visible;scroll-snap-align:start}
   .bro-vis .bro-hero{flex:0 0 46vh;flex:0 0 46dvh}
-  .bro-vis .bro-content{flex:1 1 auto;min-height:0;overflow:visible}
+  .bro-vis .bro-content{flex:1 1 auto;min-height:0;overflow:visible;padding-bottom:calc(clamp(14px,2vh,28px) + env(safe-area-inset-bottom))}
 }
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
@@ -496,6 +496,8 @@ if(returningFromPrecio){
 // mobile: todas las secciones apiladas con scroll-snap; la sección activa (centro del viewport) controla broIdx/autoplay/cue
 function setupMobileVertical(startIdx){
   const cont = document.getElementById('brochure');
+  cont.setAttribute('tabindex','0');   // región de scroll enfocable: permite recorrer con flechas de teclado
+  cont.setAttribute('aria-label','Recorrido de secciones');
   const els = stages.map(k => document.querySelector(`.bro-stage[data-stage="${k}"]`));
   // el DOM trae las secciones en otro orden (loc,cat,bar,ilu,dj); reordenamos al orden del flujo y marcamos visibles
   els.forEach(function(el,i){

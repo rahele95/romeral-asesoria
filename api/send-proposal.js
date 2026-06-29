@@ -24,7 +24,8 @@ module.exports = async (req, res) => {
     const incluyeHtml = incluyeArr.length ? `<p style="margin:32px 0 10px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#9aa39b;">Lo que incluye</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${incluyeRows}</table>` : ''
 
     const FROM = 'El Romeral <propuestas@experiencias-romeral.com>'
-    const CAL = 'https://cal.com/ricardo-heredia-jxuu3m/presencial?overlayCalendar=true'
+    const CAL_PRESENCIAL = 'https://cal.com/ricardo-heredia-jxuu3m/presencial?overlayCalendar=true'
+    const CAL_VIDEO = 'https://cal.com/ricardo-heredia-jxuu3m/video-llamada'
     const WA = 'https://wa.me/523338708159?text=' + encodeURIComponent('Hola, acabo de recibir mi propuesta de El Romeral y quiero que un asesor me contacte.')
     const MAPS = 'https://maps.app.goo.gl/iFqUS9cJkDdY6oiT9'
     // Dominio verificado en Resend → envío real activo (cliente + copias internas).
@@ -63,12 +64,19 @@ module.exports = async (req, res) => {
     <p style="margin:22px 0 4px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:15px;color:#d8d4cc;text-align:center;line-height:1.6;">Esta es la base de su experiencia. A partir de aquí, la personalizamos juntos.</p>
     ${incluyeHtml}
     <div style="height:30px;line-height:30px;font-size:0;">&nbsp;</div>
+    <p style="margin:0 0 16px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#9aa39b;text-align:center;">&iquest;C&oacute;mo prefieren que nos conozcamos?</p>
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
       <td align="center" bgcolor="#B8935A" style="background-color:#B8935A;border-radius:3px;">
-        <a href="${CAL}" target="_blank" style="display:inline-block;padding:15px 36px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;color:#0D1A12;text-decoration:none;">AGENDAR NUESTRA VISITA &rarr;</a>
+        <a href="${CAL_PRESENCIAL}" target="_blank" style="display:inline-block;padding:15px 36px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;color:#0D1A12;text-decoration:none;">AGENDAR VISITA PRESENCIAL &rarr;</a>
       </td>
     </tr></table>
-    <div style="height:14px;line-height:14px;font-size:0;">&nbsp;</div>
+    <div style="height:12px;line-height:12px;font-size:0;">&nbsp;</div>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
+      <td align="center" style="border:1px solid rgba(184,147,90,0.5);border-radius:3px;">
+        <a href="${CAL_VIDEO}" target="_blank" style="display:inline-block;padding:13px 32px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;color:#B8935A;text-decoration:none;">AGENDAR VIDEOLLAMADA &rarr;</a>
+      </td>
+    </tr></table>
+    <div style="height:12px;line-height:12px;font-size:0;">&nbsp;</div>
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
       <td align="center" style="border:1px solid rgba(184,147,90,0.5);border-radius:3px;">
         <a href="${WA}" target="_blank" style="display:inline-block;padding:13px 30px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;color:#B8935A;text-decoration:none;">QUIERO QUE ME CONTACTE UN ASESOR</a>

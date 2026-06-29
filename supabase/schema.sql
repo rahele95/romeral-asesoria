@@ -41,3 +41,12 @@ create index if not exists idx_funnel_step           on funnel_events(step);
 create index if not exists idx_funnel_created_at     on funnel_events(created_at desc);
 create index if not exists idx_leads_session_id      on leads(session_id);
 create index if not exists idx_leads_created_at      on leads(created_at desc);
+
+-- ── CRM: columnas de gestión de leads (panel admin.html) ──
+-- Ejecutar en SQL Editor para habilitar estado/asesor/notas en el dashboard.
+alter table leads add column if not exists estado        text default 'Nuevo';
+alter table leads add column if not exists asignado_a    text;
+alter table leads add column if not exists notas         text;
+alter table leads add column if not exists contacted_at  timestamptz;
+alter table leads add column if not exists seguimiento_at timestamptz;
+create index if not exists idx_leads_estado on leads(estado);

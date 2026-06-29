@@ -25,6 +25,8 @@ module.exports = async (req, res) => {
 
     const FROM = 'El Romeral <onboarding@resend.dev>'
     const CAL = 'https://cal.com/ricardo-heredia-jxuu3m/presencial?overlayCalendar=true'
+    const WA = 'https://wa.me/523338708159?text=' + encodeURIComponent('Hola, acabo de recibir mi propuesta de El Romeral y quiero que un asesor me contacte.')
+    const MAPS = 'https://maps.app.goo.gl/iFqUS9cJkDdY6oiT9'
     // MODO PRUEBA (sandbox de Resend): sin dominio verificado solo se puede enviar al dueño de la cuenta.
     // Redirige TODOS los correos a esta dirección. Poner null cuando el dominio esté verificado en Resend.
     const SANDBOX_TO = 'ricardoheredia2012@hotmail.com'
@@ -66,6 +68,21 @@ module.exports = async (req, res) => {
         <a href="${CAL}" target="_blank" style="display:inline-block;padding:15px 36px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;color:#0D1A12;text-decoration:none;">AGENDAR NUESTRA VISITA &rarr;</a>
       </td>
     </tr></table>
+    <div style="height:14px;line-height:14px;font-size:0;">&nbsp;</div>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>
+      <td align="center" style="border:1px solid rgba(184,147,90,0.5);border-radius:3px;">
+        <a href="${WA}" target="_blank" style="display:inline-block;padding:13px 30px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:13px;font-weight:700;letter-spacing:1.5px;color:#B8935A;text-decoration:none;">QUIERO QUE ME CONTACTE UN ASESOR</a>
+      </td>
+    </tr></table>
+    <div style="height:30px;line-height:30px;font-size:0;">&nbsp;</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+      <tr><td style="border-top:1px solid rgba(184,147,90,0.18);padding-top:22px;">
+        <p style="margin:0 0 6px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#9aa39b;">WhatsApp</p>
+        <p style="margin:0 0 16px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:15px;"><a href="${WA}" target="_blank" style="color:#F5F1EB;text-decoration:none;">+52 33 3870 8159</a></p>
+        <p style="margin:0 0 6px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#9aa39b;">Dirección</p>
+        <p style="margin:0;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:15px;"><a href="${MAPS}" target="_blank" style="color:#B8935A;text-decoration:none;">Ver ubicación en Google Maps &rarr;</a></p>
+      </td></tr>
+    </table>
   </td></tr>
   <tr><td align="center" style="padding:26px 0 8px;font-family:'Lato',Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:1px;color:#6f776f;">El Romeral &middot; Zapopan, Jalisco</td></tr>
 </table>

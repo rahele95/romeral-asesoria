@@ -541,7 +541,8 @@ function deviceLabel(ua){ if(!ua) return 'Desconocido'; if(/iPhone|Android.*Mobi
 function setView(v){ currentView=v; document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.dataset.view===v)); document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.view===v)); try{location.hash=v;}catch(_){}}
 document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
 document.querySelectorAll('#range button').forEach(b=>b.onclick=()=>{ currentRange=b.dataset.r; document.querySelectorAll('#range button').forEach(x=>x.classList.toggle('on',x===b)); renderAll(); });
-if(location.hash && ['#resumen','#leads','#embudo','#trafico'].includes(location.hash)) setView(location.hash.slice(1));
+const _initView=(location.hash && ['#resumen','#leads','#embudo','#trafico'].includes(location.hash))?location.hash.slice(1):'resumen';
+setView(_initView);
 
 /* ============== UTIL ============== */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }

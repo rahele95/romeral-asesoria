@@ -313,7 +313,7 @@ function cell(url, idx, ar, w, extra){
 function buildStory(ci){
   const c = COUPLES[ci], fotos = c.fotos, n = fotos.length;
   let html = `<div class="st-cover">
-    <img src="${cldR(fotos[0],1600)}" alt="El Romeral — ${c.estilo}" data-idx="0">
+    <img src="${cldR(fotos[0],1600)}" alt="El Romeral — ${c.estilo}" data-idx="0" decoding="async" fetchpriority="high">
     <div class="cap">
       <div class="eyebrow">Galería</div>
       <div class="fecha">${c.estilo}</div>

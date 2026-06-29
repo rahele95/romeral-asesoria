@@ -27,9 +27,9 @@ module.exports = async (req, res) => {
     const CAL = 'https://cal.com/ricardo-heredia-jxuu3m/presencial?overlayCalendar=true'
     const WA = 'https://wa.me/523338708159?text=' + encodeURIComponent('Hola, acabo de recibir mi propuesta de El Romeral y quiero que un asesor me contacte.')
     const MAPS = 'https://maps.app.goo.gl/iFqUS9cJkDdY6oiT9'
-    // MODO PRUEBA (sandbox de Resend): sin dominio verificado solo se puede enviar al dueño de la cuenta.
-    // Redirige TODOS los correos a esta dirección. Poner null cuando el dominio esté verificado en Resend.
-    const SANDBOX_TO = 'ricardoheredia2012@hotmail.com'
+    // Dominio verificado en Resend → envío real activo (cliente + copias internas).
+    // Para volver a modo prueba, poner aquí un correo y todo se redirige ahí con prefijo [PRUEBA].
+    const SANDBOX_TO = null
 
     // ---------- Email al cliente: dark, bulletproof (tablas + estilos inline + botón bulletproof) ----------
     const clientHtml = `<!DOCTYPE html>

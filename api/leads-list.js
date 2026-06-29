@@ -1,42 +1,38 @@
-const { Client } = require('@notionhq/client')
-
-// Lee los leads capturados por la Asesoría Virtual desde Notion.
-// Usa el mismo env var que el submit (api/leads.js); fallback al ID conocido.
-const DB_ID = process.env.NOTION_LEADS_DB_ID || '0fd5e2844f2f470087d289fad23006e4'
-
+// Lee los leads capturados por la Asesoría Virtual desde Supabase (tabla public.leads).
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
 
-  if (!process.env.NOTION_API_KEY) {
-    return res.status(500).json({ error: 'Notion no configurado (falta NOTION_API_KEY)' })
+  const SB_URL = process.env.SUPABASE_URL
+  const SB_KEY = process.env.SUPABASE_SECRET_KEY
+  if (!SB_URL || !SB_KEY) {
+    return res.status(500).json({ error: 'Supabase no configurado (faltan SUPABASE_URL / SUPABASE_SECRET_KEY)' })
   }
 
-  const notion = new Client({ auth: process.env.NOTION_API_KEY })
-
   try {
-    const r = await notion.databases.query({
-      database_id: DB_ID,
-      sorts: [{ timestamp: 'created_time', direction: 'descending' }],
-      page_size: 100,
+    const r = await fetch(SB_URL + '/rest/v1/leads?select=*&order=created_at.desc&limit=200', {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
     })
+    if (!r.ok) { throw new Error('Supabase ' + r.status + ': ' + (await r.text())) }
+    const rows = await r.json()
 
-    const leads = r.results.map(p => {
-      const props = p.properties || {}
-      return {
-        id: p.id,
-        nombre:           props['Nombre']?.title?.[0]?.text?.content || '',
-        telefono:         props['Teléfono']?.phone_number || '',
-        email:            props['Email']?.email || '',
-        nombresFestejado: props['Nombres Novios/Festejado']?.rich_text?.[0]?.text?.content || '',
-        fechaEvento:      props['Fecha Evento']?.rich_text?.[0]?.text?.content || '',
-        personas:         props['Personas']?.number || 0,
-        hora:             props['Hora']?.select?.name || '',
-        musica:           props['Música']?.select?.name || '',
-        total:            props['Total Estimado']?.number || 0,
-        estado:           props['Estado']?.select?.name || 'Nuevo',
-        fechaCaptura:     p.created_time,
-      }
-    })
+    const leads = rows.map(p => ({
+      id:               p.id,
+      nombre:           p.nombre || '',
+      telefono:         p.whatsapp || '',
+      tel:              p.whatsapp || '',
+      email:            p.email || '',
+      nombresFestejado: p.nombre || '',
+      fechaEvento:      p.fecha_evento || '',
+      tipoEvento:       p.tipo_evento || '',
+      personas:         p.personas || 0,
+      hora:             '',
+      musica:           '',
+      total:            p.total || 0,
+      quiereCita:       !!p.quiere_cita,
+      quiereEmail:      !!p.quiere_email,
+      estado:           'Nuevo',
+      fechaCaptura:     p.created_at
+    }))
 
     res.status(200).json(leads)
   } catch (e) {

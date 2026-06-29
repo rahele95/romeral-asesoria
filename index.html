@@ -181,6 +181,10 @@ const BLOCKED=['2026-01-31','2026-03-14','2026-04-11','2026-04-25','2026-05-02',
 // Bloqueo automático: 7 días antes y 5 días después de cada fecha base
 const BLOCKED_SET=(()=>{const s=new Set();BLOCKED.forEach(iso=>{const[y,m,dd]=iso.split('-').map(Number);for(let off=-7;off<=5;off++){const t=new Date(y,m-1,dd+off);s.add(`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`);}});return s;})();
 const S={fecha:null,tipo:null,personas:120};
+// --- Tracking de funnel (Supabase vía /api/track), fire-and-forget ---
+function romeralSid(){try{let s=localStorage.getItem('romeral_sid');if(!s){s=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():'sid-'+Date.now()+'-'+Math.random().toString(36).slice(2);localStorage.setItem('romeral_sid',s);}return s;}catch(_){return 'sid-anon';}}
+function track(step,data){try{fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:romeralSid(),step:step,data:data||{}}),keepalive:true}).catch(function(){});}catch(_){}}
+track('inicio',{user_agent:navigator.userAgent,referrer:document.referrer});
 function goPhase(id){document.querySelectorAll('.phase').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'instant'})}
 const dots=document.querySelectorAll('.dot');
 function showStep(n){document.querySelectorAll('.step').forEach(s=>s.classList.toggle('active',+s.dataset.step===n));dots.forEach((d,i)=>d.classList.toggle('on',i<n))}
@@ -224,7 +228,7 @@ function pickDate(iso){
   const reward=document.getElementById('dateReward');
   const cta=document.getElementById('cta1');
   if(BLOCKED_SET.has(iso)){S.fecha='';reward.textContent='Esa fecha ya está reservada. Les sugerimos otra fecha cercana.';reward.style.color='rgba(245,100,100,0.9)';reward.classList.add('show');cta.disabled=true}
-  else{S.fecha=iso;reward.textContent='¡Esa fecha está disponible!';reward.style.color='var(--gold)';reward.classList.add('show');cta.disabled=false}
+  else{S.fecha=iso;reward.textContent='¡Esa fecha está disponible!';reward.style.color='var(--gold)';reward.classList.add('show');cta.disabled=false;track('fecha_seleccionada',{fecha:iso});}
   renderCal();
 }
 renderCal();
@@ -232,7 +236,7 @@ document.getElementById('cta1').onclick=()=>{goPhase('steps');showStep(2)};
 document.getElementById('back2').onclick=()=>{goPhase('hero')};
 document.getElementById('back3').onclick=()=>showStep(2);
 document.querySelectorAll('.type-card').forEach(card=>{
-  card.onclick=()=>{document.querySelectorAll('.type-card').forEach(c=>{c.classList.remove('sel');c.setAttribute('aria-pressed','false');});card.classList.add('sel');card.setAttribute('aria-pressed','true');S.tipo=card.dataset.tipo;document.getElementById('cta2').disabled=false}
+  card.onclick=()=>{document.querySelectorAll('.type-card').forEach(c=>{c.classList.remove('sel');c.setAttribute('aria-pressed','false');});card.classList.add('sel');card.setAttribute('aria-pressed','true');S.tipo=card.dataset.tipo;document.getElementById('cta2').disabled=false;track('tipo_seleccionado',{tipo:S.tipo});}
 });
 document.getElementById('cta2').onclick=()=>showStep(3);
 const slider=document.getElementById('guestSlider');
@@ -242,7 +246,7 @@ function updateGuests(val,instant){S.personas=val;if(instant||typeof gsap==='und
 // FIX1: al arrastrar, el número salta exacto al valor del slider (step=5) sin lag de animación → fácil aterrizar en cifras como 185
 slider.oninput=()=>updateGuests(+slider.value,true);
 updateGuests(120);
-document.getElementById('cta3').onclick=()=>{sessionStorage.setItem('romeral',JSON.stringify({fecha:S.fecha,fechaTexto:fmtFechaLarga(S.fecha),tipo:S.tipo,personas:S.personas}));window.location.href='brochure.html'};
+document.getElementById('cta3').onclick=()=>{sessionStorage.setItem('romeral',JSON.stringify({fecha:S.fecha,fechaTexto:fmtFechaLarga(S.fecha),tipo:S.tipo,personas:S.personas}));track('invitados_definidos',{personas:S.personas,tipo:S.tipo,fecha:S.fecha});window.location.href='brochure.html'};
 // Si viene de brochure con ?back=1, restaurar al paso 3
 if(new URLSearchParams(window.location.search).get('back')==='1'){
   const saved=JSON.parse(sessionStorage.getItem('romeral')||'{}');

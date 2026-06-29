@@ -385,6 +385,10 @@ if(introSub){ introSub.textContent = `Les presentamos los ${stages.length} eleme
 let broIdx = 0;
 // mobile (<1024px): navegación vertical por scroll-snap nativo; desktop conserva el swipe horizontal
 const isMobileBro = window.matchMedia('(max-width:1023px)').matches;
+// --- Tracking de funnel (Supabase vía /api/track), fire-and-forget ---
+function romeralSid(){try{let s=localStorage.getItem('romeral_sid');if(!s){s=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():'sid-'+Date.now()+'-'+Math.random().toString(36).slice(2);localStorage.setItem('romeral_sid',s);}return s;}catch(_){return 'sid-anon';}}
+function track(step,data){try{fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:romeralSid(),step:step,data:data||{}}),keepalive:true}).catch(function(){});}catch(_){}}
+(function(){var _d={};try{_d=JSON.parse(sessionStorage.getItem('romeral')||'{}');}catch(_){}track('brochure_iniciado',{tipo:_d.tipo,personas:_d.personas,secciones:stages.length});})();
 // el número decorativo va dentro del contenido (fondo oscuro) para que no se pierda sobre la imagen
 document.querySelectorAll('.bro-stage').forEach(function(st){
   const bn = st.querySelector('.bro-bignum'), ct = st.querySelector('.bro-content');
@@ -418,7 +422,7 @@ if(broNavPrev) broNavPrev.addEventListener('click', function(){
 });
 if(broNavNext) broNavNext.addEventListener('click', function(){ if(broIdx < stages.length - 1) showStage(broIdx + 1); else goPrecio(); });
 function pad(n){ return String(n).padStart(2,'0'); }
-function goPrecio(){ window.location.href = 'precio.html'; }
+function goPrecio(){ track('brochure_completado',{}); window.location.href = 'precio.html'; }
 // última sección: reemplaza el botón inferior por un indicador "Deslicen para descubrir su inversión" (clic/Enter → precio)
 function addFinale(el){
   const nb = el.querySelector('.bro-next');

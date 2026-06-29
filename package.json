@@ -3,7 +3,5 @@
   "version": "1.0.0",
   "private": true,
   "description": "Asesoría Virtual de El Romeral",
-  "dependencies": {
-    "@notionhq/client": "^2.2.15"
-  }
+  "dependencies": {}
 }

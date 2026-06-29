@@ -229,6 +229,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 const d = JSON.parse(sessionStorage.getItem('romeral') || '{}');
 const CON_DJ = ['boda','xv','corporativo','social'];
 
+// --- Tracking de funnel (Supabase vía /api/track), fire-and-forget ---
+function romeralSid(){try{let s=localStorage.getItem('romeral_sid');if(!s){s=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():'sid-'+Date.now()+'-'+Math.random().toString(36).slice(2);localStorage.setItem('romeral_sid',s);}return s;}catch(_){return 'sid-anon';}}
+function track(step,data){try{fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:romeralSid(),step:step,data:data||{}}),keepalive:true}).catch(function(){});}catch(_){}}
+track('precio_visto',{tipo:d.tipo,personas:d.personas});
+// cita_agendada: al elegir una opción de agenda (presencial / videollamada / WhatsApp)
+document.querySelectorAll('.sched-card').forEach(function(c){ c.addEventListener('click', function(){ track('cita_agendada',{canal:(c.querySelector('h3')||{}).textContent||''}); }); });
+
 function getRangoRenta(n){ return [50,100,150,200,250,300,350,400].find(r=>n<=r) || 400; }
 function getRangoPista(n){ return n<=50?22500 : n<=100?27000 : n<=150?32400 : n<=250?37800 : 44100; }
 const RENTA = {50:89000,100:119000,150:149000,200:159000,250:169000,300:179000,350:189000,400:199000};
@@ -365,6 +372,7 @@ async function sendProposal(email){
 // Devuelve true/false según el resultado real del envío (para feedback de éxito/error)
 async function saveLead(quiereCita){
   const payload = {
+    session_id: romeralSid(),
     nombre: fNombre.value.trim(),
     telefono: fWhats.value.trim(),
     whatsapp: fWhats.value.trim(),
@@ -411,6 +419,7 @@ async function submitLead(){
   try{
     const ok = await saveLead(intent === 'cita');
     if(!ok) throw new Error('request-failed');
+    track('lead_capturado',{intent:intent, quiere_cita:(intent==='cita')});
     if(intent === 'cita'){
       showSchedule();
     } else {
@@ -447,6 +456,7 @@ fSaveEmail.addEventListener('blur', ()=>{
 // saveLead parcial: solo el correo + los datos que ya tenemos
 async function savePartialLead(email){
   const payload = {
+    session_id: romeralSid(),
     email: email,
     fecha: d.fecha,
     tipoEvento: d.tipo,
@@ -454,6 +464,7 @@ async function savePartialLead(email){
     personas: d.personas,
     total: total,
     total_estimado: total,
+    quiere_email: true,
     lead_parcial: true
   };
   // Notion best-effort (no rompe el flujo si está caído / mal configurado); timeout 10s
@@ -485,6 +496,7 @@ invSave.addEventListener('submit', async (e)=>{
   try{
     const ok = await savePartialLead(email);
     if(!ok) throw new Error('request-failed');
+    track('lead_capturado',{intent:'email', quiere_email:true});
     invSave.classList.add('done');
     invSave.querySelector('.inv-save-title').textContent = '¡Listo! Les enviamos su propuesta.';
   }catch(err){

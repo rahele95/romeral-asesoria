@@ -1,35 +1,42 @@
-const { Client } = require('@notionhq/client')
-
+// Guarda un lead en Supabase (tabla public.leads).
+// La SECRET key vive en process.env.SUPABASE_SECRET_KEY (Vercel), nunca en el repo.
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).end()
 
-  if (!process.env.NOTION_API_KEY || !process.env.NOTION_LEADS_DB_ID) {
-    return res.status(500).json({ error: 'Notion no configurado (faltan NOTION_API_KEY / NOTION_LEADS_DB_ID)' })
+  const SB_URL = process.env.SUPABASE_URL
+  const SB_KEY = process.env.SUPABASE_SECRET_KEY
+  if (!SB_URL || !SB_KEY) {
+    return res.status(500).json({ error: 'Supabase no configurado (faltan SUPABASE_URL / SUPABASE_SECRET_KEY)' })
   }
-
-  const notion = new Client({ auth: process.env.NOTION_API_KEY })
-  const DB_ID = process.env.NOTION_LEADS_DB_ID
 
   try {
     const b = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {})
-    await notion.pages.create({
-      parent: { database_id: DB_ID },
-      properties: {
-        'Nombre':                   { title: [{ text: { content: b.nombre || '' } }] },
-        'Teléfono':                 { phone_number: b.telefono || null },
-        'Email':                    { email: b.email || null },
-        'Tipo Evento':              { select: { name: b.tipoEvento || 'social' } },
-        'Nombres Novios/Festejado': { rich_text: [{ text: { content: b.nombre || '' } }] },
-        'Fecha Evento':             { rich_text: [{ text: { content: b.fecha || '' } }] },
-        'Personas':                 { number: parseInt(b.personas) || 0 },
-        'Hora':                     { select: { name: b.hora || 'noche' } },
-        'Música':                   { select: { name: b.musica || 'sin' } },
-        'Total Estimado':           { number: parseInt(b.total) || 0 },
-        'Fuente':                   { select: { name: 'Asesoría Virtual' } },
-        'Estado':                   { select: { name: 'Nuevo' } },
-        // 'Fecha Captura' es created_time: la asigna Notion automáticamente.
-      }
+
+    const row = {
+      session_id:   b.session_id || b.sessionId || 'sin-sesion',
+      nombre:       b.nombre || null,
+      whatsapp:     b.whatsapp || b.telefono || null,
+      email:        b.email || null,
+      tipo_evento:  b.tipoEvento || b.tipo_evento || null,
+      fecha_evento: b.fecha || b.fecha_evento || null,
+      personas:     (b.personas != null && b.personas !== '') ? parseInt(b.personas, 10) : null,
+      total:        (b.total != null && b.total !== '') ? Number(b.total) : null,
+      quiere_cita:  !!b.quiere_cita,
+      quiere_email: !!b.quiere_email
+    }
+
+    const r = await fetch(SB_URL + '/rest/v1/leads', {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(row)
     })
+    if (!r.ok) { throw new Error('Supabase ' + r.status + ': ' + (await r.text())) }
+
     res.status(200).json({ ok: true })
   } catch (e) {
     console.error(e)

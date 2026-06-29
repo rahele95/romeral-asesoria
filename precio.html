@@ -324,6 +324,25 @@ function validForm(){
   return true;
 }
 
+// Envía la propuesta por correo (fire-and-forget: no bloquea ni rompe el flujo si Resend falla)
+function sendProposal(email){
+  if(!email) return;
+  try{
+    fetch('/api/send-proposal', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      keepalive:true,
+      body: JSON.stringify({
+        email: email,
+        tipoEvento: tipoNice[d.tipo] || d.tipo || 'Evento',
+        personas: d.personas || 120,
+        fecha: fechaLegible || '',
+        total: total
+      })
+    }).catch(function(){});
+  }catch(_){}
+}
+
 // Devuelve true/false según el resultado real del envío (para feedback de éxito/error)
 async function saveLead(quiereCita){
   const payload = {
@@ -347,6 +366,7 @@ async function saveLead(quiereCita){
   const timer = setTimeout(()=>ctrl.abort(), 10000);
   try{
     const res = await fetch('/api/leads', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), signal:ctrl.signal });
+    if(res.ok) sendProposal(payload.email);   // enviar propuesta por correo (no bloquea el flujo)
     return res.ok;
   } finally {
     clearTimeout(timer);
@@ -419,6 +439,7 @@ async function savePartialLead(email){
   const timer = setTimeout(()=>ctrl.abort(), 10000);
   try{
     const res = await fetch('/api/leads', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload), signal:ctrl.signal });
+    if(res.ok) sendProposal(payload.email);   // enviar propuesta por correo (no bloquea el flujo)
     return res.ok;
   } finally { clearTimeout(timer); }
 }

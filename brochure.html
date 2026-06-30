@@ -97,7 +97,8 @@ body.intro-open{overflow:hidden}
 .bro-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .bro-stage .bro-back{display:none}   /* navegación atrás vía indicador REGRESAR; se conserva el del introScreen */
 /* número decorativo: marca de agua en el área de contenido (fondo oscuro) — legible sobre cualquier imagen, en desktop y mobile */
-.bro-bignum{position:absolute;right:clamp(12px,4vw,44px);bottom:clamp(36px,7vh,72px);font-family:'Lato',sans-serif;font-weight:300;font-size:clamp(120px,26vw,200px);color:rgba(245,241,235,0.08);line-height:1;letter-spacing:-.02em;pointer-events:none;z-index:0}
+/* número de sección: índice editorial inline antes del kicker (subordinado: más chico y ligero) */
+.bro-knum{font-size:.5em;font-weight:300;letter-spacing:.06em;color:rgba(184,147,90,0.85);margin-right:.42em;font-variant-numeric:tabular-nums;vertical-align:.14em}
 .bro-hero-text{position:relative;z-index:2;max-width:640px;animation:fadeUp .7s var(--ease) both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 /* protagonista: el KICKER (grande, dorado, con presencia) · título descriptivo secundario (peso 300) */
@@ -107,7 +108,7 @@ body.intro-open{overflow:hidden}
 
 /* Content debajo del hero, sobre fondo sólido */
 .bro-content{position:relative;flex:1 1 56%;min-height:0;overflow:hidden;background:var(--forest-deep);display:flex;flex-direction:column;justify-content:flex-start;padding:clamp(12px,1.8vh,26px) clamp(28px,6vw,76px) clamp(16px,2.5vh,52px);animation:fadeUp .7s var(--ease) both}
-.bro-content > :not(.bro-bignum){position:relative;z-index:1}   /* texto por encima de la marca de agua */
+.bro-content > *{position:relative;z-index:1}
 .bro-list{list-style:none;display:flex;flex-direction:column;gap:clamp(6px,1.4vh,11px);margin-bottom:clamp(12px,2vh,24px)}
 .bro-list li{display:flex;align-items:flex-start;gap:12px;font-size:clamp(15px,1.9vh,16px);color:rgba(245,241,235,0.85);max-width:48ch}
 .bro-list li .material-symbols-outlined{font-size:19px;line-height:1.3;color:var(--gold);flex-shrink:0;font-variation-settings:'FILL' 0,'wght' 200,'GRAD' 0,'opsz' 20}
@@ -160,7 +161,7 @@ body.intro-open{overflow:hidden}
 /* ===== mobile (<1024px): navegación VERTICAL por scroll-snap nativo (swipe arriba = siguiente) ===== */
 @media(max-width:1023px){
   html,body{height:100%;overflow:hidden}
-  #brochure{height:100vh;height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch}
+  #brochure{height:100vh;height:100dvh;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
   /* solo las secciones del flujo (.bro-vis, marcadas por JS) se muestran y participan del snap */
   .bro-stage.bro-vis{display:flex;height:auto;min-height:100vh;min-height:100dvh;overflow:visible;scroll-snap-align:start}
   .bro-vis .bro-hero{flex:0 0 46vh;flex:0 0 46dvh}
@@ -195,9 +196,8 @@ body.intro-open{overflow:hidden}
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
       <button class="btn-back loc-back" type="button" aria-label="Volver a invitados" onclick="event.stopPropagation();window.location.href='index.html?back=1'">&larr; Invitados</button>
-      <span class="bro-bignum">01</span>
       <div class="bro-hero-text">
-        <p class="bro-kicker">Locación</p>
+        <p class="bro-kicker"><span class="bro-knum">01</span>Locación</p>
         <h2>El jardín que lo enmarca todo</h2>
       </div>
       <div class="loc-dots">
@@ -232,9 +232,8 @@ body.intro-open{overflow:hidden}
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
-      <span class="bro-bignum">02</span>
       <div class="bro-hero-text">
-        <p class="bro-kicker">Gastronomía</p>
+        <p class="bro-kicker"><span class="bro-knum">02</span>Gastronomía</p>
         <h2>Cocina propia: en tiempo, calidad y temperatura</h2>
       </div>
       <div class="loc-dots">
@@ -264,9 +263,8 @@ body.intro-open{overflow:hidden}
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
-      <span class="bro-bignum">03</span>
       <div class="bro-hero-text">
-        <p class="bro-kicker">Barra y bebidas</p>
+        <p class="bro-kicker"><span class="bro-knum">03</span>Barra y bebidas</p>
         <h2>Una barra siempre servida</h2>
       </div>
       <div class="loc-dots">
@@ -297,9 +295,8 @@ body.intro-open{overflow:hidden}
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
-      <span class="bro-bignum">05</span>
       <div class="bro-hero-text">
-        <p class="bro-kicker">Iluminación arquitectónica de jardines</p>
+        <p class="bro-kicker"><span class="bro-knum">05</span>Iluminación arquitectónica de jardines</p>
         <h2 id="iluTitle">Calidez que envuelve la noche</h2>
       </div>
       <div class="loc-dots">
@@ -327,9 +324,8 @@ body.intro-open{overflow:hidden}
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
-      <span class="bro-bignum">04</span>
       <div class="bro-hero-text">
-        <p class="bro-kicker">DJ / DJ Light y pista de madera pintada a mano</p>
+        <p class="bro-kicker"><span class="bro-knum">04</span>DJ / DJ Light y pista de madera pintada a mano</p>
         <h2>La música que hace vibrar cada momento</h2>
         <p class="bro-lead">Producción de audio e iluminación profesional para llenar la pista.</p>
       </div>
@@ -389,11 +385,6 @@ const isMobileBro = window.matchMedia('(max-width:1023px)').matches;
 function romeralSid(){try{let s=localStorage.getItem('romeral_sid');if(!s){s=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():'sid-'+Date.now()+'-'+Math.random().toString(36).slice(2);localStorage.setItem('romeral_sid',s);}return s;}catch(_){return 'sid-anon';}}
 function track(step,data){try{fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:romeralSid(),step:step,data:data||{}}),keepalive:true}).catch(function(){});}catch(_){}}
 (function(){var _d={};try{_d=JSON.parse(sessionStorage.getItem('romeral')||'{}');}catch(_){}track('brochure_iniciado',{tipo:_d.tipo,personas:_d.personas,secciones:stages.length});})();
-// el número decorativo va dentro del contenido (fondo oscuro) para que no se pierda sobre la imagen
-document.querySelectorAll('.bro-stage').forEach(function(st){
-  const bn = st.querySelector('.bro-bignum'), ct = st.querySelector('.bro-content');
-  if(bn && ct) ct.appendChild(bn);
-});
 // Indicadores de navegación lateral (estáticos): ocultar "Regresar" en la primera y "Continuar" en la última
 const broNavPrev = document.querySelector('.bro-nav-prev');
 const broNavNext = document.querySelector('.bro-nav-next');
@@ -558,14 +549,19 @@ function setupMobileVertical(startIdx){
     });
   }, {root: cont, rootMargin:'-45% 0px -45% 0px', threshold:0});
   els.forEach(function(el){ io.observe(el); });
-  // en la última sección, un swipe hacia adelante (más allá del fondo) navega a precio
-  let _fy = null;
-  cont.addEventListener('touchstart', function(e){ if(e.touches.length === 1) _fy = e.touches[0].clientY; }, {passive:true});
+  // Última sección: un solo swipe hacia adelante (estando ya en el fondo) navega a precio.
+  // Fix doble-swipe: gateamos por la sección activa (broIdx, vía IO) y capturamos "cerca del fondo"
+  // en el touchSTART (no al final, cuando el rubber-band ya movió scrollTop). Umbral y tolerancia más laxos.
+  function nearBottom(){ return cont.scrollTop + cont.clientHeight >= cont.scrollHeight - 56; }
+  let _fy = null, _startBottom = false;
+  cont.addEventListener('touchstart', function(e){
+    if(e.touches.length === 1){ _fy = e.touches[0].clientY; _startBottom = nearBottom(); }
+  }, {passive:true});
   cont.addEventListener('touchend', function(e){
     if(_fy === null) return;
     const dy = e.changedTouches[0].clientY - _fy; _fy = null;
-    const atBottom = cont.scrollTop >= cont.scrollHeight - cont.clientHeight - 4;
-    if(atBottom && dy < -55){ goPrecio(); }   // ya en el fondo y siguen deslizando hacia adelante → descubrir la inversión
+    // en la última sección, gesto iniciado cerca del fondo + swipe hacia arriba → descubrir la inversión
+    if(broIdx === stages.length-1 && _startBottom && dy < -42){ goPrecio(); }
   }, {passive:true});
   if(startIdx > 0){ requestAnimationFrame(function(){ cont.scrollTop = els[startIdx].offsetTop; }); }
 }

@@ -97,8 +97,8 @@ body.intro-open{overflow:hidden}
 .bro-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .bro-stage .bro-back{display:none}   /* navegación atrás vía indicador REGRESAR; se conserva el del introScreen */
 /* número decorativo: marca de agua en el área de contenido (fondo oscuro) — legible sobre cualquier imagen, en desktop y mobile */
-/* número de sección: índice editorial inline antes del kicker (subordinado pero legible sobre imágenes) */
-.bro-knum{font-size:.62em;font-weight:600;letter-spacing:.04em;color:var(--gold);margin-right:.4em;font-variant-numeric:tabular-nums;vertical-align:.12em;text-shadow:0 2px 12px rgba(13,26,18,0.9),0 0 2px rgba(13,26,18,0.7)}
+/* número de sección: mismo tamaño y peso que el kicker, alineado a la misma línea base */
+.bro-knum{font-size:1em;font-weight:700;letter-spacing:inherit;color:var(--gold);margin-right:.3em;font-variant-numeric:tabular-nums;vertical-align:baseline}
 .bro-hero-text{position:relative;z-index:2;max-width:640px;animation:fadeUp .7s var(--ease) both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 /* protagonista: el KICKER (grande, dorado, con presencia) · título descriptivo secundario (peso 300) */
@@ -513,8 +513,13 @@ if(!isMobileBro)(function(){
   }, {passive:false});
 })();
 
-// FIX5: si se regresa desde precio.html (?back=1), reabrir el brochure en la última sección vista
-const returningFromPrecio = new URLSearchParams(location.search).get('back')==='1';
+// FIX5: si se regresa desde precio (botón ?back=1 O botón atrás del navegador/teléfono), reabrir
+// el brochure en la última sección vista y omitir la pantalla de intro (si no, el 1er swipe solo
+// descarta el intro y haría falta un segundo swipe para descubrir la inversión).
+const _navType = (performance.getEntriesByType && (performance.getEntriesByType('navigation')[0]||{}).type) || '';
+const returningFromPrecio = new URLSearchParams(location.search).get('back')==='1'
+  || /precio\.html/.test(document.referrer)
+  || _navType === 'back_forward';
 let startIdx = 0;
 if(returningFromPrecio){
   const s = parseInt(sessionStorage.getItem('broStage'), 10);

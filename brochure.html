@@ -97,8 +97,8 @@ body.intro-open{overflow:hidden}
 .bro-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .bro-stage .bro-back{display:none}   /* navegación atrás vía indicador REGRESAR; se conserva el del introScreen */
 /* número decorativo: marca de agua en el área de contenido (fondo oscuro) — legible sobre cualquier imagen, en desktop y mobile */
-/* número de sección: índice editorial inline antes del kicker (subordinado: más chico y ligero) */
-.bro-knum{font-size:.5em;font-weight:300;letter-spacing:.06em;color:rgba(184,147,90,0.85);margin-right:.42em;font-variant-numeric:tabular-nums;vertical-align:.14em}
+/* número de sección: índice editorial inline antes del kicker (subordinado pero legible sobre imágenes) */
+.bro-knum{font-size:.62em;font-weight:600;letter-spacing:.04em;color:var(--gold);margin-right:.4em;font-variant-numeric:tabular-nums;vertical-align:.12em;text-shadow:0 2px 12px rgba(13,26,18,0.9),0 0 2px rgba(13,26,18,0.7)}
 .bro-hero-text{position:relative;z-index:2;max-width:640px;animation:fadeUp .7s var(--ease) both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 /* protagonista: el KICKER (grande, dorado, con presencia) · título descriptivo secundario (peso 300) */
@@ -549,19 +549,24 @@ function setupMobileVertical(startIdx){
     });
   }, {root: cont, rootMargin:'-45% 0px -45% 0px', threshold:0});
   els.forEach(function(el){ io.observe(el); });
-  // Última sección: un solo swipe hacia adelante (estando ya en el fondo) navega a precio.
-  // Fix doble-swipe: gateamos por la sección activa (broIdx, vía IO) y capturamos "cerca del fondo"
-  // en el touchSTART (no al final, cuando el rubber-band ya movió scrollTop). Umbral y tolerancia más laxos.
-  function nearBottom(){ return cont.scrollTop + cont.clientHeight >= cont.scrollHeight - 56; }
-  let _fy = null, _startBottom = false;
+  // Última sección: navega a precio cuando el indicador "Deslicen…" YA está visible y el usuario
+  // hace un swipe hacia adelante. Gateamos por la VISIBILIDAD del finale (capturada al iniciar el
+  // gesto), no por matemática de scroll ni por broIdx — robusto ante scroll-snap, dvh y lag del IO.
+  function finaleVisible(){
+    const last = els[stages.length-1]; if(!last) return false;
+    const fin = last.querySelector('.bro-finale'); if(!fin) return false;
+    const r = fin.getBoundingClientRect();
+    return r.top < cont.clientHeight - 28 && r.bottom > 8;   // el indicador ya entró en pantalla
+  }
+  let _fy = null, _finStart = false;
   cont.addEventListener('touchstart', function(e){
-    if(e.touches.length === 1){ _fy = e.touches[0].clientY; _startBottom = nearBottom(); }
+    if(e.touches.length === 1){ _fy = e.touches[0].clientY; _finStart = finaleVisible(); }
   }, {passive:true});
   cont.addEventListener('touchend', function(e){
     if(_fy === null) return;
     const dy = e.changedTouches[0].clientY - _fy; _fy = null;
-    // en la última sección, gesto iniciado cerca del fondo + swipe hacia arriba → descubrir la inversión
-    if(broIdx === stages.length-1 && _startBottom && dy < -42){ goPrecio(); }
+    // el indicador estaba a la vista al iniciar el gesto + deslizaron hacia adelante → descubrir la inversión
+    if(_finStart && dy < -34){ goPrecio(); }
   }, {passive:true});
   if(startIdx > 0){ requestAnimationFrame(function(){ cont.scrollTop = els[startIdx].offsetTop; }); }
 }

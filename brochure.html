@@ -165,6 +165,8 @@ body.intro-open{overflow:hidden}
   /* solo las secciones del flujo (.bro-vis, marcadas por JS) se muestran y participan del snap */
   .bro-stage.bro-vis{display:flex;height:auto;min-height:100vh;min-height:100dvh;overflow:visible;scroll-snap-align:start}
   .bro-vis .bro-hero{flex:0 0 46vh;flex:0 0 46dvh}
+  /* separación extra del subtítulo respecto a los dots del carrete (solo espaciado) */
+  .bro-vis .bro-hero-text h2{margin-bottom:clamp(20px,2.6vh,24px)}
   .bro-vis .bro-content{flex:1 1 auto;min-height:0;overflow:visible;padding-bottom:calc(clamp(14px,2vh,28px) + env(safe-area-inset-bottom))}
 }
 @media (prefers-reduced-motion: reduce){

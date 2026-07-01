@@ -19,7 +19,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
-body{font-family:'Lato',sans-serif;font-weight:300;background:var(--forest-deep);color:var(--ivory);-webkit-font-smoothing:antialiased;font-size:14px}
+body{font-family:'Lato',sans-serif;font-weight:400;background:var(--forest-deep);color:var(--ivory);-webkit-font-smoothing:antialiased;font-size:14px}
 .tnum{font-variant-numeric:tabular-nums}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 22}
@@ -107,16 +107,16 @@ a{color:inherit}
 .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
 table{width:100%;border-collapse:collapse;min-width:860px}
 th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
-td{padding:13px 14px;border-bottom:1px solid rgba(245,241,235,0.05);font-size:13.5px;white-space:nowrap}
+td{padding:13px 14px;border-bottom:1px solid rgba(245,241,235,0.05);font-size:13.5px;font-weight:400;white-space:nowrap}
 tbody tr{cursor:pointer;transition:background .15s}
 tbody tr:hover{background:rgba(184,147,90,0.06)}
 tbody tr:last-child td{border-bottom:none}
 .pill{display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.04em}
-.pill-Nuevo{background:rgba(184,147,90,0.16);color:var(--gold)}
-.pill-Contactado{background:rgba(107,143,201,0.16);color:var(--info)}
+.pill-Nuevo{background:rgba(184,147,90,0.16);color:#CDA971}
+.pill-Contactado{background:rgba(107,143,201,0.16);color:#8FB4E6}
 .pill-Citaagendada{background:rgba(111,174,123,0.16);color:var(--ok)}
 .pill-Ganado{background:rgba(62,125,90,0.22);color:#8FD0A8}
-.pill-Perdido{background:rgba(197,107,92,0.16);color:var(--danger)}
+.pill-Perdido{background:rgba(197,107,92,0.16);color:#E29B90}
 
 /* drawer */
 #scrim{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,0.55);opacity:0;visibility:hidden;transition:.3s}
@@ -309,7 +309,15 @@ const fEvents=()=>EVENTS.filter(e=>inRange(e.created_at));
 const fSessions=()=>SESSIONS.filter(s=>inRange(s.created_at));
 
 /* ============== METRICS ============== */
-function funnelCounts(evts){ const m={}; STEPS.forEach(s=>m[s]=new Set()); evts.forEach(e=>{ if(m[e.step]) m[e.step].add(e.session_id); }); return STEPS.map(s=>m[s].size); }
+// Funnel "gated": una sesión cuenta en un paso solo si alcanzó ese paso o uno posterior.
+// Se usa la etapa máxima alcanzada por session_id, garantizando conteos monótonos decrecientes.
+function funnelCounts(evts){
+  const maxStage={};
+  evts.forEach(e=>{ const idx=STEPS.indexOf(e.step); if(idx<0) return; const s=e.session_id; if(maxStage[s]==null||idx>maxStage[s]) maxStage[s]=idx; });
+  const counts=STEPS.map(()=>0);
+  Object.values(maxStage).forEach(mx=>{ for(let i=0;i<=mx;i++) counts[i]++; });
+  return counts;
+}
 function fmtMoney(n){ return '$'+Math.round(n||0).toLocaleString('es-MX'); }
 function fmtDate(iso){ if(!iso) return '—'; const d=new Date(iso); return d.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}); }
 function dayKey(iso){ const d=new Date(iso); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
@@ -360,11 +368,13 @@ function renderFunnel(elId,grouped){
     const cnt=counts[i], pctTotal=total?(cnt/total*100):0;
     const drop=i>0&&counts[i-1]?((counts[i-1]-counts[i])/counts[i-1]*100):null;
     const big=i===maxDropIdx&&drop>0;
+    // Signo correcto: caída → "−N%", subida → "+N%". Nunca "−-".
+    const dropStr=drop==null?'':(drop>=0?'−'+drop.toFixed(0):'+'+Math.abs(drop).toFixed(0));
     const hue=`hsl(38, ${Math.round(42-(i*2))}%, ${Math.round(56-(i*3.5))}%)`;
     return `<div class="funnel-row">
       <div class="funnel-head"><span class="funnel-step">${STEP_LABEL[STEPS[i]]}</span><span class="funnel-meta tnum">${cnt} · ${pctTotal.toFixed(0)}%</span></div>
       <div class="funnel-bar"><div class="funnel-fill" style="width:${Math.max(pctTotal,1.5)}%;background:${big?'var(--danger)':hue}"></div></div>
-      ${drop!=null?`<div class="funnel-drop ${big?'big':''}">${big?'◀ mayor fuga ':''}−${drop.toFixed(0)}% vs paso anterior</div>`:''}
+      ${drop!=null?`<div class="funnel-drop ${big?'big':''}">${big?'◀ mayor fuga ':''}${dropStr}% vs paso anterior</div>`:''}
     </div>`;
   }
   if(!grouped){ el.innerHTML=STEPS.map((_,i)=>rowHtml(i)).join(''); return; }
@@ -392,8 +402,10 @@ function renderByType(){
   fLeads().forEach(l=>{ const k=TIPO_NICE[l.tipo_evento]||l.tipo_evento||'Otro'; map[k]=(map[k]||0)+1; });
   el.innerHTML=barList(map);
 }
-function barList(map){
-  const arr=Object.entries(map).sort((a,b)=>b[1]-a[1]); if(!arr.length) return '<div class="empty">Sin datos.</div>';
+function barList(map,keepOrder){
+  // keepOrder=true preserva el orden de inserción (p. ej. series temporales por fecha);
+  // por defecto ordena por valor descendente (rankings como fuentes/dispositivos).
+  const arr=keepOrder?Object.entries(map):Object.entries(map).sort((a,b)=>b[1]-a[1]); if(!arr.length) return '<div class="empty">Sin datos.</div>';
   const max=Math.max(...arr.map(a=>a[1]));
   return arr.map(([k,v])=>`<div class="bl-row"><span class="bl-label" title="${esc(k)}">${esc(k)}</span><div class="bl-track"><div class="bl-fill" style="width:${v/max*100}%"></div></div><span class="bl-val tnum">${v}</span></div>`).join('');
 }
@@ -528,7 +540,7 @@ function renderTraffic(){
   const byDay={}; fSessions().forEach(s=>{ const k=dayKey(s.created_at); byDay[k]=(byDay[k]||0)+1; });
   const days=Object.keys(byDay).sort(); const el=document.getElementById('sessByDay');
   if(!days.length){ el.innerHTML='<div class="empty">Sin sesiones en este periodo.</div>'; }
-  else { const m={}; days.forEach(d=>m[d.slice(5)]=byDay[d]); el.innerHTML=barList(m); }
+  else { const m={}; days.forEach(d=>m[d.slice(5)]=byDay[d]); el.innerHTML=barList(m,true); }
   const refMap={}; fSessions().forEach(s=>{ const k=refLabel(s.referrer); refMap[k]=(refMap[k]||0)+1; });
   document.getElementById('referrers').innerHTML=barList(refMap);
   const devMap={}; fSessions().forEach(s=>{ const k=deviceLabel(s.user_agent); devMap[k]=(devMap[k]||0)+1; });

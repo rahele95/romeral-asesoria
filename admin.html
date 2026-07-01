@@ -372,7 +372,7 @@ function renderFunnel(elId,grouped){
     const dropStr=drop==null?'':(drop>=0?'−'+drop.toFixed(0):'+'+Math.abs(drop).toFixed(0));
     const hue=`hsl(38, ${Math.round(42-(i*2))}%, ${Math.round(56-(i*3.5))}%)`;
     return `<div class="funnel-row">
-      <div class="funnel-head"><span class="funnel-step">${STEP_LABEL[STEPS[i]]}</span><span class="funnel-meta tnum">${cnt} · ${pctTotal.toFixed(0)}%</span></div>
+      <div class="funnel-head"><span class="funnel-step">${STEP_LABEL[STEPS[i]]}</span><span class="funnel-meta tnum">${cnt} ${cnt===1?'persona':'personas'} · ${pctTotal.toFixed(0)}%</span></div>
       <div class="funnel-bar"><div class="funnel-fill" style="width:${Math.max(pctTotal,1.5)}%;background:${big?'var(--danger)':hue}"></div></div>
       ${drop!=null?`<div class="funnel-drop ${big?'big':''}">${big?'◀ mayor fuga ':''}${dropStr}% vs paso anterior</div>`:''}
     </div>`;

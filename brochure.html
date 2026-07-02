@@ -168,6 +168,8 @@ body.intro-open{overflow:hidden}
   /* separación extra del subtítulo respecto a los dots del carrete (solo espaciado) */
   .bro-vis .bro-hero-text h2{margin-bottom:clamp(20px,2.6vh,24px)}
   .bro-vis .bro-content{flex:1 1 auto;min-height:0;overflow:visible;padding-bottom:calc(clamp(14px,2vh,28px) + env(safe-area-inset-bottom))}
+  /* S02 Gastronomía · 3ª imagen (crème brûlée): el sujeto está en la zona central-inferior; bajamos el encuadre en mobile */
+  .bro-stage[data-stage="cat"] .loc-slide:nth-child(3){background-position:center 60%}
 }
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
@@ -322,9 +324,9 @@ body.intro-open{overflow:hidden}
   <div class="bro-stage" data-stage="dj">
     <div class="bro-hero">
       <div class="loc-slider" aria-hidden="true">
-        <div class="loc-slide is-active" style="background-image:url('fotos/web/dj/dj_01.jpg')"></div>
-        <div class="loc-slide" data-bg="fotos/web/dj/dj_02.jpg"></div>
-        <div class="loc-slide" data-bg="fotos/web/dj/dj_03.jpg"></div>
+        <div class="loc-slide is-active" style="background-image:url('https://res.cloudinary.com/yqyf3vi7/image/upload/f_auto,q_auto,w_1600/romeral/brochure/dj/vals_chispas_01')"></div>
+        <div class="loc-slide" data-bg="https://res.cloudinary.com/yqyf3vi7/image/upload/f_auto,q_auto,w_1600/romeral/brochure/dj/pista_led_esferasnegras_01"></div>
+        <div class="loc-slide" data-bg="https://res.cloudinary.com/yqyf3vi7/image/upload/f_auto,q_auto,w_1600/romeral/brochure/dj/pista_pintada_rose_01"></div>
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>

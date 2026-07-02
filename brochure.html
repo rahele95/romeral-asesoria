@@ -191,7 +191,7 @@ body.intro-open{overflow:hidden}
   <div class="bro-stage" data-stage="loc">
     <div class="bro-hero">
       <div class="loc-slider" aria-hidden="true">
-        <div class="loc-slide is-active" style="background-image:url('fotos/web/locacion/locacion_01.jpg')"></div>
+        <div class="loc-slide is-active" style="background-image:url('https://res.cloudinary.com/yqyf3vi7/image/upload/f_auto,q_auto,w_1600/romeral/brochure/locacion/lago_isla_01')"></div>
         <div class="loc-slide" data-bg="fotos/web/locacion/locacion_02.jpg"></div>
         <div class="loc-slide" data-bg="fotos/web/locacion/locacion_03.jpg"></div>
       </div>
@@ -229,8 +229,8 @@ body.intro-open{overflow:hidden}
     <div class="bro-hero">
       <div class="loc-slider" aria-hidden="true">
         <div class="loc-slide is-active" style="background-image:url('fotos/web/catering/catering_01.jpg')"></div>
-        <div class="loc-slide" data-bg="fotos/web/catering/catering_02.jpg"></div>
-        <div class="loc-slide" data-bg="fotos/web/catering/catering_03.jpg"></div>
+        <div class="loc-slide" data-bg="https://res.cloudinary.com/yqyf3vi7/image/upload/f_auto,q_auto,w_1600/romeral/brochure/gastronomia/montaje_vidrio_01"></div>
+        <div class="loc-slide" data-bg="https://res.cloudinary.com/yqyf3vi7/image/upload/f_auto,q_auto,w_1600/romeral/brochure/gastronomia/creme_brulee_01"></div>
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
@@ -262,6 +262,7 @@ body.intro-open{overflow:hidden}
       <div class="loc-slider" aria-hidden="true">
         <div class="loc-slide is-active" style="background-image:url('fotos/web/barra/barra_01.jpg')"></div>
         <div class="loc-slide" data-bg="fotos/web/barra/barra_02.jpg"></div>
+        <div class="loc-slide" data-bg="https://res.cloudinary.com/yqyf3vi7/image/upload/f_auto,q_auto,w_1600/romeral/brochure/barra/montaje_azul_01"></div>
       </div>
       <span class="bro-counter"></span>
       <button class="bro-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Atrás</button>
@@ -272,6 +273,7 @@ body.intro-open{overflow:hidden}
       <div class="loc-dots">
         <button class="loc-dot is-active" type="button" aria-label="Ver imagen 1"></button>
         <button class="loc-dot" type="button" aria-label="Ver imagen 2"></button>
+        <button class="loc-dot" type="button" aria-label="Ver imagen 3"></button>
       </div>
     </div>
     <div class="bro-content">
@@ -629,6 +631,25 @@ if(returningFromPrecio){ dismissIntro(); }
     function stop(){ if(timer){ clearInterval(timer); timer = null; } }
     slider._broStart = start; slider._broStop = stop;   // expuestos para que showStage controle el autoplay
     dots.forEach(function(d,n){ d.addEventListener('click', function(){ go(n); start(); }); });
+    // Swipe táctil del carrete (misma lógica de axis-lock/umbral que el swipe de secciones):
+    // horizontal >50px cambia de imagen (izquierda→siguiente, derecha→anterior) y actualiza los dots vía go().
+    // touch-action:pan-y deja el scroll vertical (cambio de sección en mobile) intacto.
+    var swipeArea = hero || slider;
+    var _sx = 0, _sy = 0, _strack = false;
+    swipeArea.addEventListener('touchstart', function(e){
+      if(e.touches.length !== 1){ _strack = false; return; }
+      _sx = e.touches[0].clientX; _sy = e.touches[0].clientY; _strack = true;
+    }, {passive:true});
+    swipeArea.addEventListener('touchend', function(e){
+      if(!_strack) return; _strack = false;
+      var t = e.changedTouches[0];
+      var dx = t.clientX - _sx, dy = t.clientY - _sy;
+      if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50){
+        if(dx < 0) go(idx + 1); else go(idx - 1);   // izquierda → siguiente · derecha → anterior
+        start();                                     // reinicia autoplay tras la interacción (igual que el click en dots)
+        e.stopPropagation();                         // el swipe horizontal es del carrete, no cambia de sección
+      }
+    }, {passive:true});
     go(0);   // sin auto-start: solo la sección activa reproduce (lo gestiona showStage)
   });
   // arranca el carrete de la sección activa al cargar

@@ -48,8 +48,13 @@ a{color:inherit}
 .tb-range{display:flex;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:3px}
 .tb-range button{padding:6px 11px;font-size:12px;color:var(--muted);border-radius:4px;transition:.2s}
 .tb-range button.on{background:rgba(184,147,90,0.16);color:var(--gold)}
+.tb-pdf{display:inline-flex;align-items:center;gap:6px;margin-left:8px;background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:6px;padding:7px 12px;font-size:12px;font-weight:700;letter-spacing:.04em;white-space:nowrap;transition:background .2s,transform .2s}
+.tb-pdf:hover{background:rgba(184,147,90,0.14);transform:translateY(-1px)}
+.tb-pdf:disabled{opacity:.55;cursor:default;transform:none}
+.tb-pdf .material-symbols-outlined{font-size:18px}
 .tb-logout{margin-left:8px;color:var(--muted);display:flex;align-items:center}
 .tb-logout:hover{color:var(--ivory)}
+@media(max-width:640px){.tb-pdf .lbl{display:none}.tb-pdf{padding:7px 9px}}
 
 .wrap{padding:clamp(16px,3vw,28px);max-width:1320px;margin:0 auto}
 .view{display:none;animation:fade .4s var(--ease)}
@@ -192,6 +197,7 @@ tbody tr:last-child td{border-bottom:none}
       <button data-r="30" class="on">30 días</button>
       <button data-r="todo">Todo</button>
     </div>
+    <button class="tb-pdf" id="pdfBtn" title="Descargar Reporte PDF"><span class="material-symbols-outlined">picture_as_pdf</span><span class="lbl">Descargar Reporte PDF</span></button>
     <button class="tb-logout" id="logout" title="Salir"><span class="material-symbols-outlined">logout</span></button>
   </div>
 
@@ -248,6 +254,10 @@ tbody tr:last-child td{border-bottom:none}
 <!-- drawer -->
 <div id="scrim"></div>
 <div id="drawer"></div>
+
+<!-- Generación de PDF (sin instalación) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
 <script>
 /* ============== CONFIG ============== */
@@ -555,6 +565,138 @@ document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>setView(b.data
 document.querySelectorAll('#range button').forEach(b=>b.onclick=()=>{ currentRange=b.dataset.r; document.querySelectorAll('#range button').forEach(x=>x.classList.toggle('on',x===b)); renderAll(); });
 const _initView=(location.hash && ['#resumen','#leads','#embudo','#trafico'].includes(location.hash))?location.hash.slice(1):'resumen';
 setView(_initView);
+
+/* ============== REPORTE PDF ============== */
+// Genera un PDF (jsPDF + autotable) con los datos ya cargados en memoria
+// (LEADS / SESSIONS / EVENTS). Snapshot completo, sin fetch adicional.
+function generatePdfReport(){
+  const btn=document.getElementById('pdfBtn');
+  if(!(window.jspdf && window.jspdf.jsPDF)){ alert('No se pudo cargar el generador de PDF. Revisa tu conexión.'); return; }
+  const { jsPDF }=window.jspdf;
+  btn.disabled=true; const _lbl=btn.querySelector('.lbl'); const _txt=_lbl?_lbl.textContent:''; if(_lbl) _lbl.textContent='Generando…';
+  try{
+    const doc=new jsPDF({unit:'pt',format:'a4'});
+    if(typeof doc.autoTable!=='function'){ throw new Error('El complemento autotable no cargó.'); }
+    const GOLD=[184,147,90], IVORY=[249,246,241], INK=[26,47,35], DARK=[13,26,18];
+    const pageW=doc.internal.pageSize.getWidth(), pageH=doc.internal.pageSize.getHeight();
+    const M=40;
+
+    const now=new Date();
+    const ymd=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+    const longDate=now.toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'});
+
+    // --- Snapshot de datos (globals en memoria) ---
+    const leads=LEADS.slice().sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    const total=leads.length;
+    const cntEstado=e=>leads.filter(l=>estadoOf(l)===e).length;
+    const ganados=cntEstado('Ganado');
+    const citas=cntEstado('Cita agendada');
+    const convRate=total?(ganados/total*100):0;
+
+    const baseTable={
+      theme:'grid',
+      styles:{font:'helvetica',fontSize:9,cellPadding:5,textColor:[45,45,45],lineColor:[226,221,213],lineWidth:0.4},
+      headStyles:{fillColor:GOLD,textColor:[255,255,255],fontStyle:'bold',fontSize:9},
+      alternateRowStyles:{fillColor:IVORY},
+      margin:{left:M,right:M}
+    };
+    function sectionTitle(txt,startY){
+      doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(INK[0],INK[1],INK[2]);
+      doc.text(txt,M,startY);
+      doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]); doc.setLineWidth(1); doc.line(M,startY+5,pageW-M,startY+5);
+      return startY+20;
+    }
+    function nextY(){ let ny=doc.lastAutoTable.finalY+30; if(ny>pageH-100){ doc.addPage(); ny=M+14; } return ny; }
+    const pct=(n,d)=>d?(n/d*100).toFixed(1)+'%':'0%';
+
+    // ===== PÁGINA 1 — PORTADA =====
+    doc.setFillColor(DARK[0],DARK[1],DARK[2]); doc.rect(0,0,pageW,pageH,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(32); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
+    doc.text('El Romeral',pageW/2,pageH/2-72,{align:'center'});
+    doc.setFontSize(17); doc.setTextColor(245,241,235);
+    doc.text('Reporte CRM',pageW/2,pageH/2-44,{align:'center'});
+    doc.setFont('helvetica','normal'); doc.setFontSize(12); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
+    doc.setCharSpace(2); doc.text('ASESORÍA VIRTUAL',pageW/2,pageH/2-16,{align:'center'}); doc.setCharSpace(0);
+    doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]); doc.setLineWidth(0.8); doc.line(pageW/2-64,pageH/2+6,pageW/2+64,pageH/2+6);
+    doc.setTextColor(198,188,176); doc.setFontSize(11);
+    doc.text('Generado el '+longDate,pageW/2,pageH/2+36,{align:'center'});
+    doc.text('Leads registrados al '+longDate,pageW/2,pageH/2+54,{align:'center'});
+    doc.text(total+' leads · '+(SESSIONS?SESSIONS.length:0)+' sesiones',pageW/2,pageH/2+72,{align:'center'});
+
+    // ===== SECCIÓN 1 — RESUMEN EJECUTIVO =====
+    doc.addPage();
+    let y=sectionTitle('1 · Resumen ejecutivo',M+14);
+    doc.autoTable({...baseTable,startY:y,
+      head:[['Total Leads','Citas Agendadas','Ganados','Tasa de Conversión']],
+      body:[[String(total),String(citas),String(ganados),convRate.toFixed(1)+'%']],
+      styles:{...baseTable.styles,halign:'center',fontSize:12,cellPadding:9},
+      headStyles:{...baseTable.headStyles,halign:'center',fontSize:9}});
+
+    // ===== SECCIÓN 2 — EMBUDO DE CONVERSIÓN =====
+    const fc=funnelCounts(EVENTS);
+    const funnelSteps=[['Sesiones iniciadas','inicio'],['Brochure iniciado','brochure_iniciado'],['Brochure completado','brochure_completado'],['Precio visto','precio_visto'],['Lead capturado','lead_capturado']];
+    let prevC=null;
+    const body2=funnelSteps.map(([label,key])=>{ const c=fc[STEPS.indexOf(key)]||0; const conv=prevC==null?'—':pct(c,prevC); prevC=c; return [label,String(c),conv]; });
+    y=sectionTitle('2 · Embudo de conversión',nextY());
+    doc.autoTable({...baseTable,startY:y,
+      head:[['Paso','Sesiones','% del paso anterior']],body:body2,
+      columnStyles:{1:{halign:'right'},2:{halign:'right'}}});
+
+    // ===== SECCIÓN 3 — LEADS POR ESTADO =====
+    const estados=['Nuevo','Contactado','Cita agendada','Ganado','Perdido'];
+    const body3=estados.map(e=>{ const c=cntEstado(e); return [e,String(c),pct(c,total)]; });
+    y=sectionTitle('3 · Leads por estado',nextY());
+    doc.autoTable({...baseTable,startY:y,head:[['Estado','Cantidad','% del total']],body:body3,columnStyles:{1:{halign:'right'},2:{halign:'right'}}});
+
+    // ===== SECCIÓN 4 — LEADS POR TIPO DE EVENTO =====
+    const tipoMap={};
+    leads.forEach(l=>{ const k=TIPO_NICE[l.tipo_evento]||l.tipo_evento||'Sin especificar'; tipoMap[k]=(tipoMap[k]||0)+1; });
+    const body4=Object.entries(tipoMap).sort((a,b)=>b[1]-a[1]).map(([k,c])=>[k,String(c),pct(c,total)]);
+    y=sectionTitle('4 · Leads por tipo de evento',nextY());
+    doc.autoTable({...baseTable,startY:y,head:[['Tipo','Cantidad','% del total']],body:body4.length?body4:[['Sin datos','0','0%']],columnStyles:{1:{halign:'right'},2:{halign:'right'}}});
+
+    // ===== SECCIÓN 5 — LEADS POR ASESOR =====
+    const asesorRows=ASESORES.map(a=>{
+      const assigned=leads.filter(l=>(l.asignado_a||'')===a).length;
+      const g=leads.filter(l=>(l.asignado_a||'')===a && estadoOf(l)==='Ganado').length;
+      return [a,String(assigned),String(g),assigned?pct(g,assigned):'—'];
+    });
+    const sinAsignar=leads.filter(l=>!l.asignado_a).length;
+    if(sinAsignar) asesorRows.push(['Sin asignar',String(sinAsignar),'—','—']);
+    y=sectionTitle('5 · Leads por asesor',nextY());
+    doc.autoTable({...baseTable,startY:y,head:[['Asesor','Asignados','Ganados','Tasa']],body:asesorRows,columnStyles:{1:{halign:'right'},2:{halign:'right'},3:{halign:'right'}}});
+
+    // ===== SECCIÓN 6 — TABLA COMPLETA DE LEADS =====
+    const body6=leads.map(l=>[
+      l.nombre||'—', l.whatsapp||'—', TIPO_NICE[l.tipo_evento]||l.tipo_evento||'—',
+      l.fecha_evento||'—', (l.personas!=null?String(l.personas):'—'), fmtMoney(l.total),
+      estadoOf(l), l.asignado_a||'—', fmtDate(l.created_at)
+    ]);
+    y=sectionTitle('6 · Tabla completa de leads',nextY());
+    doc.autoTable({...baseTable,startY:y,
+      head:[['Nombre','WhatsApp','Tipo','Fecha Evento','Inv.','Total','Estado','Asesor','Captura']],
+      body:body6.length?body6:[['—','—','—','—','—','—','—','—','—']],
+      styles:{...baseTable.styles,fontSize:8,cellPadding:4},
+      columnStyles:{4:{halign:'right'},5:{halign:'right'}}});
+
+    // ===== FOOTER + PAGINACIÓN (todas las páginas) =====
+    const pages=doc.getNumberOfPages();
+    for(let p=1;p<=pages;p++){
+      doc.setPage(p); const cover=(p===1);
+      doc.setFont('helvetica','normal'); doc.setFontSize(8);
+      if(cover) doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]); else doc.setTextColor(150,150,150);
+      doc.text('El Romeral · Asesoría Virtual · Confidencial',M,pageH-18);
+      doc.text('Página '+p+' de '+pages,pageW-M,pageH-18,{align:'right'});
+    }
+
+    doc.save('ElRomeral_Reporte_CRM_'+ymd+'.pdf');
+  }catch(err){
+    console.error('[PDF]',err); alert('No se pudo generar el PDF: '+err.message);
+  }finally{
+    btn.disabled=false; if(_lbl) _lbl.textContent=_txt;
+  }
+}
+document.getElementById('pdfBtn').onclick=generatePdfReport;
 
 /* ============== UTIL ============== */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }

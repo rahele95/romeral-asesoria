@@ -52,6 +52,22 @@ a{color:inherit}
 .tb-pdf:hover{background:rgba(184,147,90,0.14);transform:translateY(-1px)}
 .tb-pdf:disabled{opacity:.55;cursor:default;transform:none}
 .tb-pdf .material-symbols-outlined{font-size:18px}
+.pdf-wrap{position:relative;display:inline-flex}
+.pdf-pop{position:absolute;top:calc(100% + 8px);right:0;z-index:60;width:288px;background:var(--forest);border:1px solid var(--line);border-radius:10px;padding:16px;box-shadow:0 18px 44px rgba(0,0,0,.5);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .2s var(--ease),transform .2s var(--ease)}
+.pdf-pop.on{opacity:1;visibility:visible;transform:none}
+.pdf-pop h5{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin:0 0 12px;font-weight:700}
+.pdf-opt{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.pdf-opt button{text-align:left;padding:9px 11px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ivory);font-size:13px;transition:border-color .2s,background .2s,color .2s}
+.pdf-opt button:hover{border-color:var(--gold)}
+.pdf-opt button.on{border-color:var(--gold);background:rgba(184,147,90,.14);color:var(--gold);font-weight:700}
+.pdf-custom{display:none;gap:8px;margin-bottom:12px}
+.pdf-custom.on{display:flex;flex-direction:column}
+.pdf-custom label{display:block;font-size:11px;color:var(--muted);letter-spacing:.04em;margin-bottom:4px}
+.pdf-custom input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 10px;color:var(--ivory);font-size:13px;font-family:inherit;outline:none;color-scheme:dark}
+.pdf-custom input:focus{border-color:var(--gold)}
+.pdf-go{width:100%;background:var(--gold);color:var(--forest-deep);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px;padding:11px;border-radius:6px;transition:transform .3s var(--ease)}
+.pdf-go:hover{transform:translateY(-1px)}
+.pdf-go:disabled{opacity:.55;transform:none;cursor:default}
 .tb-logout{margin-left:8px;color:var(--muted);display:flex;align-items:center}
 .tb-logout:hover{color:var(--ivory)}
 @media(max-width:640px){.tb-pdf .lbl{display:none}.tb-pdf{padding:7px 9px}}
@@ -197,7 +213,24 @@ tbody tr:last-child td{border-bottom:none}
       <button data-r="30" class="on">30 días</button>
       <button data-r="todo">Todo</button>
     </div>
-    <button class="tb-pdf" id="pdfBtn" title="Descargar Reporte PDF"><span class="material-symbols-outlined">picture_as_pdf</span><span class="lbl">Descargar Reporte PDF</span></button>
+    <div class="pdf-wrap">
+      <button class="tb-pdf" id="pdfBtn" title="Descargar Reporte PDF" aria-haspopup="dialog" aria-expanded="false"><span class="material-symbols-outlined">picture_as_pdf</span><span class="lbl">Descargar Reporte PDF</span></button>
+      <div class="pdf-pop" id="pdfPop" role="dialog" aria-label="Opciones del reporte PDF">
+        <h5>Periodo del reporte</h5>
+        <div class="pdf-opt" id="pdfOpts">
+          <button data-mode="hoy">Hoy</button>
+          <button data-mode="7">Últimos 7 días</button>
+          <button data-mode="30">Últimos 30 días</button>
+          <button data-mode="todo">Todo el histórico</button>
+          <button data-mode="custom">Rango personalizado…</button>
+        </div>
+        <div class="pdf-custom" id="pdfCustom">
+          <div><label for="pdfFrom">Desde</label><input type="date" id="pdfFrom"></div>
+          <div><label for="pdfTo">Hasta</label><input type="date" id="pdfTo"></div>
+        </div>
+        <button class="pdf-go" id="pdfGo">Generar PDF</button>
+      </div>
+    </div>
     <button class="tb-logout" id="logout" title="Salir"><span class="material-symbols-outlined">logout</span></button>
   </div>
 
@@ -567,14 +600,31 @@ const _initView=(location.hash && ['#resumen','#leads','#embudo','#trafico'].inc
 setView(_initView);
 
 /* ============== REPORTE PDF ============== */
+// Ventana temporal del reporte a partir del periodo elegido en el popover.
+// Devuelve {start,end,label}; start/end null = sin límite (histórico).
+function pdfPeriodWindow(sel){
+  const now=new Date();
+  if(!sel||sel.mode==='todo') return {start:null,end:null,label:'Todo el histórico (todos los registros)'};
+  if(sel.mode==='hoy'){ const s=new Date(now); s.setHours(0,0,0,0); return {start:s,end:now,label:'Hoy · '+fmtDate(now)}; }
+  if(sel.mode==='7'||sel.mode==='30'){ const d=+sel.mode; const s=new Date(now.getTime()-d*864e5); return {start:s,end:now,label:'Últimos '+d+' días · '+fmtDate(s)+' – '+fmtDate(now)}; }
+  if(sel.mode==='custom'){
+    const s=sel.from?new Date(sel.from+'T00:00:00'):null;
+    const e=sel.to?new Date(sel.to+'T23:59:59'):now;
+    return {start:s,end:e,label:'Del '+(s?fmtDate(s):'inicio')+' al '+fmtDate(e)};
+  }
+  return {start:null,end:null,label:'Todo el histórico'};
+}
+function pdfInWindow(iso,w){ if(!iso) return false; const t=new Date(iso); if(w.start&&t<w.start) return false; if(w.end&&t>w.end) return false; return true; }
+
 // Genera un PDF (jsPDF + autotable) con los datos ya cargados en memoria
-// (LEADS / SESSIONS / EVENTS). Snapshot completo, sin fetch adicional.
-function generatePdfReport(){
+// (LEADS / SESSIONS / EVENTS), filtrados por el periodo elegido. Sin fetch adicional.
+function generatePdfReport(period){
   const btn=document.getElementById('pdfBtn');
   if(!(window.jspdf && window.jspdf.jsPDF)){ alert('No se pudo cargar el generador de PDF. Revisa tu conexión.'); return; }
   const { jsPDF }=window.jspdf;
   btn.disabled=true; const _lbl=btn.querySelector('.lbl'); const _txt=_lbl?_lbl.textContent:''; if(_lbl) _lbl.textContent='Generando…';
   try{
+    const win=pdfPeriodWindow(period);
     const doc=new jsPDF({unit:'pt',format:'a4'});
     if(typeof doc.autoTable!=='function'){ throw new Error('El complemento autotable no cargó.'); }
     const GOLD=[184,147,90], IVORY=[249,246,241], INK=[26,47,35], DARK=[13,26,18];
@@ -585,8 +635,10 @@ function generatePdfReport(){
     const ymd=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
     const longDate=now.toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'});
 
-    // --- Snapshot de datos (globals en memoria) ---
-    const leads=LEADS.slice().sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    // --- Snapshot de datos (globals en memoria), filtrado por periodo ---
+    const leads=LEADS.filter(l=>pdfInWindow(l.created_at,win)).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+    const evts=EVENTS.filter(e=>pdfInWindow(e.created_at,win));
+    const sess=SESSIONS.filter(s=>pdfInWindow(s.created_at,win));
     const total=leads.length;
     const cntEstado=e=>leads.filter(l=>estadoOf(l)===e).length;
     const ganados=cntEstado('Ganado');
@@ -618,14 +670,17 @@ function generatePdfReport(){
     doc.setFont('helvetica','normal'); doc.setFontSize(12); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
     doc.setCharSpace(2); doc.text('ASESORÍA VIRTUAL',pageW/2,pageH/2-16,{align:'center'}); doc.setCharSpace(0);
     doc.setDrawColor(GOLD[0],GOLD[1],GOLD[2]); doc.setLineWidth(0.8); doc.line(pageW/2-64,pageH/2+6,pageW/2+64,pageH/2+6);
-    doc.setTextColor(198,188,176); doc.setFontSize(11);
-    doc.text('Generado el '+longDate,pageW/2,pageH/2+36,{align:'center'});
-    doc.text('Leads registrados al '+longDate,pageW/2,pageH/2+54,{align:'center'});
-    doc.text(total+' leads · '+(SESSIONS?SESSIONS.length:0)+' sesiones',pageW/2,pageH/2+72,{align:'center'});
+    doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(GOLD[0],GOLD[1],GOLD[2]);
+    doc.text('Periodo: '+win.label,pageW/2,pageH/2+36,{align:'center',maxWidth:pageW-110});
+    doc.setFont('helvetica','normal'); doc.setTextColor(198,188,176);
+    doc.text('Generado el '+longDate,pageW/2,pageH/2+58,{align:'center'});
+    doc.text(total+' leads · '+sess.length+' sesiones en el periodo',pageW/2,pageH/2+76,{align:'center'});
 
     // ===== SECCIÓN 1 — RESUMEN EJECUTIVO =====
     doc.addPage();
     let y=sectionTitle('1 · Resumen ejecutivo',M+14);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(120,120,120);
+    doc.text('Periodo: '+win.label,M,y,{maxWidth:pageW-2*M}); y+=16;
     doc.autoTable({...baseTable,startY:y,
       head:[['Total Leads','Citas Agendadas','Ganados','Tasa de Conversión']],
       body:[[String(total),String(citas),String(ganados),convRate.toFixed(1)+'%']],
@@ -633,7 +688,7 @@ function generatePdfReport(){
       headStyles:{...baseTable.headStyles,halign:'center',fontSize:9}});
 
     // ===== SECCIÓN 2 — EMBUDO DE CONVERSIÓN =====
-    const fc=funnelCounts(EVENTS);
+    const fc=funnelCounts(evts);
     const funnelSteps=[['Sesiones iniciadas','inicio'],['Brochure iniciado','brochure_iniciado'],['Brochure completado','brochure_completado'],['Precio visto','precio_visto'],['Lead capturado','lead_capturado']];
     let prevC=null;
     const body2=funnelSteps.map(([label,key])=>{ const c=fc[STEPS.indexOf(key)]||0; const conv=prevC==null?'—':pct(c,prevC); prevC=c; return [label,String(c),conv]; });
@@ -696,7 +751,32 @@ function generatePdfReport(){
     btn.disabled=false; if(_lbl) _lbl.textContent=_txt;
   }
 }
-document.getElementById('pdfBtn').onclick=generatePdfReport;
+// --- Popover de periodo del reporte ---
+const pdfBtn=document.getElementById('pdfBtn'), pdfPop=document.getElementById('pdfPop'), pdfCustom=document.getElementById('pdfCustom');
+let pdfMode='todo';
+function setPdfMode(m){ pdfMode=m; document.querySelectorAll('#pdfOpts button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m)); pdfCustom.classList.toggle('on',m==='custom'); }
+function openPdfPop(){
+  // Inicializa con el rango activo del dashboard (familiaridad); el usuario puede cambiarlo.
+  const map={hoy:'hoy','7':'7','30':'30',todo:'todo'};
+  setPdfMode(map[currentRange]||'todo');
+  const fromEl=document.getElementById('pdfFrom'), toEl=document.getElementById('pdfTo');
+  if(!toEl.value){ const t=new Date(), f=new Date(Date.now()-30*864e5); toEl.value=t.toISOString().slice(0,10); fromEl.value=f.toISOString().slice(0,10); }
+  pdfPop.classList.add('on'); pdfBtn.setAttribute('aria-expanded','true');
+}
+function closePdfPop(){ pdfPop.classList.remove('on'); pdfBtn.setAttribute('aria-expanded','false'); }
+pdfBtn.onclick=e=>{ e.stopPropagation(); pdfPop.classList.contains('on')?closePdfPop():openPdfPop(); };
+document.querySelectorAll('#pdfOpts button').forEach(b=>b.onclick=()=>setPdfMode(b.dataset.mode));
+document.getElementById('pdfGo').onclick=()=>{
+  const period={mode:pdfMode};
+  if(pdfMode==='custom'){
+    period.from=document.getElementById('pdfFrom').value; period.to=document.getElementById('pdfTo').value;
+    if(!period.from && !period.to){ alert('Elige al menos una fecha para el rango personalizado.'); return; }
+    if(period.from && period.to && new Date(period.from)>new Date(period.to)){ alert('La fecha "Desde" no puede ser posterior a "Hasta".'); return; }
+  }
+  closePdfPop(); generatePdfReport(period);
+};
+document.addEventListener('click',e=>{ if(pdfPop.classList.contains('on') && !e.target.closest('.pdf-wrap')) closePdfPop(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && pdfPop.classList.contains('on')) closePdfPop(); });
 
 /* ============== UTIL ============== */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }

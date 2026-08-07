@@ -133,6 +133,23 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-ra
   *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
 }
 </style>
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '285398547768977');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=285398547768977&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel -->
 </head>
 <body>
 <section id="hero" class="phase active">
@@ -183,8 +200,21 @@ const BLOCKED_SET=(()=>{const s=new Set();BLOCKED.forEach(iso=>{const[y,m,dd]=is
 const S={fecha:null,tipo:null,personas:120};
 // --- Tracking de funnel (Supabase vía /api/track), fire-and-forget ---
 function romeralSid(){try{let s=localStorage.getItem('romeral_sid');if(!s){s=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():'sid-'+Date.now()+'-'+Math.random().toString(36).slice(2);localStorage.setItem('romeral_sid',s);}return s;}catch(_){return 'sid-anon';}}
-function track(step,data){try{fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:romeralSid(),step:step,data:data||{}}),keepalive:true}).catch(function(){});}catch(_){}}
-track('inicio',{user_agent:navigator.userAgent,referrer:document.referrer});
+function track(step,data){try{fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:romeralSid(),step:step,data:data||{}}),keepalive:true}).catch(function(){});}catch(_){}try{if(window.fbq)fbq('trackCustom',step,data||{});}catch(_){}}
+// --- UTMs / fbclid: se persisten en localStorage al llegar con parámetros de campaña (no se sobrescriben con vacío) ---
+(function(){try{
+  var p=new URLSearchParams(location.search);
+  var keys=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid'];
+  var found={},has=false;
+  keys.forEach(function(k){var v=p.get(k);if(v){found[k]=v;has=true;}});
+  if(has){
+    var prev={};try{prev=JSON.parse(localStorage.getItem('romeral_utm')||'{}');}catch(_){}
+    keys.forEach(function(k){if(found[k])prev[k]=found[k];});
+    localStorage.setItem('romeral_utm',JSON.stringify(prev));
+  }
+}catch(_){}})();
+function romeralUtm(){try{return JSON.parse(localStorage.getItem('romeral_utm')||'{}');}catch(_){return {};}}
+track('inicio',Object.assign({user_agent:navigator.userAgent,referrer:document.referrer},romeralUtm()));
 function goPhase(id){document.querySelectorAll('.phase').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'instant'})}
 const dots=document.querySelectorAll('.dot');
 function showStep(n){document.querySelectorAll('.step').forEach(s=>s.classList.toggle('active',+s.dataset.step===n));dots.forEach((d,i)=>d.classList.toggle('on',i<n))}

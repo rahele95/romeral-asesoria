@@ -175,6 +175,23 @@ body.intro-open{overflow:hidden}
   *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
 }
 </style>
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '285398547768977');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=285398547768977&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel -->
 </head>
 <body class="intro-open">
 
@@ -389,7 +406,7 @@ let broIdx = 0;
 const isMobileBro = window.matchMedia('(max-width:1023px)').matches;
 // --- Tracking de funnel (Supabase vía /api/track), fire-and-forget ---
 function romeralSid(){try{let s=localStorage.getItem('romeral_sid');if(!s){s=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():'sid-'+Date.now()+'-'+Math.random().toString(36).slice(2);localStorage.setItem('romeral_sid',s);}return s;}catch(_){return 'sid-anon';}}
-function track(step,data){try{fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:romeralSid(),step:step,data:data||{}}),keepalive:true}).catch(function(){});}catch(_){}}
+function track(step,data){try{fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:romeralSid(),step:step,data:data||{}}),keepalive:true}).catch(function(){});}catch(_){}try{if(window.fbq)fbq('trackCustom',step,data||{});}catch(_){}}
 (function(){var _d={};try{_d=JSON.parse(sessionStorage.getItem('romeral')||'{}');}catch(_){}track('brochure_iniciado',{tipo:_d.tipo,personas:_d.personas,secciones:stages.length});})();
 // Indicadores de navegación lateral (estáticos): ocultar "Regresar" en la primera y "Continuar" en la última
 const broNavPrev = document.querySelector('.bro-nav-prev');

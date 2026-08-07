@@ -147,6 +147,23 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
 }
 </style>
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '285398547768977');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=285398547768977&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel -->
 </head>
 <body>
 
@@ -231,10 +248,17 @@ const CON_DJ = ['boda','xv','corporativo','social'];
 
 // --- Tracking de funnel (Supabase vía /api/track), fire-and-forget ---
 function romeralSid(){try{let s=localStorage.getItem('romeral_sid');if(!s){s=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():'sid-'+Date.now()+'-'+Math.random().toString(36).slice(2);localStorage.setItem('romeral_sid',s);}return s;}catch(_){return 'sid-anon';}}
-function track(step,data){try{fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:romeralSid(),step:step,data:data||{}}),keepalive:true}).catch(function(){});}catch(_){}}
+function track(step,data){try{fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:romeralSid(),step:step,data:data||{}}),keepalive:true}).catch(function(){});}catch(_){}try{if(window.fbq)fbq('trackCustom',step,data||{});}catch(_){}}
+// --- Meta Pixel: helpers de atribución ---
+// UTMs persistidas en index.html (localStorage 'romeral_utm')
+function romeralUtm(){try{return JSON.parse(localStorage.getItem('romeral_utm')||'{}');}catch(_){return {};}}
+// Cookies _fbp/_fbc del Pixel (para matching en Conversions API)
+function getMetaCookie(name){try{var m=document.cookie.match(new RegExp('(?:^|; )'+name+'=([^;]*)'));return m?decodeURIComponent(m[1]):null;}catch(_){return null;}}
+// UN event_id de Lead por sesión: Meta deduplica parcial + completo + reconsiderar (y browser vs. CAPI)
+var leadEventId = 'lead_' + romeralSid();
 track('precio_visto',{tipo:d.tipo,personas:d.personas});
 // cita_agendada: al elegir una opción de agenda (presencial / videollamada / WhatsApp)
-document.querySelectorAll('.sched-card').forEach(function(c){ c.addEventListener('click', function(){ track('cita_agendada',{canal:(c.querySelector('h3')||{}).textContent||''}); }); });
+document.querySelectorAll('.sched-card').forEach(function(c){ c.addEventListener('click', function(){ track('cita_agendada',{canal:(c.querySelector('h3')||{}).textContent||''}); try{if(window.fbq)fbq('track','Contact');}catch(_){} }); });
 
 function getRangoRenta(n){ return [50,100,150,200,250,300,350,400].find(r=>n<=r) || 400; }
 function getRangoPista(n){ return n<=50?22500 : n<=100?27000 : n<=150?32400 : n<=250?37800 : 44100; }
@@ -259,6 +283,8 @@ const NAME_LABELS = { boda:'Nombre de los novios', xv:'Nombre de la festejada', 
 const tipoNice = {boda:'Boda',xv:'XV Años',corporativo:'Corporativo',social:'Evento social',bautizo:'Bautizo',comunion:'Primera Comunión'};
 
 const total = calcularTotal(d.personas || 120, d.tipo);
+// Meta Pixel: ViewContent con el valor del evento (complemento de track('precio_visto'); total se calcula aquí)
+try{if(window.fbq)fbq('track','ViewContent',{value:total,currency:'MXN'});}catch(_){}
 
 document.getElementById('invBasis').textContent = `Basado en ${d.personas || 120} invitados · ${tipoNice[d.tipo] || ''} · ${fechaLegible}`;
 document.getElementById('nameLabel').textContent = NAME_LABELS[d.tipo] || 'Su nombre';
@@ -386,8 +412,12 @@ async function saveLead(quiereCita){
     total: total,
     total_estimado: total,
     quiere_cita: quiereCita,
-    quiere_email: (intent === 'info')
+    quiere_email: (intent === 'info'),
+    event_id: leadEventId,
+    fbp: getMetaCookie('_fbp'),
+    fbc: getMetaCookie('_fbc')
   };
+  Object.assign(payload, romeralUtm());
   // Notion best-effort (no rompe el flujo si está caído / mal configurado); timeout 10s
   let notionOk = false;
   const ctrl = new AbortController();
@@ -420,6 +450,7 @@ async function submitLead(){
     const ok = await saveLead(intent === 'cita');
     if(!ok) throw new Error('request-failed');
     track('lead_capturado',{intent:intent, quiere_cita:(intent==='cita')});
+    try{if(window.fbq)fbq('track','Lead',{value:total||0,currency:'MXN'},{eventID:leadEventId});}catch(_){}
     if(intent === 'cita'){
       showSchedule();
     } else {
@@ -465,8 +496,12 @@ async function savePartialLead(email){
     total: total,
     total_estimado: total,
     quiere_email: true,
-    lead_parcial: true
+    lead_parcial: true,
+    event_id: leadEventId,
+    fbp: getMetaCookie('_fbp'),
+    fbc: getMetaCookie('_fbc')
   };
+  Object.assign(payload, romeralUtm());
   // Notion best-effort (no rompe el flujo si está caído / mal configurado); timeout 10s
   let notionOk = false;
   const ctrl = new AbortController();
@@ -497,6 +532,7 @@ invSave.addEventListener('submit', async (e)=>{
     const ok = await savePartialLead(email);
     if(!ok) throw new Error('request-failed');
     track('lead_capturado',{intent:'email', quiere_email:true});
+    try{if(window.fbq)fbq('track','Lead',{value:total||0,currency:'MXN'},{eventID:leadEventId});}catch(_){}
     invSave.classList.add('done');
     invSave.querySelector('.inv-save-title').textContent = '¡Listo! Les enviamos su propuesta.';
   }catch(err){
@@ -506,7 +542,7 @@ invSave.addEventListener('submit', async (e)=>{
   }
 });
 
-document.getElementById('btnReconsiderar').onclick = ()=>{ saveLead(true).catch(()=>{}); showSchedule(); };
+document.getElementById('btnReconsiderar').onclick = ()=>{ saveLead(true).then(function(ok){ if(ok){ try{if(window.fbq)fbq('track','Lead',{value:total||0,currency:'MXN'},{eventID:leadEventId});}catch(_){} } }).catch(()=>{}); showSchedule(); };
 </script>
 </body>
 </html>

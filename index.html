@@ -228,7 +228,7 @@ function pickDate(iso){
   const reward=document.getElementById('dateReward');
   const cta=document.getElementById('cta1');
   if(BLOCKED_SET.has(iso)){S.fecha='';reward.textContent='Esa fecha ya está reservada. Les sugerimos otra fecha cercana.';reward.style.color='rgba(245,100,100,0.9)';reward.classList.add('show');cta.disabled=true}
-  else{S.fecha=iso;reward.textContent='¡Esa fecha está disponible!';reward.style.color='var(--gold)';reward.classList.add('show');cta.disabled=false;track('fecha_seleccionada',{fecha:iso});}
+  else{S.fecha=iso;reward.textContent='';reward.classList.remove('show');cta.disabled=false;track('fecha_seleccionada',{fecha:iso});}
   renderCal();
 }
 renderCal();

@@ -237,15 +237,16 @@ track('precio_visto',{tipo:d.tipo,personas:d.personas});
 document.querySelectorAll('.sched-card').forEach(function(c){ c.addEventListener('click', function(){ track('cita_agendada',{canal:(c.querySelector('h3')||{}).textContent||''}); }); });
 
 function getRangoRenta(n){ return [50,100,150,200,250,300,350,400].find(r=>n<=r) || 400; }
-function getRangoPista(n){ return n<=50?22500 : n<=100?27000 : n<=150?32400 : n<=250?37800 : 44100; }
 const RENTA = {50:89000,100:119000,150:149000,200:159000,250:169000,300:179000,350:189000,400:199000};
+// Precios Agosto 2026 — verificados contra los 8 Excel "Experiencia Integral" (Precio Final por bracket 305k…884k):
+// renta por rango de personas · menú $1,250/per · barra $90/per · iluminación arquitectónica $28,000 ·
+// equipo Bose+8 luces robóticas $66,000 · DJ Reset $25,000 · pista de baile $30,000.
 function calcularTotal(personas, tipo){
   const dj = CON_DJ.includes(tipo);
   const renta = RENTA[getRangoRenta(personas)];
   const menu = 1250 * personas, barra = 90 * personas;
-  const pista = getRangoPista(personas);
-  const ilum = dj ? 32000 : 0;
-  const sonido = dj ? 123000 + 25000 + pista : 0;
+  const ilum = dj ? 28000 : 0;
+  const sonido = dj ? 66000 + 25000 + 30000 : 0;   // Bose+luces + DJ Reset + pista
   return renta + menu + barra + ilum + sonido;
 }
 

@@ -258,7 +258,7 @@ function getMetaCookie(name){try{var m=document.cookie.match(new RegExp('(?:^|; 
 var leadEventId = 'lead_' + romeralSid();
 track('precio_visto',{tipo:d.tipo,personas:d.personas});
 // cita_agendada: al elegir una opción de agenda (presencial / videollamada / WhatsApp)
-document.querySelectorAll('.sched-card').forEach(function(c){ c.addEventListener('click', function(){ track('cita_agendada',{canal:(c.querySelector('h3')||{}).textContent||''}); try{if(window.fbq)fbq('track','Contact');}catch(_){} }); });
+document.querySelectorAll('.sched-card').forEach(function(c){ c.addEventListener('click', function(){ var canal=(c.querySelector('h3')||{}).textContent||''; track('cita_agendada',{canal:canal}); try{if(window.fbq)fbq('track','Contact');}catch(_){} try{fetch('/api/leads-cita',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:romeralSid(),canal:canal})});}catch(_){} }); });
 
 function getRangoRenta(n){ return [50,100,150,200,250,300,350,400].find(r=>n<=r) || 400; }
 const RENTA = {50:89000,100:119000,150:149000,200:159000,250:169000,300:179000,350:189000,400:199000};

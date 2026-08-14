@@ -38,7 +38,30 @@ module.exports = async (req, res) => {
     })
     if (!r.ok) { throw new Error('Supabase ' + r.status + ': ' + (await r.text())) }
     const rows = await r.json()
-    res.status(200).json({ ok: true, lead: rows[0] || null })
+    const lead = rows[0] || null
+
+    // Espejo al pipeline del ERP: el estado del lead mueve la etapa de su oportunidad.
+    // (No degrada: solo avanza etapas tempranas; ganado/perdido manuales del kanban se respetan.)
+    const ETAPA = { 'Contactado': 'contactado', 'Cita agendada': 'cita', 'Ganado': 'ganado', 'Perdido': 'perdido' }
+    const etapa = patch.estado && ETAPA[patch.estado]
+    if (etapa && lead && (lead.whatsapp || lead.email)) {
+      try {
+        const filtros = []
+        if (lead.whatsapp) filtros.push('whatsapp.eq.' + encodeURIComponent(lead.whatsapp))
+        if (lead.email) filtros.push('email.eq.' + encodeURIComponent(lead.email))
+        const H = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' }
+        const rc = await fetch(SB_URL + '/rest/v1/contactos?select=id&or=(' + filtros.join(',') + ')&limit=1', { headers: H })
+        const contactos = rc.ok ? await rc.json() : []
+        if (contactos[0]) {
+          await fetch(
+            SB_URL + '/rest/v1/oportunidades?contacto_id=eq.' + contactos[0].id + '&etapa=in.(nuevo,contactado,cita)',
+            { method: 'PATCH', headers: H, body: JSON.stringify({ etapa }) }
+          )
+        }
+      } catch (e) { console.error('espejo pipeline:', e && e.message) }
+    }
+
+    res.status(200).json({ ok: true, lead })
   } catch (e) {
     console.error(e)
     res.status(500).json({ error: e.message })

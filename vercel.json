@@ -1,6 +1,7 @@
 {
   "version": 2,
   "alias": ["asesoria.elromeral.com.mx"],
+  "rewrites": [{ "source": "/renta", "destination": "/renta.html" }],
   "functions": {
     "api/leads.js": { "maxDuration": 10 },
     "api/leads-list.js": { "maxDuration": 10 }
